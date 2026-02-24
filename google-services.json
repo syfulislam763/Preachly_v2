@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "311211597732",
+    "firebase_url": "https://photophiya-default-rtdb.firebaseio.com",
+    "project_id": "photophiya",
+    "storage_bucket": "photophiya.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311211597732:android:325f5f45cc70e05672ab31",
+        "android_client_info": {
+          "package_name": "com.syful151.preachly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311211597732-5hcssqhmj3j23u00nh1vm50rgctmj5qr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.syful151.preachly",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "311211597732-drk14eajg29l9rhld1hkr0g1m7dnr4p8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApBrnP8Q5wRAUltAf0WXPiywkfjmgzqAM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311211597732-drk14eajg29l9rhld1hkr0g1m7dnr4p8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,14 +1,30 @@
-import { ScreenContent } from 'components/ScreenContent';
-import { StatusBar } from 'expo-status-bar';
-
-import './global.css';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import RootNavigator from './src/navigation/RootNavigator';
+import { AuthProvider } from './src/context/AuthContext';
+import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import FontLoader from './src/components/FontLoader';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
+import { StatusBar } from 'react-native';
 
 export default function App() {
+
+  
   return (
-    <SafeAreaProvider>
-      <ScreenContent title="Home" path="App.tsx"></ScreenContent>
-      <StatusBar style="auto" />
-    </SafeAreaProvider>
+    <FontLoader>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <AuthProvider>
+            <SafeAreaView style={{flex:1}} edges={['bottom',]}>
+              <StatusBar translucent={false} backgroundColor="#ffffff" barStyle="dark-content" />
+              <RootNavigator />
+            </SafeAreaView>
+          </AuthProvider>
+        </NavigationContainer>
+      </GestureHandlerRootView>
+      <Toast/>
+    </FontLoader>
   );
 }
