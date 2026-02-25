@@ -2,14 +2,14 @@ import axios from "axios";
 import { ROOT_URL, SIGNUP, VERIFY_EMAIL, RESEND_OTP, CREATE_PASS, LOGIN, SOCIAL_LOGIN , PROFILE_UPDATE, VERIFY_CHANGE_EMAIL} from "../../context/Paths";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-//Google sign in
+
 // import {
 //   GoogleSignin,
 //   isErrorWithCode,
 //   isSuccessResponse,
 //   statusCodes,
 // } from '@react-native-google-signin/google-signin';
-import api from "../../context/api";
+// import api from "../../context/api";
 
 
 // GoogleSignin.configure({

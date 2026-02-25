@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, Dimensions, Pressable, ActivityIndicator} from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Image, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import {
   SafeAreaView
@@ -113,14 +113,14 @@ export default function AuthHome({}) {
 
             <View style={styles.googleAppleAuth}
             >
-                <Pressable>
+                <TouchableOpacity>
                   <Image 
                     source={require("../../../assets/img/appleAuth.png")}
                     height={50}
                     width={50}
                   />
-                </Pressable>
-                <Pressable 
+                </TouchableOpacity>
+                <TouchableOpacity 
                   //onPress={handleGoogleLogin}
                 >
                   <Image 
@@ -128,7 +128,7 @@ export default function AuthHome({}) {
                     height={50}
                     width={50}
                   />
-                </Pressable>
+                </TouchableOpacity>
             </View>
         
             <Text style={styles.footerText}>By singing up, you agree to the app's <Text style={styles.footerHighlighter}>Terms of Use</Text> and <Text style={styles.footerHighlighter}>Privacy Policy</Text></Text>
