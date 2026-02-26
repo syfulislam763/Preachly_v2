@@ -1,0 +1,263 @@
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+const useAppStore = create(
+  persist(
+    (set, get) => ({
+
+      auth: {
+        access: null,
+        refresh: null,
+        isLoggedIn: false,
+        onboarding_completed: false,
+        user: {
+          email: null,
+          name: null,
+          social_auth_provider: null,
+        },
+      },
+
+      setAuth: (authData) =>
+        set((state) => ({
+          auth: {
+            ...state.auth,
+            access: authData.access,
+            refresh: authData.refresh,
+            isLoggedIn: true,
+            onboarding_completed: authData.onboarding_completed ?? false,
+            user: {
+              email: authData.user?.email ?? null,
+              name: authData.user?.name ?? null,
+              social_auth_provider: authData.user?.social_auth_provider ?? null,
+            },
+          },
+        })),
+
+      setOnboardingCompleted: (value) =>
+        set((state) => ({
+          auth: { ...state.auth, onboarding_completed: value },
+        })),
+
+      logout: () =>
+        set({
+          auth: {
+            access: null,
+            refresh: null,
+            isLoggedIn: false,
+            onboarding_completed: false,
+            user: { email: null, name: null, social_auth_provider: null },
+          },
+          profile: useAppStore.getInitialState().profile,
+          payment: useAppStore.getInitialState().payment,
+          goal: useAppStore.getInitialState().goal,
+        }),
+
+      onboarding: {
+        denominations: [],
+        bible_versions: [],
+        tone_preference_data: [],
+        faith_journey_reasons: [],
+        bible_familiarity_data: [],
+        faith_goal_questions: [],
+      },
+
+      setOnboardingData: (data) => {
+        const denominations = [...(data.denominations ?? [])];
+        if (!denominations.find((d) => d.id === 0)) {
+          denominations.push({ id: 0, name: 'None', is_active: false, is_selected: false });
+        }
+
+        const faith_journey_reasons = (data.journey_reasons ?? []).map((item) => ({
+          ...item,
+          name: item.option,
+        }));
+
+        const bible_versions = (data.bible_versions ?? []).map((item) => ({
+          ...item,
+          name: item.title,
+        }));
+
+        const faith_goal_questions = (data.faith_goal_questions ?? []).map((item) => ({
+          ...item,
+          options: item.options.map((op) => ({ ...op, name: op.option })),
+        }));
+
+        set({
+          onboarding: {
+            denominations,
+            bible_versions,
+            tone_preference_data: data.tone_preferences ?? [],
+            faith_journey_reasons,
+            bible_familiarity_data: data.bible_familiarity ?? [],
+            faith_goal_questions,
+          },
+        });
+      },
+
+      profile: {
+        userInfo: {},       
+        denomination: {},
+        bible_version: {},
+        tone_preference: {},
+        faith_reason: {},
+        bible_familiarity: {},
+        goal_preference: {},
+        dashboard: {},     
+      },
+
+      setProfileData: (data) =>
+        set((state) => ({
+          profile: { ...state.profile, ...data },
+        })),
+
+      setDashboard: (dashboard) =>
+        set((state) => ({
+          profile: { ...state.profile, dashboard },
+        })),
+
+      resolveProfileSettings: (onboardingUserData, userInfo, dashboardData) => {
+        const { onboarding } = get();
+
+        const goals = {
+          conversation: 'Confidence Goal',
+          scripture: 'Scripture Knowledge',
+          share_faith: 'Inspiration Goal',
+        };
+
+        const find = (list, id) => list.find((item) => item.id === id) ?? {};
+
+        const denomination = find(
+          onboarding.denominations,
+          onboardingUserData?.denomination?.denomination_option
+        );
+        const bible_version = find(
+          onboarding.bible_versions,
+          onboardingUserData?.bible_version?.bible_version_option
+        );
+        const tone_preference = find(
+          onboarding.tone_preference_data,
+          onboardingUserData?.tone_preference?.tone_preference_option
+        );
+        const faith_reason = find(
+          onboarding.faith_journey_reasons,
+          onboardingUserData?.journey_reason?.journey_reason
+        );
+        const bible_familiarity = find(
+          onboarding.bible_familiarity_data,
+          onboardingUserData?.bible_familiarity?.bible_familiarity_option
+        );
+        const goal_preference = {
+          ...onboardingUserData?.goal_preference,
+          name: goals[onboardingUserData?.goal_preference?.goal_type] ?? '',
+        };
+
+        const faith_goal_questions = (onboardingUserData?.faith_goals ?? []).map((item) => ({
+          ...item,
+          options: item.options.map((op) => ({ ...op, name: op.option })),
+        }));
+
+        set((state) => ({
+          profile: {
+            ...state.profile,
+            userInfo: userInfo ?? {},
+            denomination,
+            bible_version,
+            tone_preference,
+            faith_reason,
+            bible_familiarity,
+            goal_preference,
+            dashboard: dashboardData ?? state.profile.dashboard,
+          },
+          onboarding: {
+            ...state.onboarding,
+            faith_goal_questions,
+          },
+        }));
+      },
+
+
+
+      payment: {
+        has_subscription: false,
+        status: 'free',
+        can_make_request: false,
+        revenuecat_user_id: null,
+        monthly_prompts_used: 0,
+        monthly_prompts_limit: 0,
+        is_active: false,
+      },
+
+      setPayment: (paymentData) =>
+        set({ payment: { ...paymentData } }),
+
+
+      goal: {
+        id: null,
+        goal_type: null,
+        goal_display: null,
+        target_count: 0,
+        current_count: 0,
+        completed: false,
+        progress_percentage: 0,
+        days_remaining: 0,
+        week_start: null,
+        week_end: null,
+      },
+
+      setCurrentGoal: (goalData) =>
+        set({ goal: { ...goalData } }),
+
+
+      socket: {
+        notifications: [],
+        isNotificationSocketConnected: false,
+        socketInstance: null,
+      },
+
+      setNotifications: (notifications) =>
+        set((state) => ({
+          socket: { ...state.socket, notifications },
+        })),
+
+      setSocketConnected: (value) =>
+        set((state) => ({
+          socket: { ...state.socket, isNotificationSocketConnected: value },
+        })),
+
+      setSocketInstance: (instance) =>
+        set((state) => ({
+          socket: { ...state.socket, socketInstance: instance },
+        })),
+
+      ui: {
+        isAuthLoading: false,
+        isHomeLoading: false,
+        isProfileLoading: false,
+      },
+
+      setLoading: (key, value) =>
+        set((state) => ({
+          ui: { ...state.ui, [key]: value },
+        })),
+
+    }),
+
+    {
+      name: 'preachly-store',
+      storage: createJSONStorage(() => AsyncStorage),
+
+    
+      partialize: (state) => ({
+        auth: state.auth,
+        onboarding: state.onboarding,
+        profile: state.profile,
+        payment: state.payment,
+        goal: state.goal,
+      }),
+    }
+  )
+);
+
+export default useAppStore;

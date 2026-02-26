@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ImageBackground, ActivityIndicator} from 'react-native';
 import ProgressBar from '../../components/ProgressBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,6 +24,8 @@ export default function PersonalizationScreen() {
   const [id, setId] = useState(-1)
 
   const navigation = useNavigation();
+
+  
 
 
   const handleIsActive = (id, toggle) => {
@@ -67,6 +69,14 @@ export default function PersonalizationScreen() {
     });
   }
 
+
+  if(!(store?.faith_journey_reasons)){
+      console.log(store?.faith_journey_reasons)
+      logoutUser(() => {
+        logout();
+      })
+    return;
+  }
 
 
   return (
