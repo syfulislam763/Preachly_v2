@@ -12,7 +12,7 @@ import { handleToast } from '../auth/AuthAPI';
 import { logoutUser } from '../../context/api';
 import { useAuth } from '../../context/AuthContext';
 import useStaticData from '../../hooks/useStaticData';
-
+import useAppStore from '@/context/useAppStore';
 
 export default function PersonalizationScreen() {
  
@@ -21,11 +21,12 @@ export default function PersonalizationScreen() {
   const [cardOne, setCardOne] = useState(false)
   const [cardTwo, setCardTwo] = useState(false)
   const [loading, setLoading] = useState(false);
-  const [id, setId] = useState(-1)
+  const [id, setId] = useState(-1);
+  const faith_journey_reasons = useAppStore(s => s.onboarding.faith_journey_reasons)
 
   const navigation = useNavigation();
 
-  
+  console.log("do know", JSON.stringify(faith_journey_reasons, null, 2))
 
 
   const handleIsActive = (id, toggle) => {
@@ -55,11 +56,7 @@ export default function PersonalizationScreen() {
       } else if(res.response && res.response.status === 401) {
         setLoading(false);
         handleToast("error", "Session expired. Please login again.", 2000, () => {
-          logoutUser(() => {
-            logout();
-          }, () => {
-            setLoading(false)
-          });
+          
         });
 
       }else {
@@ -69,14 +66,6 @@ export default function PersonalizationScreen() {
     });
   }
 
-
-  if(!(store?.faith_journey_reasons)){
-      console.log(store?.faith_journey_reasons)
-      logoutUser(() => {
-        logout();
-      })
-    return;
-  }
 
 
   return (
@@ -95,15 +84,15 @@ export default function PersonalizationScreen() {
         <View style={styles.imageContainer}>
             <PhotoCard
               isActive={cardOne}
-              setIsActive={() => handleIsActive(store?.faith_journey_reasons[0]?.id, true)}
+              setIsActive={() => handleIsActive(faith_journey_reasons[0]?.id, true)}
               img={require("../../../assets/img/card_bg1.png")}
-              text={store?.faith_journey_reasons[0]?.name}
+              text={faith_journey_reasons[0]?.name}
             />
             <PhotoCard
               isActive={cardTwo}
-              setIsActive={() => handleIsActive(store?.faith_journey_reasons[1]?.id, false)}
+              setIsActive={() => handleIsActive(faith_journey_reasons[1]?.id, false)}
               img={require("../../../assets/img/card_bg2.png")}
-              text={store?.faith_journey_reasons[1]?.name}
+              text={faith_journey_reasons[1]?.name}
             />
             
         </View>

@@ -8,6 +8,7 @@ import FontLoader from './src/components/FontLoader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'react-native';
+import 'global.css'
 
 export default function App() {
 

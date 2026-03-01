@@ -15,7 +15,8 @@ const baseStyle = StyleSheet.create({
     width: '100%',
     backgroundColor:'#fff',
     marginTop:'8%',
-    padding:20
+    padding:20,
+    alignItems:'center'
   },
   bg_image: {
         height:'100%', 
@@ -44,7 +45,7 @@ const baseStyle = StyleSheet.create({
   welcomeTitle: {
     fontSize: 32,
     fontFamily:'DMSerifDisplay',
-    color:"#0B172A"
+    color:"#005a55"
   },
   subtitle: {
     color: '#2B4752',

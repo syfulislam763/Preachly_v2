@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import api from './api';
 
 const useAppStore = create(
   persist(
@@ -20,20 +20,23 @@ const useAppStore = create(
       },
 
       setAuth: (authData) =>
-        set((state) => ({
-          auth: {
-            ...state.auth,
-            access: authData.access,
-            refresh: authData.refresh,
-            isLoggedIn: true,
-            onboarding_completed: authData.onboarding_completed ?? false,
-            user: {
-              email: authData.user?.email ?? null,
-              name: authData.user?.name ?? null,
-              social_auth_provider: authData.user?.social_auth_provider ?? null,
+        set((state) => {
+          api.defaults.headers.common['Authorization'] = `Bearer ${authData.access}`;
+          return {
+            auth: {
+              ...state.auth,
+              access: authData.access,
+              refresh: authData.refresh,
+              isLoggedIn: authData.isLoggedIn ?? false,
+              onboarding_completed: authData.onboarding_completed ?? false,
+              user: {
+                email: authData.user?.email ?? null,
+                name: authData.user?.name ?? null,
+                social_auth_provider: authData.user?.social_auth_provider ?? null,
+              },
             },
-          },
-        })),
+          }
+        }),
 
       setOnboardingCompleted: (value) =>
         set((state) => ({
@@ -250,7 +253,11 @@ const useAppStore = create(
 
     
       partialize: (state) => ({
-        auth: state.auth,
+        auth: {
+          access: state.auth.access,
+          refresh: state.auth.refresh,
+          onboarding_completed: state.auth.onboarding_completed
+        },
         onboarding: state.onboarding,
         profile: state.profile,
         payment: state.payment,

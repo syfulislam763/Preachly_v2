@@ -19,9 +19,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import VoiceMessageBubble from './VoiceMessageBubble';
 import { Audio } from 'expo-av';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import * as FileSystem from 'expo-file-system'
+import * as FileSystem from 'expo-file-system';
+
 
 const lock = require("../../../../assets/img/lock_voice.png");
+const close = require("../../../../assets/img/Close.png")
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -47,6 +49,7 @@ const MessageWrapper = ({
     const intervalRef = useRef(null);
     const [seconds, setSeconds] = useState(0);
     const [flag, setFlag] = useState(false);
+    const [isFollowUpQuestion, setIsFollowUpQuestion] = useState(true);
 
 
     const startTimer = () => {
@@ -65,36 +68,17 @@ const MessageWrapper = ({
     const soundRef = useRef(null);
     const [currentId, setCurrentId] = useState(0);
 
-    // const playSound = async (item) => {
- 
-    //   if (soundRef.current) {
-    //     await soundRef.current.unloadAsync();
-    //     soundRef.current = null;
-    //   }
-
-    //   const { sound } = await Audio.Sound.createAsync({ uri: item.uri }, {shouldPlay: true});
-    //   soundRef.current = sound;
-
-    //   sound.setOnPlaybackStatusUpdate((status) => {
-    //     if (status.didJustFinish) {
-    //         stopSound()
-    //     }
-    //   });
-
-    //   setCurrentId(item.id);
-    // };
-
     const playSound = async (item) => {
       console.log("file audio->", item)
       try {
-        // Set audio mode for iOS
+
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: false,
           staysActiveInBackground: false,
-          interruptionModeIOS:1, // Corrected
+          interruptionModeIOS:1, 
           playsInSilentModeIOS: true,
           shouldDuckAndroid: true,
-          interruptionModeAndroid: 1, // Corrected
+          interruptionModeAndroid: 1, 
         });
 
         if (soundRef.current) {
@@ -104,13 +88,12 @@ const MessageWrapper = ({
 
         let audioUri = item.uri;
     
-        // If it's a URL, download it first
         if (item.uri.startsWith('http')) {
           const filename = `audio_${item.id}.m4a`;
           const fileUri = `${FileSystem.cacheDirectory}${filename}`;
           
           try {
-            // Check if file already exists
+
             const fileInfo = await FileSystem.getInfoAsync(fileUri);
             if (!fileInfo.exists) {
               console.log('Downloading audio file...');
@@ -119,7 +102,7 @@ const MessageWrapper = ({
             audioUri = fileUri;
           } catch (downloadError) {
             console.log('Download failed, trying direct URL:', downloadError);
-            // Fallback to direct URL if download fails
+
           }
         }
 
@@ -318,11 +301,10 @@ const MessageWrapper = ({
             )}
             contentContainerStyle={{
               paddingTop: 15,
-              paddingHorizontal: 12,
-              paddingBottom: 20, // leave space for input
+              flexGrow:1
             }}
             ListEmptyComponent={() => {
-              return <DummyQuestion onChange={onPredefinedMsg}/>
+              return isFollowUpQuestion?<DummyQuestion setIsFollowUpQuestion={setIsFollowUpQuestion} onChange={onPredefinedMsg}/>:null
             }}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
@@ -423,44 +405,56 @@ const MessageWrapper = ({
 
 export default MessageWrapper
 
-const DummyQuestion = ({onChange}) => {
-  return <View style={{
-   
-    marginTop: "100%",
-    width:"100%",
-    backgroundColor:'#fff',
-    padding:20,
-    alignItems: 'center',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10
-  }}>
-    <Text style={{
-      color:"#0B172A",
-      fontFamily:'NunitoBold',
-      fontSize: 18,
-      paddingVertical: 20,
-    }}>What do you want to ask?</Text>
-    <View style={{
-      
-    }}>
-      <Pressable onPress={()=>onChange("Why does God allow suffering and evil in the world?")}>
-        <Text style={styles.commonQuestion}>Why does God allow suffering and evil in the world?</Text>
-      </Pressable>
-      <Pressable onPress={() => onChange("How can we trust the Bible when it's written by humans?")}>
-        <Text style={styles.commonQuestion}>How can we trust the Bible when it's written by humans?</Text>
-      </Pressable>
-      <Pressable onPress={() => onChange("How can Jesus be both fully God and fully man?")}>
-        <Text style={styles.commonQuestion}>How can Jesus be both fully God and fully man?</Text>
-      </Pressable>
-      <Pressable onPress={() => onChange(`Can't people be good without believing in God?`)}>
-        <Text style={styles.commonQuestion}>Can't people be good without believing in God?</Text>
-      </Pressable>
-      <Pressable onPress={() => onChange(`How can I trust the church when it's full of scandalsand corruption?`)}>
-        <Text style={styles.commonQuestion}>How can I trust the church when it's full of scandalsand corruption?</Text>
-      </Pressable>
+const DummyQuestion = ({ onChange, setIsFollowUpQuestion }) => {
+  const questions = [
+    "Why does God allow suffering and evil in the world?",
+    "How can we trust the Bible when it's written by humans?",
+    "How can Jesus be both fully God and fully man?",
+    "Can't people be good without believing in God?",
+    "How can I trust the church when it's full of scandals and corruption?",
+  ];
+
+  return (
+    <View className="flex-1 justify-end pb-2">
+      <View
+        className="bg-white rounded-t-3xl px-5 pt-5 pb-6"
+        style={{
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 3,
+        }}
+      >
+        {/* Title */}
+
+        <View className='flex-row justify-end items-start'>
+          <View className='w-full items-center'>
+            <Text className="text-[#0B172A] font-[NunitoBold] text-lg pb-2 mb-3 ml-5">
+              What do you want to ask?
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => setIsFollowUpQuestion(false)} className=''>
+            <Image source={close} style={{objectFit:'contain'}} className='h-[24px] w-[24px]'/>
+          </TouchableOpacity>
+        </View>
+        
+
+        {/* Pills */}
+        {questions.map((question, index) => (
+          <Pressable
+            key={index}
+            onPress={() => onChange(question)}
+            className="bg-[#FDF2D8] rounded-full px-4 py-2 mb-2.5 w-full active:opacity-70"
+          >
+            <Text className="text-[#0B172A] font-[NunitoSemiBold] text-[15px]">
+              {question}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
     </View>
-  </View>
-}
+  );
+};
 
 const styles = StyleSheet.create({
   commonQuestion:{

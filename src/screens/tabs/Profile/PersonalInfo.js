@@ -476,7 +476,7 @@ const InfoRow = ({ label, value, onChange, isEditable=true,isDate=false}) => {
 
   return <View style={styles.inputFieldRow}>
     <Text style={styles.inputFieldLabel}>{label}</Text>
-    {console.log("value", value)}
+
     {isEditable?
 
       isDate?

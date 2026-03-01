@@ -281,7 +281,7 @@ const Day = ({ day, selectedDate, currentMonth, onSelect, markedDates }) => {
               }}
             />
             <View style={{height:20}}></View>
-            <CommonButton
+            {/* <CommonButton
               btnText={"Homepage"}
               bgColor={deepGreen}
               navigation={navigation}
@@ -291,7 +291,7 @@ const Day = ({ day, selectedDate, currentMonth, onSelect, markedDates }) => {
               opacity={1}
             />
             <View style={{height:20}}></View>
-            <Text style={styles.footerText}>Back</Text>
+            <Text style={styles.footerText}>Back</Text> */}
             
           </View>
         </CustomModal>}

@@ -1,20 +1,39 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import CommonButton from '../../../components/CommonButton'
+import { useNavigation } from '@react-navigation/native'
 
-const HistoryNotFound = ({title, text, navigation}) => {
+const HistoryNotFound = ({title, text, route, starIcon}) => {
+    const navigation = useNavigation();
+
+    const renderText = () => {
+        if (!starIcon || !text.includes('{{}}')) {
+            return <Text style={styles.text}>{text}</Text>;
+        }
+
+        const [before, after] = text.split('{{}}');
+
+        return (
+            <Text style={styles.text}>
+                {before}
+                <Image source={starIcon} style={{ width: 15, height: 15 }} />
+                {after}
+            </Text>
+        );
+    };
+
   return (
     <View style={styles.container}>
 
         <Text style={styles.title}>{title}</Text>
 
-        <Text style={styles.text}>{text}</Text>
+        {renderText()}
 
         <CommonButton
             btnText={"Ask Preachly"}
             bgColor={"#005A55"}
-            navigation={navigation}
             route={""}
+            handler={() => navigation.navigate(route)}
             txtColor={"#fff"}
             opacity={1}
         />
@@ -45,6 +64,7 @@ const styles = StyleSheet.create({
         color:'#2B4752',
         paddingHorizontal: 20,
         textAlign:'center',
-        paddingBottom: 70
+        paddingBottom: 70,
+        alignItems:'center'
     }
 })

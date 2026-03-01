@@ -6,15 +6,24 @@ import MainTabs from './MainTabs';
 import SubscriptionScreen from '../screens/subscription/SubscriptionScreen';
 import { useAuth } from '../context/AuthContext';
 import PreachlyScreen from '../screens/tabs/Preachly/PreachlyScreen';
+import useAppStore from '@/context/useAppStore';
+import { View , Text} from 'react-native';
 
 export default function RootNavigator() {
   
   const { isAuthenticated, isPersonalized, isSubscribed } = useAuth();
-  
+  const isLoggedIn = useAppStore(s => s.auth.isLoggedIn);
+
+  console.log(isLoggedIn, "logged in")
+  // <PersonalizationStack/>
+
+  return !isLoggedIn?<AuthStack/>: <PersonalizationStack/>
 
 
+}
 
-  return !isAuthenticated?<AuthStack/>:<PersonalizationStack/>
-
-
+const Test = () => {
+  return <View className="flex-1 justify-center items-center">
+    <Text>Hello</Text>
+  </View>
 }

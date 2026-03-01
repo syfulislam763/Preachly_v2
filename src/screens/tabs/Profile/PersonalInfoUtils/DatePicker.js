@@ -18,6 +18,8 @@ const DatePicker = ({
 
   const selectedDate = value ? dayjs(value, "YYYY-MM-DD", true) : null;
 
+  console.log(selectedDate, "dfdf")
+
   const formatDateForDisplay = (date) => {
 
     const temp = date ? dayjs(date).format('YYYY-MM-DD') : null;
@@ -36,11 +38,11 @@ const DatePicker = ({
   
       <TouchableOpacity onPress={() => setIsOpen(true)} >
         <Text
-          className={`text-base flex-1 ${
-            selectedDate ? 'text-gray-900' : 'text-gray-400'
+          className={`text-base ${
+            selectedDate ? 'text-gray-900' : 'text-gray-500'
           }`}
         >
-          {selectedDate ? formatDateForDisplay(selectedDate) : placeholder}
+          {selectedDate ? formatDateForDisplay(selectedDate) : 'Select a date'}{" "}
         </Text>
       </TouchableOpacity>
 

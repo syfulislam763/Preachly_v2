@@ -31,11 +31,14 @@ import { useNavigation } from '@react-navigation/native';
 import { onboarding_status } from '../personalization/PersonalizationAPIs';
 import { get_onboarding_all_data } from '../personalization/PersonalizationAPIs';
 import { CommonActions } from '@react-navigation/native';
+import useAppStore from '@/context/useAppStore';
 
 export default function CreatePassword() {
   const { updateStore } = useAuth();
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
+
+  const setAuth = useAppStore(s => s.setAuth);
 
   const route = useRoute()
   const navigation = useNavigation()
@@ -51,9 +54,9 @@ export default function CreatePassword() {
     }
 
     setLoading(true);
-    console.log(payload, "899")
+   
     confirm_forget_password(payload, (res, success) => {
-      console.log(res);
+
       if(success){
         handleToast("info", "Password changed successfully, login again!",3000, () => {
             // navigation.navigate("SignUp", {resentOPT:true, ...route.params})
@@ -98,10 +101,11 @@ export default function CreatePassword() {
       if(isSuccess){
       
         onboarding_status(res?.data?.access, (statusRes, isOk) => {
-
+          const {access, refresh} = res.data;
+          const onboarding_completed = statusRes?.data?.onboarding_completed ?? false
           setLoading(false)
           if(isOk){
-            updateStore({...res?.data, onboarding_completed:statusRes?.data?.onboarding_completed})
+            setAuth({access, refresh, onboarding_completed})
             handleToast("success", "User is created!",2000, () => {
               navigation.navigate("FinishAuthentication")
             })
@@ -153,7 +157,7 @@ export default function CreatePassword() {
           <View style={styles.content}>
             <View style={{paddingTop:16}}></View>
             <Text style={styles.title}>Create a password</Text>
-            <Text style={styles.text}>The password must be longer than 8 characters, contain numbers, letters, and special characters</Text>
+            <Text style={styles.text}>The password must be longer than 8 characters, contain numbers(0 - 9), letters (A-Z,a-z), and special characters (! # $ % & * + , - . : ; ? @ ^ )</Text>
             
             <CommonInput
               type='password'

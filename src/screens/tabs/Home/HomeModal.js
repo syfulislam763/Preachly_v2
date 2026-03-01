@@ -38,17 +38,7 @@ const HomeModal = ({modalVisible, setModalVisible, current_streak}) => {
               }}
             />
             <View style={{height:20}}></View>
-            <CommonButton
-              btnText={"Homepage"}
-              bgColor={deepGreen}
-              navigation={navigation}
-              route={""}
-              txtColor={primaryText}
-              bold='bold'
-              opacity={1}
-            />
-            <View style={{height:20}}></View>
-            <Text style={styles.footerText}>Back</Text>
+
             
           </View>
         </CustomModal>

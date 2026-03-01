@@ -345,16 +345,21 @@ const HistoryScreen = () => {
             return <HistoryNotFound
               title={"No Chats Yet"}
               text={"Ask Preachly for clarity, insight, and scripture-bvacked answers. Your past chats will be saved here for easy reference"}
+              route={"MessageScreen"}
             />
           }else if(selectedFilter == "Favorites"){
             return  <HistoryNotFound
               title={"No Favorites Yet"}
-              text={"Looks like you haven't saved any chats yet. When you find a conversation that resonates tap the favorite icon to keep it handy"}
+              text={"Looks like you haven't saved any chats yet. When you find a conversation that resonates tap the {{}} to keep it handy"}
+              route={"MessageScreen"}
+              starIcon={star}
             />
           }else {
             return <HistoryNotFound 
               title={"No Saved Answers Yet"}
-              text={"Looks like you haven't saved any key answers. When you find an answer worth keeping, tap the bookmark to store it for quick reference"}
+              text={"Looks like you haven't saved any key answers. When you find an answer worth keeping, tap the {{}} to store it for quick reference"}
+              route={"MessageScreen"}
+              starIcon={bookmark}
             />
           }
            

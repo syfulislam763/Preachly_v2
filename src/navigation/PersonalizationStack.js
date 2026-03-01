@@ -18,6 +18,7 @@ import MainTabs from './MainTabs';
 import MessageScreen from '../screens/tabs/Message/MessageScreen';
 import { useAuth } from '../context/AuthContext';
 import BackButton from '../components/BackButton';
+import useAppStore from '@/context/useAppStore';
 
 const NotFound = () => <View>
   <Text>Not Found</Text>
@@ -28,10 +29,16 @@ const Stack = createNativeStackNavigator();
 export default function PersonalizationStack() {
 
   
-  const {store, completePersonalization, isPersonalized, isSubscribed} = useAuth()
+  const {store, completePersonalization, isPersonalized, isSubscribed} = useAuth();
   
-  const isMainTab = (isPersonalized) && (isSubscribed);
-  const isPaymentTab = (isPersonalized)
+
+  //rawiti7686@pazuric.com
+  const onboarding_completed = useAppStore(s => s.auth.onboarding_completed);
+  const isPaymentCompleted = useAppStore(s => s.payment.has_subscription)
+
+  
+  const isMainTab = (onboarding_completed) && (isPaymentCompleted);
+  const isPaymentTab = (onboarding_completed)
 
   
 
