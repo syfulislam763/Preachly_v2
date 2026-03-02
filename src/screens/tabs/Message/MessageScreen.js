@@ -22,7 +22,7 @@ import { useRoute } from '@react-navigation/native';
 import MessageWrapper from './MessageWrapper';
 import { startRecording, stopRecording,requestPermission} from './voiceRecord_';
 import { useFocusEffect } from '@react-navigation/native';
-
+import useAppStore from '@/context/useAppStore';
 
 export default function MessageScreen() {
   //useLogout();
@@ -31,7 +31,9 @@ export default function MessageScreen() {
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0)
   ///
-  const {store, updateStore, updateSession, session} = useAuth();
+  const {updateSession, session} = useAuth();
+
+  const access = useAppStore((s) => s.auth.access)
 
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("")
@@ -107,7 +109,7 @@ export default function MessageScreen() {
       setLoading(false);
     })
   }
-  //console.log("***", JSON.stringify(store, null, 2))
+
 
   useEffect(() =>{
     console.log(session, "session")
@@ -168,8 +170,7 @@ export default function MessageScreen() {
           updateSession({...session, isNewSession: false})
           //console.log("m ->", JSON.stringify(msgs, null, 2))
         }else{
-          console.log("s error->", res);
-          console.log(store.session)
+          
           setLoading(false);
         }
         
@@ -243,7 +244,7 @@ export default function MessageScreen() {
     if(!session?.id)return () => {}
     if(ws.current)return () => {}
 
-    const wsURL = WEBSOCKET_URL+`/ws/chat/${session?.id}/?token=${store?.access}`;
+    const wsURL = WEBSOCKET_URL+`/ws/chat/${session?.id}/?token=${access}`;
     console.log(wsURL);
     ws.current = new WebSocket(wsURL);
 
@@ -310,7 +311,7 @@ export default function MessageScreen() {
     ws.current.onclose = () =>{
       console.log("socket disconnected...");
     }
-  }, [ store, session]);
+  }, [ access, session]);
 
   const handleSendPredefinedMessage = (message) => {
     const payload = {

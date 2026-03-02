@@ -4,11 +4,12 @@ import { View, Text, StyleSheet, Pressable, Image, Modal, TouchableOpacity} from
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logoutUser } from '../../../context/api'
 import { useAuth } from '../../../context/AuthContext'
-import { CommonActions } from '@react-navigation/native'
+import { CommonActions } from '@react-navigation/native';
+import useAppStore from '@/context/useAppStore'
 
 const SettingHome = () => {
 
-    const { logout } = useAuth()
+    const logout = useAppStore((s) => s.logout)
 
     const navigation = useNavigation()
 

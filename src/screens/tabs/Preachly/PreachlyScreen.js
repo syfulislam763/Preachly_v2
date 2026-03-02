@@ -15,6 +15,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import useLogout from '../../../hooks/useLogout';
 import { useFocusEffect } from '@react-navigation/native';
 import { finish_scripture } from '../TabsAPI';
+import useAppStore from '@/context/useAppStore';
 
 export default function PreachlyScreen() {
   useLogout();
@@ -22,8 +23,8 @@ export default function PreachlyScreen() {
   const [openChapterList, setOpenChapterList] = useState(false)
   const [openSearch, setOpenSearch] = useState(false)
   const [progress, setProgress] = useState(0);
-  const {store, updateStore} = useAuth();
-  const [selectedBibleVersion, setSelectedBibleVersion] = useState({})
+  const [selectedBibleVersion, setSelectedBibleVersion] = useState({});
+  const bible_version = useAppStore((s) => s.profile.bible_version)
   const [bibleBooks, setBibleBooks] = useState([]);
   const [bibleBook, setBibleBook] = useState({});
   const [loading, setLoading ] = useState(false);
@@ -219,7 +220,7 @@ export default function PreachlyScreen() {
     if(Object.keys(selectedBibleVersion).length > 0){
       payload.version_id = selectedBibleVersion?.api_bible_id
     } else {
-      payload.version_id = store?.profileSettingData?.bible_version?.api_bible_id
+      payload.version_id = bible_version?.api_bible_id
     }
 
     console.log("bible issue", payload);
@@ -229,7 +230,7 @@ export default function PreachlyScreen() {
         setBibleBooks(res?.data);
         setOpenBibleVersion(false)
         if(Object.keys(selectedBibleVersion).length <= 0){
-          setSelectedBibleVersion(store?.profileSettingData?.bible_version)
+          setSelectedBibleVersion(bible_version)
         }
 
         const book = res?.data?.books[0];

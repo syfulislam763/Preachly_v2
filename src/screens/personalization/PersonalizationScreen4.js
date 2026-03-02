@@ -12,10 +12,12 @@ import { useNavigation } from '@react-navigation/native';
 import Indicator from '../../components/Indicator';
 import { bible_familiarity} from './PersonalizationAPIs';
 import useStaticData from '../../hooks/useStaticData';
-
+import useAppStore from '@/context/useAppStore';
 
 export default function PersonalizationScreen() {
   const {store} = useAuth();
+
+  const bible_familiarity_data = useAppStore((s) => s.onboarding.bible_familiarity_data)
 
   const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
   const styles = getStyles(isSmall, isMedium, isLarge, isFold)
@@ -56,27 +58,27 @@ export default function PersonalizationScreen() {
               isActive={index==0}
               setIsActive={() => {
                 setIndex(0);
-                setId(store?.bible_familiarity_data[0].id)
+                setId(bible_familiarity_data[0].id)
               }}
-              text={store?.bible_familiarity_data[0].label}
+              text={bible_familiarity_data[0].label}
               img={require("../../../assets/img/card_bg1.png")}
             />
             <PhotoCard 
               isActive={index==1}
               setIsActive={() => {
                 setIndex(1);
-                setId(store?.bible_familiarity_data[1].id)
+                setId(bible_familiarity_data[1].id)
               }}
-              text={store?.bible_familiarity_data[1].label}
+              text={bible_familiarity_data[1].label}
               img={require("../../../assets/img/card_bg2.png")}
             />
             <PhotoCard 
               isActive={index==2}
               setIsActive={() => {
                 setIndex(2);
-                setId(store?.bible_familiarity_data[2].id)
+                setId(bible_familiarity_data[2].id)
               }}
-              text={store?.bible_familiarity_data[2].label}
+              text={bible_familiarity_data[2].label}
               img={require("../../../assets/img/card_bg3.png")}
             />
           
@@ -85,7 +87,7 @@ export default function PersonalizationScreen() {
         
         <Content
           styles={styles}
-          data={store?.bible_familiarity_data[index]}
+          data={bible_familiarity_data[index]}
         />
         
 

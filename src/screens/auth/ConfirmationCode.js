@@ -7,13 +7,18 @@ import {verify_email, resentOTP, handleToast, verify_change_email,verify_forget_
 import Indicator from '../../components/Indicator'
 import { useNavigation, useRoute , CommonActions} from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
+import useAppStore from '@/context/useAppStore';
 
 const ConfirmationCode = ({ }) => {
   const [isLoading, setIsloading] = useState(false)
   const route = useRoute()
   const navigation = useNavigation()
   const {email, change, profileSettingData, faith_goal_questions, type} = route.params
-  const {updateStore} = useAuth()
+  const {updateStore} = useAuth();
+
+  const setAuth = useAppStore((s) => s.setAuth);
+  const auth = useAppStore((s) => s.auth);
+  const setProfileData = useAppStore((s) => s.setProfileData)
 
 
   const handleReset = (otp) => {
@@ -38,8 +43,9 @@ const ConfirmationCode = ({ }) => {
     setIsloading(true)
     verify_change_email({otp: otp}, (res, success) => {
       if(success){
-      
-          updateStore({profileSettingData, faith_goal_questions})
+
+          setProfileData({...profileSettingData, userInfo: {...profileSettingData.userInfo, email: route.params.email}})
+          //updateStore({profileSettingData, faith_goal_questions})
           handleToast("info", "Email Changed!",2000, () => {
               // navigation.navigate("SignUp", {resentOPT:true, ...route.params})
               navigation.dispatch(state => {
@@ -73,7 +79,6 @@ const ConfirmationCode = ({ }) => {
       if(isSuccess){
         
         setIsloading(false)
-        updateStore({refreshToken:res?.refresh, accessToken: res?.access})
         navigation.navigate("CreatePassword", payload)
         
       }else{

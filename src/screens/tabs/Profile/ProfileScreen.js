@@ -18,12 +18,17 @@ import Indicator from '../../../components/Indicator';
 import { get_static_badge, update_static_badge } from '../TabsAPI';
 import { BASE_URL } from '../../../context/Paths';
 import dayjs from 'dayjs';
+import useAppStore from '@/context/useAppStore';
 
 const ProfileScreen = () => {
   useLogout();
   const route = useRoute();
   const navigation = useNavigation();
-  const { updateStore, store } = useAuth();
+
+  const userInfo = useAppStore((s) => s.profile.userInfo);
+  const dashboard = useAppStore((s) => s.profile.dashboard)
+
+
 
   const [badge, setBadge] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -94,8 +99,8 @@ const ProfileScreen = () => {
           }}>
             <Image
               source={
-                store?.profileSettingData?.userInfo?.profile_picture
-                  ? { uri: store?.profileSettingData?.userInfo?.profile_picture }
+                userInfo?.profile_picture
+                  ? { uri: userInfo?.profile_picture }
                   : require("../../../../assets/img/user1.png")
               }
               style={{
@@ -106,7 +111,7 @@ const ProfileScreen = () => {
             />
           </View>
           <Text style={styles.profileText}>
-            {store?.profileSettingData?.userInfo?.name || "User"}
+            {userInfo?.name || "User"}
           </Text>
         </View>
 
@@ -137,7 +142,7 @@ const ProfileScreen = () => {
           />
           <Text style={{ ...styles.semitext, fontSize: 14 }}>
             You're on <Text style={{ color: '#2B4752', fontFamily: 'NunitoBold' }}>
-              Day {store?.profile_dashboard?.streak?.longest_streak}
+              Day {dashboard?.streak?.longest_streak ?? 0}
             </Text> of growing your faith confidence!
           </Text>
         </View>

@@ -7,9 +7,24 @@ import { BIBLE_BIBLE_VERSIONS,
     WEEKLY_CHECK_IN_QUESTIONS,
     SAVE_CHECK_IN,
     ALL_GOAL,
-    PROFILE_URL
+    PROFILE_URL,
+    DAILY_CHECK_IN
  } from "../../context/Paths";
 
+
+ export const daily_check_in = async (token, cb) => {
+    try{
+        const res = await api.post(DAILY_CHECK_IN, {}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        cb(res.data, true)
+    }catch(e){
+        cb(e, false);
+        //console.log(JSON.stringify(e, null, 2), "daily check in")
+    }
+}
 
 export const get_bible_versions = async (cb) => {
     try{

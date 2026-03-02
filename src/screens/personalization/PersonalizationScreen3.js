@@ -14,11 +14,13 @@ import { useNavigation } from '@react-navigation/native';
 import Indicator from '../../components/Indicator';
 import { isValid } from 'date-fns';
 import useStaticData from '../../hooks/useStaticData';
-
+import useAppStore from '@/context/useAppStore';
 
 
 export default function PersonalizationScreen3() {
-  const {store} = useAuth()
+  const {store} = useAuth();
+
+  const tone_preference_data = useAppStore((s) => s.onboarding.tone_preference_data)
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [id, setId] = useState(null);
@@ -64,7 +66,7 @@ export default function PersonalizationScreen3() {
           contentContainerStyle={{ padding: 0 }}
           showsVerticalScrollIndicator={false}
         >
-          {store?.tone_preference_data.map((item, idx) => (
+          {tone_preference_data.map((item, idx) => (
             <SelectableCard
               key={idx}
               title={item.title}

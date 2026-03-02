@@ -12,10 +12,12 @@ import { useNavigation } from '@react-navigation/native';
 import { bible_version } from './PersonalizationAPIs';
 import Indicator from '../../components/Indicator';
 import useStaticData from '../../hooks/useStaticData';
-
+import useAppStore from '@/context/useAppStore';
 
 export default function PersonalizationScreen5() {
   const {store} = useAuth();
+
+  const bible_versions = useAppStore((s) => s.onboarding.bible_versions)
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -46,7 +48,7 @@ export default function PersonalizationScreen5() {
         <Text style={styles.title}>Select your preferred Bible versioin</Text>
 
         <CustomSelect
-          items={store?.bible_versions}
+          items={bible_versions}
           placeholder='Bible Version'
           onSelect={(item) => {
             setSelectedItem(item)

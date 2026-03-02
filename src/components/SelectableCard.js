@@ -9,6 +9,7 @@ import {
   UIManager,
   Image,
 } from 'react-native';
+import { ROOT_URL } from '@/context/Paths';
 
 // Enable layout animation for Android
 // if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -31,6 +32,8 @@ const SelectableCard = ({
     setExpanded(!expanded);
   };
 
+  console.log("url", ROOT_URL+icon)
+
   return (
     <TouchableOpacity
       style={[
@@ -44,7 +47,7 @@ const SelectableCard = ({
         {/* Replace this with your custom icon */}
         {/* <Text style={styles.leafIcon}>🍃</Text> */}
         <Image
-            source={icon}
+            source={{uri: ROOT_URL+icon}}
             style={{...styles.icon, marginRight:15}}
         />
 

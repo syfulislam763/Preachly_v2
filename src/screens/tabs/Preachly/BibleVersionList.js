@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import ModalHeader from './ModalHeader';
 import { useAuth } from '../../../context/AuthContext';
+import useAppStore from '@/context/useAppStore';
 
 const initialVersions = [
   {
@@ -24,7 +25,9 @@ const initialVersions = [
 
 export default function BibleVersionList({selectedItem, setSelectedItem, onClose}) {
   const [selectedId, setSelectedId] = useState('1');
-  const {store} = useAuth()
+  const {store} = useAuth();
+
+  const bible_versions = useAppStore((s) => s.onboarding.bible_versions)
 
 
   const renderItem = ({ item }) => {
@@ -66,7 +69,7 @@ export default function BibleVersionList({selectedItem, setSelectedItem, onClose
             />
         </View>
         <FlatList
-            data={store?.bible_versions}
+            data={bible_versions}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
             ItemSeparatorComponent={() => <View style={styles.separator} />}

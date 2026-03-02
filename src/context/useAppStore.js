@@ -3,6 +3,26 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
 
+const bird = require("../../assets/img/bird.png");
+const bulb = require("../../assets/img/24-sunset.png");
+const leaf = require("../../assets/img/24-leaf.png")
+const book = require("../../assets/img/book_tone.png");
+const rocket = require("../../assets/img/RocketLaunch.png");
+const thunder = require("../../assets/img/thunder.png");
+
+const tones = {
+  "Clear and Hopeful": bulb,
+  "Dynamic and Powerful": thunder,
+  "Practical and Everyday": leaf,
+  "Scholarly and Rational": book,
+  "Encouraging and Purposeful": rocket,
+  "Uplifting and Optimistic": bird,
+
+  "Warm and Relatable": bulb,
+  "Passionate and Empowering": thunder,
+
+}
+
 const useAppStore = create(
   persist(
     (set, get) => ({
@@ -43,8 +63,9 @@ const useAppStore = create(
           auth: { ...state.auth, onboarding_completed: value },
         })),
 
-      logout: () =>
-        set({
+      logout: () => {
+        delete api.defaults.headers.common['Authorization'];
+        return set({
           auth: {
             access: null,
             refresh: null,
@@ -55,7 +76,8 @@ const useAppStore = create(
           profile: useAppStore.getInitialState().profile,
           payment: useAppStore.getInitialState().payment,
           goal: useAppStore.getInitialState().goal,
-        }),
+        })
+      },
 
       onboarding: {
         denominations: [],
@@ -72,6 +94,8 @@ const useAppStore = create(
           denominations.push({ id: 0, name: 'None', is_active: false, is_selected: false });
         }
 
+        console.log("data -> ", JSON.stringify(data, null, 2))
+
         const faith_journey_reasons = (data.journey_reasons ?? []).map((item) => ({
           ...item,
           name: item.option,
@@ -87,11 +111,17 @@ const useAppStore = create(
           options: item.options.map((op) => ({ ...op, name: op.option })),
         }));
 
+        const tone_preference_data = (data?.tone_preferences ?? []).map((item) => ({
+          ...item,
+          //icon: tones[item.title]
+        }))
+
+
         set({
           onboarding: {
             denominations,
             bible_versions,
-            tone_preference_data: data.tone_preferences ?? [],
+            tone_preference_data,
             faith_journey_reasons,
             bible_familiarity_data: data.bible_familiarity ?? [],
             faith_goal_questions,
@@ -100,14 +130,76 @@ const useAppStore = create(
       },
 
       profile: {
-        userInfo: {},       
-        denomination: {},
-        bible_version: {},
-        tone_preference: {},
-        faith_reason: {},
-        bible_familiarity: {},
-        goal_preference: {},
-        dashboard: {},     
+        userInfo: {
+          name: null,
+          date_of_birth: null,
+          profile_picture: null,
+          remove_profile_picture: false,
+          email: ""
+        },       
+        denomination: {
+          id: 0,
+          name: "",
+          is_active: false,
+          is_selected: false
+        },
+        bible_version: {
+          id: 0,
+          title: "",
+          subtitle: "",
+          api_bible_id: "",
+          is_active: false,
+          is_selected: false,
+          name: ""
+        },
+        tone_preference: {
+          id: 0,
+          title: "",
+          name: "",
+          description: "",
+          quote: "",
+          icon: 0,
+          is_active: false,
+          is_selected: false
+        },
+        faith_reason: {
+          id: 0,
+          option: "",
+          is_active: false,
+          is_selected: false,
+          name: ""
+        },
+        bible_familiarity: {
+          id: 0,
+          label: "",
+          text1: "",
+          text2: "",
+          title: "",
+          name: "",
+          caption: "",
+          is_active: false,
+          is_selected: false
+        },
+        goal_preference: {
+          id: 0,
+          goal_type: "",
+          goal_display: "",
+          target_count: 0,
+          current_count: 0,
+          completed: false,
+          progress_percentage: 0,
+          week_start: "",
+          week_end: "",
+          days_remaining: 0,
+          created_at: "",
+          name: ""
+        },
+        dashboard: {
+          streak: {},
+          badges: [],
+          available_weekly_checkins: 0,
+          total_weekly_checkins_completed: 0
+        },     
       },
 
       setProfileData: (data) =>
@@ -197,16 +289,19 @@ const useAppStore = create(
 
 
       goal: {
-        id: null,
-        goal_type: null,
-        goal_display: null,
-        target_count: 0,
-        current_count: 0,
-        completed: false,
-        progress_percentage: 0,
+        week_start: "",
+        week_end: "",
         days_remaining: 0,
-        week_start: null,
-        week_end: null,
+        goal: {
+          goal_type: "",
+          goal_display: "",
+          current_count: 0,
+          target_count: 0,
+          completed: false,
+          progress_percentage: 0
+        },
+        is_new_goal: false,
+        week_number: 0
       },
 
       setCurrentGoal: (goalData) =>

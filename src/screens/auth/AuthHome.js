@@ -32,7 +32,7 @@ const AuthHome = () => {
 
     googleLogin(payload, (res, success) => {
       if (!success) {
-        console.log('Login failed', res);
+        console.log('Login failed', JSON.stringify(res, null, 2));
         setLoading(false);
         return;
       }

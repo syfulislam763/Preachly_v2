@@ -28,7 +28,7 @@ const Stack = createNativeStackNavigator();
 
 export default function PersonalizationStack() {
 
-  
+
   const {store, completePersonalization, isPersonalized, isSubscribed} = useAuth();
   
 

@@ -16,6 +16,7 @@ import Indicator from '../../../components/Indicator';
 import { useRoute } from '@react-navigation/native';
 import CommonCard from '../Home/CommonCard';
 import { useAuth } from '../../../context/AuthContext';
+import useAppStore from '@/context/useAppStore';
 
 const screenWidth = Dimensions.get('window').width;
 const calendarPadding = 10;
@@ -30,7 +31,9 @@ const Calendar = () => {
   const styles = getStyles(isSmall, isMedium, isLarge, isFold)
   const [loading , setLoading] = useState(false);
   const [checkIns, setCheckIns] = useState([]);
-  const {store} = useAuth();
+ 
+
+  const dashboard = useAppStore((s) => s.profile.dashboard)
 
 
   const handle_get_calendar_information = () => {
@@ -203,7 +206,7 @@ const Day = ({ day, selectedDate, currentMonth, onSelect, markedDates }) => {
           color: '#0b172A',
           fontSize: 18
         }}>Calendar</Text>)}
-        RightComponent={() => <Reward count={store?.profile_dashboard?.streak?.current_streak} handler={() => setModalVisible(true)}/>}
+        RightComponent={() => <Reward count={dashboard.streak?.current_streak} handler={() => setModalVisible(true)}/>}
         backgroundStyle={{backgroundColor:'#fff'}}
       />
 
@@ -268,7 +271,7 @@ const Day = ({ day, selectedDate, currentMonth, onSelect, markedDates }) => {
             </View>
 
             <View>
-              <Text style={styles.text}>You've checked in for <Text style={{fontFamily:'NunitoExtraBold'}}>{store?.profile_dashboard?.streak?.current_streak || "0"} days</Text> straight! </  Text> 
+              <Text style={styles.text}>You've checked in for <Text style={{fontFamily:'NunitoExtraBold'}}>{dashboard?.streak?.current_streak || "0"} days</Text> straight! </  Text> 
               <Text style={styles.text}>Keep the momentum going -- stay consistent, stay inspired, and unlock new titiles along the way.</Text>
             </View>
 

@@ -14,8 +14,6 @@ export default function RootNavigator() {
   const { isAuthenticated, isPersonalized, isSubscribed } = useAuth();
   const isLoggedIn = useAppStore(s => s.auth.isLoggedIn);
 
-  console.log(isLoggedIn, "logged in")
-  // <PersonalizationStack/>
 
   return !isLoggedIn?<AuthStack/>: <PersonalizationStack/>
 

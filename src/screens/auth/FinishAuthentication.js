@@ -25,8 +25,10 @@ const FinishAuthentication = () => {
   const onboarding_completed = useAppStore((s) => s.auth.onboarding_completed);
   const setOnboardingData = useAppStore((s) => s.setOnboardingData);
   const setAuth = useAppStore((s) => s.setAuth);
+  const onboarding = useAppStore((s) => s.onboarding);
 
-  console.log(access, "finish")
+
+  console.log(refresh, "finish")
 
   const handleForward = () => {
     setLoading(true);

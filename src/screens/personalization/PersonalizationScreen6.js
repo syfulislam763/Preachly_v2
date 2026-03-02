@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import Indicator from '../../components/Indicator';
 import { setAuthToken } from '../../context/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useAppStore from '@/context/useAppStore';
 
 export default function PersonalizationScreen() {
   const navigation = useNavigation();
@@ -22,6 +23,9 @@ export default function PersonalizationScreen() {
 
   const [loading, setLoading] = React.useState(false);
   const { store,updateStore } = useAuth();
+  
+
+  const setOnboardingCompleted = useAppStore((s) => s.setOnboardingCompleted)
 
   const handleSubmit = () => {
 
@@ -29,11 +33,7 @@ export default function PersonalizationScreen() {
     onboarding_complete((data, success) => {
       setLoading(false);
       if (success) {
-        const temp = {...store, onboarding_completed: true}
-        updateStore(temp)
-        setAuthToken(store?.access, store?.refresh, async () => {
-          await AsyncStorage.setItem('store', JSON.stringify(temp));
-        })
+        setOnboardingCompleted(true)
         navigation.navigate("Notification");
       } else {
         console.error(data);

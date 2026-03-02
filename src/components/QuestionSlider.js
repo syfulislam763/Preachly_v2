@@ -6,14 +6,14 @@ import useLayoutDimention from '../hooks/useLayoutDimention';
 import { getStyles } from './QuestionSliderStyle';
 import useStaticData from '../hooks/useStaticData';
 import { useAuth } from '../context/AuthContext';
-
+import useAppStore from '@/context/useAppStore';
 
 
 export default function QuestionSlider({savedOptions, setSavedOptions}) {
   const {store} = useAuth();
 
-  //console.log(JSON.stringify(store?.faith_goal_questions, null, 2), "y")
   
+  const faith_goal_questions = useAppStore((s) => s.onboarding.faith_goal_questions)
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
@@ -21,10 +21,10 @@ export default function QuestionSlider({savedOptions, setSavedOptions}) {
  
 
   const handleSelect = (option) => {
-    if(currentIndex>store?.faith_goal_questions.length-1 || currentIndex < 0 || !(store?.faith_goal_questions)){
+    if(currentIndex>faith_goal_questions.length-1 || currentIndex < 0 || !(faith_goal_questions)){
       return;
     }
-    const temp = store?.faith_goal_questions?.sort((a, b) => a.id - b.id)[currentIndex]?.options;
+    const temp = faith_goal_questions?.sort((a, b) => a.id - b.id)[currentIndex]?.options;
 
     let filtered = selectedOptions;
     temp.forEach(item => {
@@ -40,7 +40,7 @@ export default function QuestionSlider({savedOptions, setSavedOptions}) {
   };
 
   const goNext = () => {
-    if (currentIndex < store?.faith_goal_questions.length - 1) {
+    if (currentIndex < faith_goal_questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
   };
@@ -70,10 +70,10 @@ export default function QuestionSlider({savedOptions, setSavedOptions}) {
   return (
     <View style={styles.container}>
       <View style={styles.questionBox}>
-        <Text style={styles.questionText}>{store?.faith_goal_questions[currentIndex].question}</Text>
+        <Text style={styles.questionText}>{faith_goal_questions[currentIndex].question}</Text>
       </View>
 
-      {store?.faith_goal_questions?.sort((a, b) => a.id - b.id)[currentIndex].options.map(renderRadio)}
+      {faith_goal_questions?.sort((a, b) => a.id - b.id)[currentIndex].options.map(renderRadio)}
 
       <View style={{
         alignItems:'center',
@@ -85,7 +85,7 @@ export default function QuestionSlider({savedOptions, setSavedOptions}) {
           </TouchableOpacity>
 
           <View style={styles.dots}>
-            {store?.faith_goal_questions.map((_, index) => (
+            {faith_goal_questions.map((_, index) => (
               <View
                 key={index}
                 style={[
@@ -96,8 +96,8 @@ export default function QuestionSlider({savedOptions, setSavedOptions}) {
             ))}
           </View>
 
-          <TouchableOpacity onPress={goNext} disabled={currentIndex === store?.faith_goal_questions.length - 1}>
-            <AntDesign name="right" size={24} color={currentIndex === store?.faith_goal_questions.length - 1 ? '#d3e0dd' : '#a1b7b2'} />
+          <TouchableOpacity onPress={goNext} disabled={currentIndex === faith_goal_questions.length - 1}>
+            <AntDesign name="right" size={24} color={currentIndex === faith_goal_questions.length - 1 ? '#d3e0dd' : '#a1b7b2'} />
           </TouchableOpacity>
         </View>
       </View>

@@ -3,6 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadAuthToken } from './api';
 import { WEBSOCKET_URL } from './Paths';
 import { da } from 'date-fns/locale';
+import { daily_check_in } from '@/screens/tabs/TabsAPI';
+import useAppStore from './useAppStore';
 
 const AuthContext = createContext(null);
 
@@ -22,6 +24,10 @@ export const AuthProvider = ({ children }) => {
 
   const [isNotificationSocketConnected, setIsNotificationSocketConnected] = useState(false);
   const [isConversationSocketConnected, setIsConversationSocketConnected] = useState(false);
+
+  const setAuth = useAppStore((s) => s.setAuth);
+  const auth = useAppStore((s) => s.auth);
+  const payment = useAppStore((s) => s.payment)
 
   const initiateConversationSocket = (session_id, token) =>{
     if(!session_id || !token)return;
@@ -139,14 +145,6 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // const setLocalStorage = async () => {
-  //   await AsyncStorage.setItem('store', JSON.stringify(store));
-  // }
-
-  // useEffect(() => {
-  //   setLocalStorage()
-  // }, [store]);
-
 
   const logout =  () => {
     setIsAuthenticated(false);
@@ -155,23 +153,26 @@ export const AuthProvider = ({ children }) => {
     setStore({});
   };
 
-  
+
+
   
 
   useEffect(() => {
+    console.log("auth data -> ", JSON.stringify(auth, null, 2))
+    console.log("payment data -> ", JSON.stringify(payment, null, 2))
+    
+    if(auth.access) {
+      daily_check_in(auth.access, (res, success) => {
+        if(success){
+          setAuth({...auth, isLoggedIn: true})
+        }else{
+          setAuth({...auth, isLoggedIn: false})
+          console.log("failed login")
+        }
+      })
+    }
 
-    loadAuthToken((data) => { 
-      console.log("AuthContext data", data);
-      if (data.accessToken) {
-        setIsAuthenticated(true);
-        setStore(data.store || {});
-        completePersonalization(data.store.onboarding_completed);
-        completeSubscription(data.store?.payment?.is_active)
-      } else {
-        setIsAuthenticated(false);
-        setStore({});
-      }
-    });
+    
   }, []);
 
   return (

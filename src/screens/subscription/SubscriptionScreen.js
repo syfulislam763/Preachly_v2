@@ -18,6 +18,7 @@ import { handleToast } from '../auth/AuthAPI';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { KEY } from '../../context/Paths';
 import BackButton from '../../components/BackButton';
+import useAppStore from '@/context/useAppStore';
 
 const window = Dimensions.get("window")
 
@@ -27,14 +28,13 @@ export default function SubscriptionScreen() {
   const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
   const styles = getStyles(isSmall, isMedium, isLarge, isFold)
   const [selectedPlanType, setSelectedPlanType] = useState('yearly');
+  
+  const setPayment = useAppStore((s) => s.setPayment)
 
 
+  const handleSubscription =  () => {
 
-  const hanldeSubscription =  () => {
-
-    completeSubscription(true);
-    completePersonalization(true);
-    
+    setPayment({has_subscription: true})
     
   }
 
@@ -82,7 +82,7 @@ export default function SubscriptionScreen() {
                   bgColor={"#005A55"}
                   navigation={navigation}
                   route={""}
-                  handler={hanldeSubscription}
+                  handler={handleSubscription}
                   txtColor={"#fff"}
                   opacity={1}
               />

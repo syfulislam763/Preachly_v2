@@ -13,10 +13,11 @@ import Indicator from '../../components/Indicator';
 import { denomination } from './PersonalizationAPIs';
 import { useNavigation } from '@react-navigation/native';
 import useStaticData from '../../hooks/useStaticData';
-
+import useAppStore from '@/context/useAppStore';
 
 export default function PersonalizationScreen1() {
     const {store} = useAuth();
+    const denominations = useAppStore((s) => s.onboarding.denominations)
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -47,7 +48,7 @@ export default function PersonalizationScreen1() {
         <Text style={styles.title}>Select your denomination</Text>
 
         <CustomSelect
-          items={store?.denominations}
+          items={denominations}
           placeholder='Select Denomination'
           onSelect={(item) => {
             setSelectedItem(item)
