@@ -88,11 +88,11 @@ function FaithQuestionSlider({Answers, selectedOption=0, ans, setAns}) {
    },[Answers])
  
   return (
-    <SafeAreaView style={{
-        flex:1,
+    <View style={{
+        // flex:1,
         backgroundColor:'#fff'
     }}>
-        <View style={{...styles.slideContainer, marginTop: isSmall?height*0.05:height*0.1}}>
+        <View style={{...styles.slideContainer}}>
 
             <View style={styles.cardContainer} >
 
@@ -132,7 +132,7 @@ function FaithQuestionSlider({Answers, selectedOption=0, ans, setAns}) {
             <Dot
                 dotNumber={0}
                 left={(window.width*4)/100}
-                top={ activeDot[0]?50:55}
+                top={ activeDot[0]?65:70}
                 pressEvent={progressHandler}
                 activeDot={activeDot}
                 group={group}
@@ -148,7 +148,7 @@ function FaithQuestionSlider({Answers, selectedOption=0, ans, setAns}) {
             <Dot
                 dotNumber={3}
                 left={ (window.width*69)/100}
-                top={ activeDot[3]?3:6}
+                top={ activeDot[3]?8:10}
                 pressEvent={progressHandler}
                 activeDot={activeDot}
                 group={group}
@@ -156,14 +156,14 @@ function FaithQuestionSlider({Answers, selectedOption=0, ans, setAns}) {
             <Dot
                 dotNumber={4}
                 left={(window.width*87)/100}
-                top={ activeDot[4]?49:50}
+                top={ activeDot[4]?67:70}
                 pressEvent={progressHandler}
                 activeDot={activeDot}
                 group={group}
             />
             
         </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     slideContainer:{ 
         alignItems: 'center', 
         justifyContent: 'center', 
-        marginTop: 100 ,
+        marginTop: 0 ,
         position:'relative',
         backgroundColor:'#fff',
         height:350,

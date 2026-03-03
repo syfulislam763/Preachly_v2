@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  Image
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -19,8 +19,8 @@ const CustomModal = ({animationType="fade", visible, onClose, title, overlayStyl
       animationType={animationType}
       onRequestClose={onClose}
     >
-      <SafeAreaView style={{...styles.overlay, ...overlayStyle}}>
-        <View style={{...styles.modalContainer, ...modalContainerStyle}}>
+      <SafeAreaView edges={['top', 'bottom']} style={{...styles.overlay, ...overlayStyle,}}>
+        <View style={{...styles.modalContainer, ...modalContainerStyle, }}>
             <View style={{
                 display:'flex',
                 flexDirection:'row-reverse',

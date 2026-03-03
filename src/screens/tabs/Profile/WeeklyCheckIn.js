@@ -1,201 +1,140 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
-import {View, Text, Image, StyleSheet, Pressable, ActivityIndicator, ImageBackground, TouchableWithoutFeedback, FlatList} from 'react-native'
-import CommonButton from '../../../components/CommonButton'
+import React, { useCallback, useState } from 'react'
+import { View, Text, Image, StyleSheet, Pressable, ActivityIndicator, ImageBackground, FlatList } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { deepGreen, primaryText } from '../../../components/Constant'
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { get_weekly_check_in_history } from '../TabsAPI';
-import Indicator from '../../../components/Indicator';
-import Entypo from '@expo/vector-icons/Entypo';
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { get_weekly_check_in_history } from '../TabsAPI'
+import Indicator from '../../../components/Indicator'
+import Entypo from '@expo/vector-icons/Entypo'
 
-const img1 = require('../../../../assets/img/card_bg8.png');
+const img1   = require('../../../../assets/img/card_bg8.png')
+const img4   = require('../../../../assets/img/card_bg11.png')
+const leaf_b = require('../../../../assets/img/leaf_b.png')
+const leaf_w = require('../../../../assets/img/leaf_w.png')
 
-const img4 = require('../../../../assets/img/card_bg11.png');
-const leaf_b = require('../../../../assets/img/leaf_b.png');
-const leaf_w = require('../../../../assets/img/leaf_w.png');
+const timeAgo = (string) => {
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+    const d = new Date(string)
+    return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`
+}
 
 const WeeklyCheckIn = () => {
     const navigation = useNavigation()
-    const [history, setHistory] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    console.log("historty", JSON.stringify(history, null, 2))
-
-    const timeAgo = (string) => {
-        const month_string = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        const now = new Date(string);
-        const day = now.getUTCDay();
-        const month = month_string[now.getUTCMonth()];
-        const year = now.getUTCFullYear();
-        return `${day} ${month} ${year}`
-    }
+    const [history, setHistory] = useState([])   // ← fixed: was [history, setLoading]
+    const [loading, setLoading] = useState(false) // ← fixed: was [loading, setLoadingState]
 
     const handleGetHistory = () => {
-        setLoading(true);
+        setLoading(true)
         get_weekly_check_in_history((res, success) => {
-            setLoading(false);
-            if(success){
-                setHistory(res?.data?.completed_weekly_checkins.filter(item => item.status != "locked"))
-            }else{
-          
+            setLoading(false)
+            if (success) {
+                const filtered = res?.data?.completed_weekly_checkins.filter(i => i.status !== "locked")
+                setHistory(filtered)
             }
-            
         })
     }
-    
-    useFocusEffect(
-        useCallback(() => {
-            handleGetHistory();
-        }, [])
-    )
 
+    useFocusEffect(useCallback(() => { handleGetHistory() }, []))
 
+    const renderItem = ({ item, index }) => {
+        const isEven     = index % 2 === 0
+        const bgImage    = isEven ? img1 : img4
+        const leafIcon   = isEven ? leaf_b : leaf_w
+        const titleColor = isEven ? '#0B172A' : '#ffffff'
+        const dateColor  = isEven ? '#966F44' : '#90B2B2'
 
-
-    const renderItem = ({item, index}) => {
-
-        return <Pressable style={{
-            // height:80,
-            // width:'100%',
-            // overflow:"hidden",
-            // borderRadius: 30
-        }} onPress={() => {
-            if(item.is_completed){
-                navigation.navigate("WeeklyCheckIn_", {...item, title: item.week_number+" Weekly Check-In"})
-            }else{
-                navigation.navigate("RegularCheckIn", {title: item.week_number+" Weekly Check-In"})
-            }
-        }}>
-                <ImageBackground
-                    source={(index%2==0)?img1:img4}  // or use { uri: 'https://...' }
-                    style={styles.background}
-                    resizeMode="cover"
-                >
+        return (
+            <Pressable
+                onPress={() => {
+                    if (item.is_completed) {
+                        navigation.navigate("WeeklyCheckIn_", { ...item, title: `${item.week_number} Weekly Check-In` })
+                    } else {
+                        navigation.navigate("RegularCheckIn", { title: `${item.week_number} Weekly Check-In` })
+                    }
+                }}
+            >
+                <ImageBackground source={bgImage} style={styles.background} resizeMode="cover">
                     <View style={styles.card}>
-
-                        <View style={styles.card_wrap}>
-                            <View style={{
-                                width: 30,
-                            }}>
-                                <Image
-                                    source={(index%2==0)?leaf_b:leaf_w}
-                                    style={{
-                                        height: 24,
-                                        width: 24,
-                                        objectFit:'contain',
-                                    }}
-                                />
-                            </View>
+                        <View style={styles.cardWrap}>
+                            <Image source={leafIcon} style={styles.leafIcon} />
                             <View>
-                                <Text style={(index%2==0)?{...styles.title}: {...styles.title, color:"#ffffff"}}>{(history.length-item.week_number)+1}. Week Check-In</Text>
-                                <Text style={(index%2==0)?{...styles.text}: {...styles.text, color:"#90B2B2"}}>{item?.completed_at?timeAgo(item?.completed_at):"Available"}</Text>
+                                <Text style={[styles.title, { color: titleColor }]}>
+                                    {(history.length - item.week_number) + 1}. Week Check-In
+                                </Text>
+                                <Text style={[styles.text, { color: dateColor }]}>
+                                    {item?.completed_at ? timeAgo(item.completed_at) : "Available"}
+                                </Text>
                             </View>
                         </View>
-
-                        <View>
-                            <Entypo name="chevron-thin-right" size={24} color="white" />
-                        </View>
-
+                        <Entypo name="chevron-thin-right" size={24} color="white" />
                     </View>
                 </ImageBackground>
             </Pressable>
+        )
     }
 
-
-  return (
-        <SafeAreaView style={styles.container} >
-            <View style={styles.subContainer}>
-                <View>
-
-                    
-                    <FlatList
-                        data={history.sort((a,b)=> b.week_number-a.week_number)}
-                        keyExtractor={(item) => item.week_number}
-                        renderItem={renderItem}
-                        contentContainerStyle={{
-                            paddingTop: 15,
-                            paddingBottom: 20, // leave space for input
-                        }}
-                        
-                        showsVerticalScrollIndicator={false}
-                        
-                        
-                    />
-
-
-
-                    
-                </View>
-
-                <View>
-                    {/* <CommonButton
-                        btnText={"Homepage"}
-                        bgColor={deepGreen}
-                        navigation={navigation}
-                        route={""}
-                        txtColor={primaryText}
-                        bold='bold'
-                        opacity={1}
-                    /> */}
-                </View>
-            </View>
-            {loading && <Indicator visible={loading} onClose={() => setLoading(false)}>
-                <ActivityIndicator size={'large'}/>
-            </Indicator>}
-        </SafeAreaView>
-  )
+    return (
+        <View style={styles.container}>
+            <FlatList
+                data={[...history].sort((a, b) => b.week_number - a.week_number)}
+                keyExtractor={(item) => String(item.week_number)}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.listContent}
+            />
+            {loading && (
+                <Indicator visible={loading} onClose={() => setLoading(false)}>
+                    <ActivityIndicator size="large" />
+                </Indicator>
+            )}
+        </View>
+    )
 }
 
 export default WeeklyCheckIn
 
-
 const styles = StyleSheet.create({
     container: {
-        flex:1,
-        backgroundColor:'#fff',
+        flex: 1,
+        backgroundColor: '#fff',
     },
-    subContainer:{
-        height:"100%",
-        paddingHorizontal:20,
-        display:'flex',
-        flexDirection:'column',
+    listContent: {
+        paddingHorizontal: 20,
+        paddingTop: 10,
+        paddingBottom: 100,
+    },
+    background: {
+        height: 82,
+        width: '100%',
+        marginBottom: 20,
+        overflow: 'hidden',
+        borderRadius: 15,
+    },
+    card: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        paddingBottom: 100
-    },
-    background:{
-        height:82,
-        width:'100%',
-        flexDirection:'row',
-        alignItems:'center',
-        marginBottom:20,
-        overflow:'hidden',
-        borderRadius: 15
-    },
-    card:{
-        display:'flex',
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-between',
         paddingHorizontal: 10,
         paddingVertical: 10,
-        width:"100%"
     },
-    card_wrap:{
-        display:'flex',
-        flexDirection:'row',
-        alignItems:'flex-start',
-        width:"92%",
-        justifyContent:"flex-start"
+    cardWrap: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        width: '92%',
     },
-    title:{
-        fontFamily:'NunitoSemiBold',
-        fontSize:16,
-        color:"#B172A"
+    leafIcon: {
+        height: 24,
+        width: 24,
+        objectFit: 'contain',
+        marginRight: 6,
+    },
+    title: {
+        fontFamily: 'NunitoSemiBold',
+        fontSize: 16,
     },
     text: {
-        fontFamily:"NunitoSemiBold",
-        fontSize:12,
-        color:"#966F44",
+        fontFamily: 'NunitoSemiBold',
+        fontSize: 12,
         marginTop: 3,
     },
 })
