@@ -18,7 +18,7 @@ import { finish_scripture } from '../TabsAPI';
 import useAppStore from '@/context/useAppStore';
 
 export default function PreachlyScreen() {
-  useLogout();
+
   const [openBibleVersion, setOpenBibleVersion] = useState(false)
   const [openChapterList, setOpenChapterList] = useState(false)
   const [openSearch, setOpenSearch] = useState(false)

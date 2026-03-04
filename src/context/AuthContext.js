@@ -162,14 +162,7 @@ export const AuthProvider = ({ children }) => {
     console.log("payment data -> ", JSON.stringify(payment, null, 2))
     
     if(auth.access) {
-      daily_check_in(auth.access, (res, success) => {
-        if(success){
-          setAuth({...auth, isLoggedIn: true})
-        }else{
-          setAuth({...auth, isLoggedIn: false})
-          console.log("failed login")
-        }
-      })
+      setAuth({...auth, isLoggedIn: true})
     }
 
     

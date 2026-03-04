@@ -21,6 +21,8 @@ import DatePickerButton from '../../screens/tabs/Profile/PersonalInfoUtils/DateP
 import ConfirmationCode from '../../screens/auth/ConfirmationCode';
 import WeeklyCheckIn_ from '../../screens/tabs/Profile/WeeklyCheckIn_';
 import { useRoute } from '@react-navigation/native';
+import PrivacyPolicy from '@/screens/tabs/Profile/PrivacyPolicy';
+import TermsAndCondition from '@/screens/tabs/Profile/TermsAndCondition';
 
 const Stack = createNativeStackNavigator();
 
@@ -124,6 +126,44 @@ export default function ProfileStack() {
         },
         headerLeft: () => <BackButton navigation={navigation}/>
       })} name="AboutApp" component={AboutApp} />
+
+      <Stack.Screen options={({navigation}) => ({
+        headerShown: false,
+        title: 'Privacy Policy',
+        headerTitleAlign: "center",
+        headerShadowVisible: false,
+        headerTitleStyle: {
+          fontFamily: 'NunitoSemiBold',
+          color: '#0b172A',
+          fontSize: 18
+        },
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+          backgroundColor: '#fff',
+        },
+        headerLeft: () => <BackButton navigation={navigation}/>
+      })} name="PrivacyPolicy" component={PrivacyPolicy} />
+
+      <Stack.Screen options={({navigation}) => ({
+        headerShown:false,
+        title: 'Terms and Conditions',
+        headerTitleAlign: "center",
+        headerShadowVisible: false,
+        headerTitleStyle: {
+          fontFamily: 'NunitoSemiBold',
+          color: '#0b172A',
+          fontSize: 18
+        },
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+          backgroundColor: '#fff',
+        },
+        headerLeft: () => <BackButton navigation={navigation}/>
+      })} name="TermsAndCondition" component={TermsAndCondition} />
 
       <Stack.Screen options={({navigation}) => ({
         title: 'Notifications',

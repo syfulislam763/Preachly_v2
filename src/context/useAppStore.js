@@ -308,37 +308,24 @@ const useAppStore = create(
         set({ goal: { ...goalData } }),
 
 
-      socket: {
-        notifications: [],
-        isNotificationSocketConnected: false,
-        socketInstance: null,
-      },
-
-      setNotifications: (notifications) =>
-        set((state) => ({
-          socket: { ...state.socket, notifications },
-        })),
-
-      setSocketConnected: (value) =>
-        set((state) => ({
-          socket: { ...state.socket, isNotificationSocketConnected: value },
-        })),
-
-      setSocketInstance: (instance) =>
-        set((state) => ({
-          socket: { ...state.socket, socketInstance: instance },
-        })),
-
       ui: {
         isAuthLoading: false,
         isHomeLoading: false,
-        isProfileLoading: false,
+        isDailyLoading: false,
       },
 
       setLoading: (key, value) =>
         set((state) => ({
           ui: { ...state.ui, [key]: value },
         })),
+
+
+      current_session: {},
+      setCurrentSession: (session) => {
+        return set( (state) => ({
+          current_session: {...state.current_session, ...session}
+        }))
+      }
 
     }),
 
@@ -357,6 +344,7 @@ const useAppStore = create(
         profile: state.profile,
         payment: state.payment,
         goal: state.goal,
+        current_session: state.current_session
       }),
     }
   )

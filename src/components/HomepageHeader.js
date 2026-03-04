@@ -34,7 +34,7 @@ const HomepageHeader = ({userInfo, dashboard}) => {
           <Text style={styles.welcome}>Welcome</Text>
           <Text style={styles.welcome}>{userInfo?.name}</Text>
         </View>
-      </View>
+      </View> 
 
       {/* Right: Icons */}
       <View style={styles.rightSection}>
@@ -58,12 +58,12 @@ const HomepageHeader = ({userInfo, dashboard}) => {
                     objectFit:'contain'
                 }}
             />
-          <Text style={styles.countText}>{store?.profile_dashboard?.streak?.current_streak || "1"}</Text>
+          <Text style={styles.countText}>{dashboard?.streak?.current_streak || "0"}</Text>
         </TouchableOpacity>
       </View>
 
 
-      <HomeModal setModalVisible={setModalVisible} current_streak={store?.profile_dashboard?.streak?.current_streak} modalVisible={modalVisible}/>
+      <HomeModal setModalVisible={setModalVisible} current_streak={dashboard?.streak?.current_streak} modalVisible={modalVisible}/>
     </View>
   );
 };

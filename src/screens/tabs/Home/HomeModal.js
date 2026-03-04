@@ -25,7 +25,7 @@ const HomeModal = ({modalVisible, setModalVisible, current_streak}) => {
             </View>
 
             <View>
-              <Text style={styles.text}>You've checked in for <Text style={{fontFamily:'NunitoExtraBold'}}>{ current_streak || "1"} days</Text> straight! </  Text> 
+              <Text style={styles.text}>You've checked in for <Text style={{fontFamily:'NunitoExtraBold'}}>{ current_streak || "0"} days</Text> straight! </  Text> 
               <Text style={styles.text}>Keep the momentum going -- stay consistent, stay inspired, and unlock new titiles along the way.</Text>
             </View>
 

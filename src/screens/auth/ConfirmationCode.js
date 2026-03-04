@@ -115,7 +115,7 @@ const ConfirmationCode = ({ }) => {
 
         <Text style={styles.title}>Enter confirmation Code</Text>
 
-        <View style={{paddingTop:30, paddingBottom: 80}}>
+        <View style={{paddingTop:30, paddingBottom: 80, textAlign:'left'}}>
           <Text style={styles.subtitle}>
           The 4-digit confirmation code has been sent to
           </Text>
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: 'NunitoSemiBold',
     color: '#2B4752',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   codeContainer: {
     flexDirection: 'row',

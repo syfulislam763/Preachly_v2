@@ -8,17 +8,43 @@ import { BIBLE_BIBLE_VERSIONS,
     SAVE_CHECK_IN,
     ALL_GOAL,
     PROFILE_URL,
-    DAILY_CHECK_IN
+    DAILY_CHECK_IN,
+    DAILY_MODAL_URL,
+    PRIVACY_URL,
+    TERMS_URL
  } from "../../context/Paths";
 
 
- export const daily_check_in = async (token, cb) => {
+export const get_privacy = async (cb) => {
     try{
-        const res = await api.post(DAILY_CHECK_IN, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await api.get(PRIVACY_URL);
+        cb(res.data, true)
+    }catch(e){
+        cb(e, false);
+    }
+}
+
+export const get_terms = async (cb) => {
+    try{
+        const res = await api.get(TERMS_URL);
+        cb(res.data, true)
+    }catch(e){
+        cb(e, false);
+    }
+}
+
+export const show_daily_modal = async (cb) => {
+    try{
+        const res = await api.get(DAILY_MODAL_URL);
+        cb(res.data, true)
+    }catch(e){
+        cb(e, false);
+    }
+}
+
+ export const daily_check_in = async (cb) => {
+    try{
+        const res = await api.post(DAILY_CHECK_IN)
         cb(res.data, true)
     }catch(e){
         cb(e, false);
@@ -259,10 +285,12 @@ export const finish_share = async (cb) => {
 }
 
 export const get_profile_dashboard_data = async (cb) => {
-    try{
-        const res = await api.get(PROFILE_URL);
-        cb(res.data, true);
-    }catch(e){
+    try {
+        daily_check_in(async (checkInRes, success) => {
+            const res = await api.get(PROFILE_URL);
+            cb(res.data, true);
+        });
+    } catch(e) {
         cb(e, false);
     }
 }

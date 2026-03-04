@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   View, Text, ScrollView, ImageBackground,
-  StyleSheet, Image, TouchableOpacity,
+  StyleSheet, Image, TouchableOpacity, ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -16,21 +16,25 @@ import {
   get_random_verses, finish_share,
   get_notifications, get_profile_dashboard_data,
   get_current_goal,
+  show_daily_modal,
+  daily_check_in
 } from '../TabsAPI';
 import CommonCard from './CommonCard';
 import HomeModal from './HomeModal';
 import { useAuth } from '@/context/AuthContext';
 import useAppStore from '@/context/useAppStore';
+import Indicator from '@/components/Indicator';
 
 
 export default function HomeScreen() {
-  useLogout()
+
  
   const {socket} = useAuth();
   
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [randomVerse, setRandomVerse] = useState({});
+  const [showDailyModal, setDailyModal] = useState(false);
 
   const access = useAppStore((s) => s.auth.access);
   const profile = useAppStore((s) => s.profile);
@@ -41,17 +45,21 @@ export default function HomeScreen() {
   const setDashboard = useAppStore((s) => s.setDashboard);
   const resolveProfileSettings = useAppStore((s) => s.resolveProfileSettings);
   const setCurrentGoal = useAppStore((s) => s.setCurrentGoal);
+  const setLoading = useAppStore((s) => s.setLoading);
+  const isDailyLoading = useAppStore((s) => s.ui.isDailyLoading)
   
 
   console.log("profile -> ", JSON.stringify(profile, null, 2))
-  console.log("goal -> ", JSON.stringify(goal, null, 2))
- 
+  // console.log("goal -> ", JSON.stringify(goal, null, 2));
+
+
 
   useFocusEffect(
     useCallback(() => {
       get_random_verses((res, success) => {
         if (success) setRandomVerse(res?.data?.data ?? {});
       });
+      daily_check_in((res, success) => {})
     }, [])
   );
 
@@ -90,7 +98,6 @@ export default function HomeScreen() {
   
   useEffect(() => {
     setModalVisible(true);
-
     get_onboarding_user_data((res, success) => {
       if (!success) {
         setModalVisible(false);
@@ -107,6 +114,12 @@ export default function HomeScreen() {
           setModalVisible(false);
           if (dashSuccess) {
             resolveProfileSettings(res?.data, res1?.data, dashboardRes?.data);
+            show_daily_modal((modal, isResOk) => {
+              if (isResOk && modal.show_modal ) {
+                setLoading("isDailyLoading", true)
+              }
+            });
+            
           }
         });
       });
@@ -190,10 +203,14 @@ export default function HomeScreen() {
       </ScrollView>
 
       <HomeModal
-        modalVisible={modalVisible}
-        setModalVisible={() => setModalVisible(false)}
+        modalVisible={isDailyLoading}
+        setModalVisible={() => setLoading("isDailyLoading", false)}
         current_streak={profile.dashboard?.streak?.current_streak}
       />
+
+      {modalVisible && <Indicator visible={modalVisible} onClose={() => setModalVisible(false)}>
+        <ActivityIndicator size={"large"}/>
+      </Indicator>}
     </SafeAreaView>
   );
 }

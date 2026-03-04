@@ -103,7 +103,7 @@ export const resentOTP = async (payload, cb) => {
 
 export const create_password = async (payload, cb) => {
     try{
-        const res = await axios.post(CREATE_PASS, payload)
+        const res = await axios.post(ROOT_URL+CREATE_PASS, payload)
         const data = res.data
         cb(data, true)
     }catch(error){
@@ -146,13 +146,12 @@ export const get_profile_info = async(cb) => {
 }
 
 
-export const update_profile_info = async(payload, cb) => {
-    const accessToken = await AsyncStorage.getItem('accessToken');
+export const update_profile_info = async(payload, token, cb) => {
     try{
         const response = await fetch(`${ROOT_URL}${PROFILE_UPDATE}`, {
             method: 'PATCH',
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
+                'Authorization': `Bearer ${token}`,
                 // Don't set Content-Type - let fetch handle it
             },
             body: payload // FormData

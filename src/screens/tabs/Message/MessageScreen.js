@@ -25,13 +25,14 @@ import { useFocusEffect } from '@react-navigation/native';
 import useAppStore from '@/context/useAppStore';
 
 export default function MessageScreen() {
-  //useLogout();
+
   const flatListRef = useRef(null);
   const [isFeedback, setIsFeedback] = useState(false);
   const [feedback, setFeedback] = useState("");
-  const [rating, setRating] = useState(0)
-  ///
-  const {updateSession, session} = useAuth();
+  const [rating, setRating] = useState(0);
+  const setCurrentSession = useAppStore((s) => s.setCurrentSession);
+  const currentSession = useAppStore((s) => s.current_session);
+
 
   const access = useAppStore((s) => s.auth.access)
 
@@ -81,14 +82,12 @@ export default function MessageScreen() {
     setLoading(true);
     get_session_id((res,success)=>{
       if(success){
-        console.log("created new session")
         setMessage("");
         setMessages([])
         setPrevMsg("");
         setRecordings(null);
         let temp = JSON.stringify({ ...res.data, isNewSession: true});
-        console.log(temp, 'session, str')
-        updateSession(JSON.parse(temp))
+        setCurrentSession(JSON.parse(temp))
         setDoneOne(true)
         setFeedback(true);
         setIsFeedback(false);
@@ -112,12 +111,11 @@ export default function MessageScreen() {
 
 
   useEffect(() =>{
-    console.log(session, "session")
     
-    if((session?.id)){
+    if((currentSession?.id)){
       setLoading(true);
       
-      get_message_by_session_id(session?.id, (res, success) => {
+      get_message_by_session_id(currentSession?.id, (res, success) => {
         if(success){
 
           let msgs = res?.data?.messages?.map(item => {
@@ -163,11 +161,10 @@ export default function MessageScreen() {
           //console.log(JSON.stringify(res?.data, null, 2), "etm")
 
           setMessages(temp);
-          //setSession(session);
           setLoading(false);
           //setIsNewSession(false);
           setDoneOne(true)
-          updateSession({...session, isNewSession: false})
+          setCurrentSession({...currentSession, isNewSession: false})
           //console.log("m ->", JSON.stringify(msgs, null, 2))
         }else{
           
@@ -230,7 +227,7 @@ export default function MessageScreen() {
   const handleRegenerate = () =>{
     const payload = {
       message: "Answer this question more deeply and precisely please " + prevMsg,
-      session_id: session?.id,
+      session_id: currentSession?.id,
       type: "message"
     }
     if(ws.current && prevMsg.trim()){
@@ -241,10 +238,10 @@ export default function MessageScreen() {
 
   
   useEffect(() =>{
-    if(!session?.id)return () => {}
+    if(!currentSession?.id)return () => {}
     if(ws.current)return () => {}
 
-    const wsURL = WEBSOCKET_URL+`/ws/chat/${session?.id}/?token=${access}`;
+    const wsURL = WEBSOCKET_URL+`/ws/chat/${currentSession?.id}/?token=${access}`;
     console.log(wsURL);
     ws.current = new WebSocket(wsURL);
 
@@ -311,12 +308,12 @@ export default function MessageScreen() {
     ws.current.onclose = () =>{
       console.log("socket disconnected...");
     }
-  }, [ access, session]);
+  }, [ access, currentSession]);
 
   const handleSendPredefinedMessage = (message) => {
     const payload = {
       message: message,
-      session_id: session?.id,
+      session_id: currentSession?.id,
       type: "message",
       message_type: (message.trim().toLowerCase() === "no" || message.trim().toLowerCase() == "yes")?"yes_no":"objection"
     }
@@ -343,7 +340,7 @@ export default function MessageScreen() {
   const sendMessage = () =>{
     const payload = {
       message: message,
-      session_id: session?.id,
+      session_id: currentSession?.id,
       type: "message",
       message_type: (message.trim().toLowerCase() === "no" || message.trim().toLowerCase() == "yes")?"yes_no":"objection"
     }
@@ -400,7 +397,7 @@ export default function MessageScreen() {
         type: 'audio/'+ temp[temp.length-1].split(".")[1]
       }
       payload.append("voice_file", voice_file)
-      payload.append("session_id", session?.id)
+      payload.append("session_id", currentSession?.id)
 
 
       const res = {
@@ -428,7 +425,7 @@ export default function MessageScreen() {
           }
           const payload = {
             message: res?.data?.transcript,
-            session_id: session?.id,
+            session_id: currentSession?.id,
             type: "message",
             message_type: "objection"
           }
@@ -460,7 +457,7 @@ export default function MessageScreen() {
     requestPermission();
     if(doneOne && doneTwo){
       console.log("yes i am ready")
-      if( (session?.id) && (route.params?.question) && ws.current){
+      if( (currentSession?.id) && (route.params?.question) && ws.current){
         handleSendPredefinedMessage(route.params?.question)
       }
     }

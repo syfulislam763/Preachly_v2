@@ -1,9 +1,12 @@
-import { useNavigation } from '@react-navigation/native'
+
 import React, { useLayoutEffect } from 'react'
-import { View, Text, Image, StyleSheet, Pressable} from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const AboutApp = () => {
 
+
+  const navigation = useNavigation();
 
   return (
     <View style={{
@@ -38,7 +41,7 @@ const AboutApp = () => {
         </View>
         
         <Pressable 
-            onPress={() => {}}
+            onPress={() => {navigation.navigate("PrivacyPolicy")}}
         >
             <View style={styles.settingMenu}>
             <Text style={styles.menuText}>Privacy Policy</Text>
@@ -50,7 +53,7 @@ const AboutApp = () => {
         </Pressable>
         <View style={{height:15}}></View>
         <Pressable 
-            onPress={() => {}}
+            onPress={() => {navigation.navigate("TermsAndCondition")}}
         >
             <View style={styles.settingMenu}>
             <Text style={styles.menuText}>Terms and Conditions</Text>

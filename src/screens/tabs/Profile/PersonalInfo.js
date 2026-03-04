@@ -33,7 +33,7 @@ const faith_goal = [
 ];
 
 const PersonalInfo = () => {
-  useLogout();
+
 
   const denominations = useAppStore((s) => s.onboarding.denominations);
   const bible_versions = useAppStore((s) => s.onboarding.bible_versions);
@@ -48,6 +48,7 @@ const PersonalInfo = () => {
   const profileTonePreference = useAppStore((s) => s.profile.tone_preference);
   const profileGoalPreference = useAppStore((s) => s.profile.goal_preference);
   const profileBibleFamiliarity = useAppStore((s) => s.profile.bible_familiarity);
+  const access = useAppStore((s) => s.auth.access)
 
 
   const setProfileData = useAppStore((s) => s.setProfileData);
@@ -146,7 +147,7 @@ const PersonalInfo = () => {
         return;
       }
 
-      update_profile_info(profileInfo_payload, (response, isOk) => {
+      update_profile_info(profileInfo_payload,access, (response, isOk) => {
         setLoading(false);
 
         if (!isOk) {

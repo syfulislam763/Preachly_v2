@@ -54,4 +54,8 @@ export const WEEKLY_CHECK_IN_QUESTIONS = "/checkin/weekly/questions/";
 export const SAVE_CHECK_IN = "/checkin/weekly/submit/"
 export const PROFILE_URL = "/checkin/dashboard/"
 export const ALL_GOAL = "/goals/stats/"
-export const DAILY_CHECK_IN = "/checkin/daily/"
+export const DAILY_CHECK_IN = "/checkin/daily/";
+export const DAILY_MODAL_URL = "/core/daily-modal-checkin/";
+
+export const PRIVACY_URL = "/core/legal/privacy/";
+export const TERMS_URL = "/core/legal/terms/"

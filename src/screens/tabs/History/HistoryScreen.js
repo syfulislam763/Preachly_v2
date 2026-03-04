@@ -22,6 +22,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../../context/AuthContext';
 import useLogout from '../../../hooks/useLogout'
+import useAppStore from '@/context/useAppStore';
 
 const star = require("../../../../assets/img/VectorStar.png")
 const bookmark = require("../../../../assets/img/24-bookmark.png")
@@ -31,23 +32,8 @@ const trash = require("../../../../assets/img/Trash.png")
 const FILTERS = [{img:'', txt:'All chats'}, {img:star,txt:'Favorites'}, {img:bookmark, txt: 'Answers'}];
 
 
-/*
-
-{
-    id: '9',
-    title: '',
-    snippet: '',
-    replies: 0,
-    timeAgo: '',
-    isFavorite: ,
-    type: 'answer',
-  },
-
-
-*/
-
 const HistoryScreen = () => {
-  useLogout();
+
   const [selectedFilter, setSelectedFilter] = useState('All chats');
   const [searchText, setSearchText] = useState('');
   const [data, setData] = useState([]);
@@ -57,7 +43,8 @@ const HistoryScreen = () => {
   
   const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
   const styles = getStyles(isSmall, isMedium, isLarge, isFold);
-  const {updateStore, updateSession} = useAuth()
+
+  const setCurrentSession = useAppStore((s) => s.setCurrentSession)
 
   const handleDelete = (id) => {
     setData((prev) => prev.filter((item) => item.id !== id));
@@ -242,7 +229,7 @@ const HistoryScreen = () => {
     <TouchableOpacity onPress={() => {
       if(item.type != "answer"){
         console.log("id_", item.id)
-        updateSession(item)
+        setCurrentSession(item)
         navigation.navigate("MessageScreen", {session_id: item.id})
       }
     }}>

@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     boxSizing: 'border-box',
     color: '#2B4752',
-    textAlign:'center',
+    textAlign:'left',
     fontFamily:'NunitoSemiBold',
     lineHeight:20
 

@@ -21,7 +21,7 @@ import dayjs from 'dayjs';
 import useAppStore from '@/context/useAppStore';
 
 const ProfileScreen = () => {
-  useLogout();
+ 
   const route = useRoute();
   const navigation = useNavigation();
 

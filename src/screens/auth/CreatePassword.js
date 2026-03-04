@@ -115,7 +115,7 @@ export default function CreatePassword() {
         })
         
       }else{
-        
+        console.log(JSON.stringify(res, null, 2), "VALID")
         setLoading(false)
         handleToast("error", "Enter valid password", 3000, () => {})
         
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   }, 
   text: {
     fontSize: 17,
-    padding: 20,
+    padding: 0,
     boxSizing: 'content-box',
     fontFamily:'NunitoSemiBold',
     color: '#2B4752',
