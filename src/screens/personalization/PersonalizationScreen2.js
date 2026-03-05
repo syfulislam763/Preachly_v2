@@ -1,33 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image} from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import ProgressBar from '../../components/ProgressBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CommonButton from '../../components/CommonButton';
 import { deepGreen, primaryText } from '../../components/Constant';
 import QuestionSlider from '../../components/QuestionSlider';
-import useLayoutDimention from '../../hooks/useLayoutDimention';
-import {getStyles} from './personalizationScreen2Style'
 import { useNavigation } from '@react-navigation/native';
 import { faith_goal } from './PersonalizationAPIs';
-import { ActivityIndicator } from 'react-native';
 import Indicator from '../../components/Indicator';
+import ReusableNavigation from '../../components/ReusabeNavigation';
+import BackButton from '../../components/BackButton';
 
 export default function PersonalizationScreen2() {
-  const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
   const [selectedOptions, setSelectedOptions] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-
   const navigation = useNavigation();
 
   const handleSubmit = () => {
     setLoading(true);
-    const allOptions = selectedOptions.map((id) => ({faith_goal_option: id}))
-    const payload = {
-      goals: allOptions
-    };
-    
-    console.log(payload, "onboarding")
+    const allOptions = selectedOptions.map((id) => ({ faith_goal_option: id }));
+    const payload = { goals: allOptions };
+
+    console.log(payload, "onboarding");
     faith_goal(payload, (data, success) => {
       setLoading(false);
       if (success) {
@@ -37,50 +32,68 @@ export default function PersonalizationScreen2() {
         console.error("Error submitting Faith Goals: ", data);
       }
     });
-  }
-
-  const styles = getStyles(isSmall, isMedium, isLarge, isFold)
+  };
 
   return (
-    <View style={styles.container}>
-      
-      <View>
-        <View style={{}}>
-          <ProgressBar progress={14.28*3} />
+    <SafeAreaView className="flex-1 bg-white">
+
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => <Text />}
+        RightComponent={() => <Text />}
+      />
+
+      <View className="flex-1 justify-between p-2.5">
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <ProgressBar progress={14.28 * 3} />
+
+          <Text
+            style={{ fontFamily: 'DMSerifDisplay', lineHeight: 35 }}
+            className="text-[32px] text-[#0B172A] text-center px-10 py-10"
+          >
+            What brings you to Preachly
+          </Text>
+
+          <Text
+            style={{ fontFamily: 'NunitoSemiBold' }}
+            className="text-lg text-[#2B4752] text-center px-5 pb-5"
+          >
+            We'll personalize recommendations based on your goals
+          </Text>
+
+          <QuestionSlider
+            savedOptions={selectedOptions}
+            setSavedOptions={setSelectedOptions}
+          />
+        </ScrollView>
+
+        <View className="pb-8">
+          <CommonButton
+            btnText={"Continue"}
+            bgColor={deepGreen}
+            navigation={navigation}
+            route={""}
+            handler={handleSubmit}
+            txtColor={primaryText}
+            bold='bold'
+            opacity={selectedOptions.length < 3 ? 0.5 : 1}
+            disabled={selectedOptions.length < 3}
+          />
         </View>
 
-        <Text style={styles.title}>What brings you to Preachly</Text>
-
-        <Text style={styles.text}>We'll personalize recommendations based on your goals</Text>
-
-
-      <QuestionSlider
-        savedOptions={selectedOptions}
-        setSavedOptions={setSelectedOptions}
-      />
-        
-
-       
       </View>
-
-      <CommonButton
-          btnText={"Continue"}
-          bgColor={deepGreen}
-          navigation={navigation}
-          route={""}
-          handler={handleSubmit}
-          txtColor={primaryText}
-          bold='bold'
-          opacity={selectedOptions.length < 3 ? 0.5 : 1}
-          disabled={selectedOptions.length < 3 ? true : false}
-      />
 
       {loading && (
         <Indicator>
-          <ActivityIndicator size="large"/>
+          <ActivityIndicator size="large" />
         </Indicator>
       )}
-    </View>
+
+    </SafeAreaView>
   );
 }
-

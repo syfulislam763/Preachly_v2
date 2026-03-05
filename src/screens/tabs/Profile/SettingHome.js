@@ -1,106 +1,97 @@
-import { useNavigation } from '@react-navigation/native'
-import React, { useLayoutEffect, useState } from 'react'
-import { View, Text, StyleSheet, Pressable, Image, Modal, TouchableOpacity} from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { logoutUser } from '../../../context/api'
-import { useAuth } from '../../../context/AuthContext'
-import { CommonActions } from '@react-navigation/native';
-import useAppStore from '@/context/useAppStore'
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, Pressable, Image, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { logoutUser } from '../../../context/api';
+import useAppStore from '@/context/useAppStore';
+import ReusableNavigation from '../../../components/ReusabeNavigation';
+import BackButton from '../../../components/BackButton';
 
 const SettingHome = () => {
+  const logout = useAppStore((s) => s.logout);
+  const navigation = useNavigation();
+  const [isOpenModal, setOpenModal] = useState(false);
 
-    const logout = useAppStore((s) => s.logout)
-
-    const navigation = useNavigation()
-
-    const [isOpenModal, setOpenModal] = useState(false)
-    
   return (
-    <View style={{flex:1, backgroundColor:'#fff', padding:20}}>
-        
-        <Pressable 
-            onPress={() => navigation.navigate("PersonalInfo")}
-        >
-            <View style={styles.settingMenu}>
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
+
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => (
+          <Text
+            style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}
+            className="mr-10"
+          >
+            Settings
+          </Text>
+        )}
+        RightComponent={() => <Text />}
+      />
+
+      <View className="flex-1 bg-white p-5">
+
+        <Pressable onPress={() => navigation.navigate("PersonalInfo")}>
+          <View style={styles.settingMenu}>
             <Text style={styles.menuText}>Personal info</Text>
-            <Image
-                source={require("../../../../assets/img/CaretRight.png")}
-                style={styles.caretRight}
-            />
-            </View>
+            <Image source={require("../../../../assets/img/CaretRight.png")} style={styles.caretRight} />
+          </View>
         </Pressable>
-        <View style={{height:15}}/>
-        <Pressable 
-            onPress={() => navigation.navigate("ProfileSubscription")}
-        >
-            <View style={styles.settingMenu}>
+
+        <View className="h-4" />
+
+        <Pressable onPress={() => navigation.navigate("ProfileSubscription")}>
+          <View style={styles.settingMenu}>
             <Text style={styles.menuText}>Subscription</Text>
-            <Image
-                source={require("../../../../assets/img/CaretRight.png")}
-                style={styles.caretRight}
-            />
-            </View>
+            <Image source={require("../../../../assets/img/CaretRight.png")} style={styles.caretRight} />
+          </View>
         </Pressable>
-        <View style={{height:15}}/>
-        <Pressable 
-            onPress={() => navigation.navigate("AboutApp")}
-        >
-            <View style={styles.settingMenu}>
+
+        <View className="h-4" />
+
+        <Pressable onPress={() => navigation.navigate("AboutApp")}>
+          <View style={styles.settingMenu}>
             <Text style={styles.menuText}>About app</Text>
-            <Image
-                source={require("../../../../assets/img/CaretRight.png")}
-                style={styles.caretRight}
-            />
-            </View>
+            <Image source={require("../../../../assets/img/CaretRight.png")} style={styles.caretRight} />
+          </View>
         </Pressable>
-        <View style={{height:20}}/>
 
-        <Pressable 
-            onPress={() => {}}
+        <View className="h-5" />
+
+        <Pressable
+          onPress={() => setOpenModal(true)}
+          className="flex-row items-center justify-start"
         >
-            <Pressable onPress={()=>setOpenModal(true)} style={{
-                display:'flex',
-                flexDirection:'row',
-                alignItems:'center',
-                justifyContent:'flex-start'
-            }}>
-            
-                <Image
-                    source={require("../../../../assets/img/SignOut.png")}
-                    style={{
-                        height: 30,
-                        width: 30,
-                        objectFit:'contain'
-                    }}
-                />
-                <Text style={{
-                    color:'#D85B4B',
-                    fontFamily:'NunitoBold',
-                    fontSize:16,
-                    marginLeft: 15,
-                    // textDecorationColor:'#D85B4B',
-                    // textDecorationLine: 'underline',
-                    
-                    borderBottomWidth: .6,
-                    borderBottomColor: '#D85B4B'
-                }}>Log out</Text>
-            </Pressable>
+          <Image
+            source={require("../../../../assets/img/SignOut.png")}
+            style={{ height: 30, width: 30, objectFit: 'contain' }}
+          />
+          <Text style={{
+            color: '#D85B4B',
+            fontFamily: 'NunitoBold',
+            fontSize: 16,
+            marginLeft: 15,
+            borderBottomWidth: 0.6,
+            borderBottomColor: '#D85B4B',
+          }}>
+            Log out
+          </Text>
         </Pressable>
-        
-        <LogoutModal
-            isVisible={isOpenModal}
-            onClose={() => setOpenModal(false)}
-            logout={logout}
-            navigation={navigation}
-        />
 
-    </View>
-  )
-}
+      </View>
+
+      <LogoutModal
+        isVisible={isOpenModal}
+        onClose={() => setOpenModal(false)}
+        logout={logout}
+        navigation={navigation}
+      />
+
+    </SafeAreaView>
+  );
+};
 
 export default SettingHome;
-
-
 
 const LogoutModal = ({ isVisible, onClose, logout, navigation }) => (
   <Modal
@@ -112,94 +103,68 @@ const LogoutModal = ({ isVisible, onClose, logout, navigation }) => (
   >
     <View style={styles.modalOverlay}>
       <View style={styles.modalContainer}>
-        
-        
-        <Text
-            style={{
-                color:'#0B172A',
-                fontFamily:'DMSerifDisplay',
-                fontSize:30,
-                textAlign:'center',
-                paddingVertical: 20
-            }}
-        >
-            Log out of the account?
+
+        <Text style={{
+          color: '#0B172A',
+          fontFamily: 'DMSerifDisplay',
+          fontSize: 30,
+          textAlign: 'center',
+          paddingVertical: 20,
+        }}>
+          Log out of the account?
         </Text>
 
-        <View 
+        <View className="flex-row justify-between items-center">
 
-            style={{
-                display:'flex',
-                flexDirection:'row',
-                justifyContent:'space-between',
-                alignItems:'center'
-            }}
-        
-        >
-
-            
-          <TouchableOpacity
-            style={styles.selectBtn}
-            onPress={onClose}
-          >
+          <TouchableOpacity style={styles.selectBtn} onPress={onClose}>
             <Text style={styles.selectBtnText}>Cancel</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={{...styles.selectBtn, backgroundColor:'#EDF3F3'}}
-            onPress={() => {
-              logoutUser(() => {
-                logout();
-              });
-            }}
+            style={{ ...styles.selectBtn, backgroundColor: '#EDF3F3' }}
+            onPress={() => logoutUser(() => logout())}
           >
-            <Text style={{...styles.selectBtnText, color:'#000'}}>Logout</Text>
+            <Text style={{ ...styles.selectBtnText, color: '#000' }}>Logout</Text>
           </TouchableOpacity>
 
-
-
         </View>
-
-
 
       </View>
     </View>
   </Modal>
 );
 
-
 const styles = StyleSheet.create({
-  menuText:{
-    fontFamily:'NunitoSemiBold',
-    color:'#0B172A',
-    fontSize: 18
+  menuText: {
+    fontFamily: 'NunitoSemiBold',
+    color: '#0B172A',
+    fontSize: 18,
   },
-  settingMenu:{
-    display: 'flex',
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
-    backgroundColor:'#F3F8F8',
+  settingMenu: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#F3F8F8',
     padding: 15,
-    borderRadius: 20
+    borderRadius: 20,
   },
-  caretRight:{
-    width:20,
-    height:20,
-    objectFit:"contain"
+  caretRight: {
+    width: 20,
+    height: 20,
+    objectFit: 'contain',
   },
-    selectBtn: {
+  selectBtn: {
     backgroundColor: '#005A55',
     paddingVertical: 12,
     borderRadius: 20,
     alignItems: 'center',
     marginTop: 12,
-    width: '48%'
+    width: '48%',
   },
   selectBtnText: {
     color: '#fff',
     fontSize: 16,
-    fontFamily:'NunitoSemiBold'
+    fontFamily: 'NunitoSemiBold',
   },
   modalOverlay: {
     flex: 1,

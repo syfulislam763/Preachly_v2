@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  Keyboard, 
-  Pressable, 
+import {
+  View,
+  Text,
+  Keyboard,
+  Pressable,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -14,230 +12,180 @@ import {
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import CommonInput from '../../components/CommonInput';
-import { 
-    deepGreen,
-    lightgreen1,
-  primaryText, 
-  primaryTextSize, 
-  primaryTitle, 
-  primaryTitleSize 
-} from '../../components/Constant';
+import { deepGreen, lightgreen1 } from '../../components/Constant';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CommonButton from '../../components/CommonButton';
 import { create_password, handleToast, confirm_forget_password } from './AuthAPI';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation, CommonActions } from '@react-navigation/native';
 import Indicator from '../../components/Indicator';
-import { useNavigation } from '@react-navigation/native';
-import { onboarding_status } from '../personalization/PersonalizationAPIs';
-import { get_onboarding_all_data } from '../personalization/PersonalizationAPIs';
-import { CommonActions } from '@react-navigation/native';
+import { onboarding_status, get_onboarding_all_data } from '../personalization/PersonalizationAPIs';
 import useAppStore from '@/context/useAppStore';
+import ReusableNavigation from '../../components/ReusabeNavigation';
+import BackButton from '../../components/BackButton';
 
 export default function CreatePassword() {
   const { updateStore } = useAuth();
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [keyboardOffset, setKeyboardOffset] = useState(30);
 
   const setAuth = useAppStore(s => s.setAuth);
-
-  const route = useRoute()
-  const navigation = useNavigation()
-  
-  const [loading, setLoading] = useState(false)
+  const route = useRoute();
+  const navigation = useNavigation();
 
   const handleResetComplete = () => {
-     const payload = {
+    const payload = {
       email: route.params.email,
       otp: route.params.otp,
       new_password: password,
-      new_password2: password
-    }
-
+      new_password2: password,
+    };
     setLoading(true);
-   
     confirm_forget_password(payload, (res, success) => {
-
-      if(success){
-        handleToast("info", "Password changed successfully, login again!",3000, () => {
-            // navigation.navigate("SignUp", {resentOPT:true, ...route.params})
-            navigation.dispatch(state => {
-            
-            const routes = state.routes.slice(0,-5);
-            
-            routes.push({
-              name: 'SignIn',
-              params: payload
-            });
-            
-          return CommonActions.reset({
-            ...state,
-            index: routes.length - 1,
-            routes
-            });
+      if (success) {
+        handleToast("info", "Password changed successfully, login again!", 3000, () => {
+          navigation.dispatch(state => {
+            const routes = state.routes.slice(0, -5);
+            routes.push({ name: 'SignIn', params: payload });
+            return CommonActions.reset({ ...state, index: routes.length - 1, routes });
           });
-        })
+        });
       }
-
       setLoading(false);
-    })
-
-
-
-
-  }
-
+    });
+  };
 
   const handleSignUpComplete = () => {
-    const payload = {
-      ...route.params,
-      password: password,
-      password2: password
-    }
-    
-    //
-    
-    setLoading(true)
-    create_password(payload, (res, isSuccess)=>{
-      if(isSuccess){
-      
+    const payload = { ...route.params, password, password2: password };
+    setLoading(true);
+    create_password(payload, (res, isSuccess) => {
+      if (isSuccess) {
         onboarding_status(res?.data?.access, (statusRes, isOk) => {
-          const {access, refresh} = res.data;
-          const onboarding_completed = statusRes?.data?.onboarding_completed ?? false
-          setLoading(false)
-          if(isOk){
-            setAuth({access, refresh, onboarding_completed})
-            handleToast("success", "User is created!",2000, () => {
-              navigation.navigate("FinishAuthentication")
-            })
-          }else{
-
+          const { access, refresh } = res.data;
+          const onboarding_completed = statusRes?.data?.onboarding_completed ?? false;
+          setLoading(false);
+          if (isOk) {
+            setAuth({ access, refresh, onboarding_completed });
+            handleToast("success", "User is created!", 2000, () => {
+              navigation.navigate("FinishAuthentication");
+            });
           }
-        })
-        
-      }else{
-        console.log(JSON.stringify(res, null, 2), "VALID")
-        setLoading(false)
-        handleToast("error", "Enter valid password", 3000, () => {})
-        
+        });
+      } else {
+        setLoading(false);
+        handleToast("error", "Enter valid password", 3000, () => {});
       }
-    })
-  }
-
-  const [keyboardOffset, setKeyboardOffset] = useState(30);
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', e => {
-      const height = e.endCoordinates.height;
- 
-      const safeOffset = Math.min(height, 100); 
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setKeyboardOffset(safeOffset);
     });
+  };
 
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+  useEffect(() => {
+    const show = Keyboard.addListener('keyboardDidShow', e => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setKeyboardOffset(Math.min(e.endCoordinates.height, 100));
+    });
+    const hide = Keyboard.addListener('keyboardDidHide', () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setKeyboardOffset(30);
     });
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
+    return () => { show.remove(); hide.remove(); };
   }, []);
 
+  const isReady = password.length > 8 && password === rePassword;
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <Pressable onPress={() => Keyboard.dismiss()} style={{ flex: 1 }}>
-        <ScrollView 
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View style={styles.content}>
-            <View style={{paddingTop:16}}></View>
-            <Text style={styles.title}>Create a password</Text>
-            <Text style={styles.text}>The password must be longer than 8 characters, contain numbers(0 - 9), letters (A-Z,a-z), and special characters (! # $ % & * + , - . : ; ? @ ^ )</Text>
-            
-            <CommonInput
-              type='password'
-              placeholder="Enter password"
-              value={password}
-              onChangeText={(e) => setPassword(e)}
-              style={password.length>8?{...styles.input, borderColor:deepGreen}:styles.input}
-              placeholderColor='#607373'
-            />
-            <CommonInput
-              type='password'
-              placeholder="Re enter password"
-              value={rePassword}
-              onChangeText={(e) => setRePassword(e)}
-              style={rePassword.length>8?{...styles.input, borderColor:deepGreen}:styles.input}
-              placeholderColor='#607373'
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
+
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => <Text />}
+        RightComponent={() => <Text />}
+      />
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
+        <Pressable onPress={() => Keyboard.dismiss()} className="flex-1">
+
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="flex-1 px-5 pt-16">
+
+              <Text
+                style={{ fontFamily: 'DMSerifDisplay' }}
+                className="text-3xl text-[#0B172A] mb-2"
+              >
+                Create a password
+              </Text>
+
+              <Text
+                style={{ fontFamily: 'NunitoSemiBold', fontSize: 17 }}
+                className="text-[#2B4752] mb-10"
+              >
+                The password must be longer than 8 characters, contain numbers(0 - 9), letters (A-Z,a-z), and special characters (! # $ % & * + , - . : ; ? @ ^ )
+              </Text>
+
+              <CommonInput
+                type='password'
+                placeholder="Enter password"
+                value={password}
+                onChangeText={(e) => setPassword(e)}
+                style={{
+                  marginBottom: 5,
+                  marginTop: 20,
+                  borderColor: password.length > 8 ? deepGreen : '#ACC6C5',
+                }}
+                placeholderColor='#607373'
+              />
+
+              <CommonInput
+                type='password'
+                placeholder="Re enter password"
+                value={rePassword}
+                onChangeText={(e) => setRePassword(e)}
+                style={{
+                  marginBottom: 5,
+                  marginTop: 20,
+                  borderColor: rePassword.length > 8 ? deepGreen : '#ACC6C5',
+                }}
+                placeholderColor='#607373'
+              />
+
+            </View>
+          </ScrollView>
+
+          {/* Button pinned at bottom */}
+          <View className="px-5" style={{ paddingBottom: keyboardOffset }}>
+            <CommonButton
+              btnText={"Save"}
+              bgColor={isReady ? deepGreen : lightgreen1}
+              navigation={navigation}
+              route={""}
+              handler={() => {
+                if (route?.params?.type == "reset") handleResetComplete();
+                else handleSignUpComplete();
+              }}
+              txtColor={isReady ? lightgreen1 : deepGreen}
+              bold='bold'
+              opacity={1}
+              disabled={!isReady}
             />
           </View>
-        </ScrollView>
 
-        <View style={[styles.buttonContainer, { paddingBottom: keyboardOffset }]}>
-          <CommonButton
-            btnText={"Save"}
-            bgColor={(password.length>8 && password === rePassword)?deepGreen:lightgreen1}
-            navigation={navigation}
-            route={""}
-            handler={() => {
-              if(route?.params?.type == "reset"){
-                handleResetComplete()
-              }else{
-                handleSignUpComplete()
-              }
-            }}
-            txtColor={(password.length>8 && password === rePassword)?lightgreen1: deepGreen}
-            bold='bold'
-            opacity={1}
-            disabled={password.length<=8 || password !== rePassword}
-          />
-        </View>
-      </Pressable>
-      {loading && <Indicator visible={loading} onClose={() => setLoading(false)}>
-          <ActivityIndicator size={"large"}/>
-        </Indicator>}
-    </KeyboardAvoidingView>
+        </Pressable>
+      </KeyboardAvoidingView>
+
+      {loading &&
+        <Indicator visible={loading} onClose={() => setLoading(false)}>
+          <ActivityIndicator size="large" />
+        </Indicator>
+      }
+
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  scrollContent: {
-    flexGrow: 1,
-    padding: 20,
-  },
-  content: {
-    flex: 1,
-  },
-  title: {
-    fontSize: primaryTitleSize,
-    fontFamily:'DMSerifDisplay',
-    marginBottom: 8,
-    color:'#0B172A'
-  }, 
-  text: {
-    fontSize: 17,
-    padding: 0,
-    boxSizing: 'content-box',
-    fontFamily:'NunitoSemiBold',
-    color: '#2B4752',
-
-  },
-  input: {
-    marginBottom: 5,
-    marginTop:20,
-    borderColor: '#ACC6C5',
-  },
-  buttonContainer: {
-    padding: 20,
-    //paddingBottom: Platform.OS === 'ios' ? 30 : 30,
-  }
-});

@@ -6,7 +6,7 @@ const window = Dimensions.get("window")
 const baseStyle = StyleSheet.create({
   footerHighlighter:{color:'black', textDecorationLine:'underline', fontFamily: 'NunitoExtraBold'},
 
-  footerText:{fontSize:16, color:'#90B2B2', paddingRight:50, paddingLeft:50, paddingTop:30, paddingBottom:30, textAlign:'center', fontFamily:'NunitoSemiBold'},
+  footerText:{fontSize:16, color:'#90B2B2', paddingRight:30, paddingLeft:30, paddingTop:0, paddingBottom:30, textAlign:'center', fontFamily:'NunitoSemiBold'},
 
   googleAppleAuth:{
       display:"flex",

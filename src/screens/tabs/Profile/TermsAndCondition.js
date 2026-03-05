@@ -103,7 +103,7 @@ const SectionCard = ({ section, index }) => {
       }}
     >
       {/* Accent stripe — amber/gold to distinguish from Privacy (teal) */}
-      <View style={{ height: 3, backgroundColor: '#B45309' }} />
+      <View style={{ height: 3, backgroundColor: '#f7da9b' }} />
 
       <View style={{ padding: 16 }}>
         {section.heading && (
@@ -311,7 +311,7 @@ const TermsAndCondition = ({ navigation }) => {
           <Text style={{ fontFamily: 'NunitoRegular', fontSize: 12, color: '#9CA3AF' }}>
             © 2025 1nfinite Aura Studios Inc. — Preachly
           </Text>
-          <Text style={{ fontFamily: 'NunitoRegular', fontSize: 12, color: '#B45309', marginTop: 2 }}>
+          <Text style={{ fontFamily: 'NunitoRegular', fontSize: 12, color: '#f7da9b', marginTop: 2 }}>
             info@preachly.app
           </Text>
         </View>

@@ -1,269 +1,150 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Pressable, ActivityIndicator } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Pressable, Keyboard } from 'react-native';
 import { deepGreen, lighgreen } from '../../components/Constant';
 import OTPInput from '../../components/OTPInput';
-import {verify_email, resentOTP, handleToast, verify_change_email,verify_forget_password} from './AuthAPI'
-import Indicator from '../../components/Indicator'
-import { useNavigation, useRoute , CommonActions} from '@react-navigation/native';
+import { verify_email, resentOTP, handleToast, verify_change_email, verify_forget_password } from './AuthAPI';
+import Indicator from '../../components/Indicator';
+import { useNavigation, useRoute, CommonActions } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import useAppStore from '@/context/useAppStore';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ReusableNavigation from '../../components/ReusabeNavigation';
+import BackButton from '../../components/BackButton';
 
-const ConfirmationCode = ({ }) => {
-  const [isLoading, setIsloading] = useState(false)
-  const route = useRoute()
-  const navigation = useNavigation()
-  const {email, change, profileSettingData, faith_goal_questions, type} = route.params
-  const {updateStore} = useAuth();
+const ConfirmationCode = () => {
+  const [isLoading, setIsloading] = useState(false);
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { email, change, profileSettingData, faith_goal_questions, type } = route.params;
+  const { updateStore } = useAuth();
 
   const setAuth = useAppStore((s) => s.setAuth);
   const auth = useAppStore((s) => s.auth);
-  const setProfileData = useAppStore((s) => s.setProfileData)
-
+  const setProfileData = useAppStore((s) => s.setProfileData);
 
   const handleReset = (otp) => {
     setIsloading(true);
-    const payload = {
-      email: email,
-      otp: otp,
-    }
+    const payload = { email: email, otp: otp };
     verify_forget_password(payload, (res, success) => {
-
-
-      if(success){
-        navigation.navigate("CreatePassword", {...payload, type:"reset"})
+      if (success) {
+        navigation.navigate("CreatePassword", { ...payload, type: "reset" });
       }
-
       setIsloading(false);
-    })
-
-  }
+    });
+  };
 
   const changeEmailVerify = (otp) => {
-    setIsloading(true)
-    verify_change_email({otp: otp}, (res, success) => {
-      if(success){
-
-          setProfileData({...profileSettingData, userInfo: {...profileSettingData.userInfo, email: route.params.email}})
-          //updateStore({profileSettingData, faith_goal_questions})
-          handleToast("info", "Email Changed!",2000, () => {
-              // navigation.navigate("SignUp", {resentOPT:true, ...route.params})
-              navigation.dispatch(state => {
-              
-              const routes = state.routes.slice(0,-3);
-              
-              routes.push({
-                name: 'PersonalInfo',
-                params: {editMode:false}
-              });
-              
-              return CommonActions.reset({
-                ...state,
-                index: routes.length - 1,
-                routes
-              });
-            });
-          })
-      }else{
-        console.log(res)
-        navigation.goBack()
+    setIsloading(true);
+    verify_change_email({ otp: otp }, (res, success) => {
+      if (success) {
+        setProfileData({ ...profileSettingData, userInfo: { ...profileSettingData.userInfo, email: route.params.email } });
+        handleToast("info", "Email Changed!", 2000, () => {
+          navigation.dispatch(state => {
+            const routes = state.routes.slice(0, -3);
+            routes.push({ name: 'PersonalInfo', params: { editMode: false } });
+            return CommonActions.reset({ ...state, index: routes.length - 1, routes });
+          });
+        });
+      } else {
+        console.log(res);
+        navigation.goBack();
       }
-      setIsloading(false)
-    })
-  }
+      setIsloading(false);
+    });
+  };
+
   const handleComplete = (otp) => {
-    setIsloading(true)
-    const payload = {...route.params, otp: otp}
-    console.log(payload, " -> payload")
+    setIsloading(true);
+    const payload = { ...route.params, otp: otp };
     verify_email(payload, (res, isSuccess) => {
-      if(isSuccess){
-        
-        setIsloading(false)
-        navigation.navigate("CreatePassword", payload)
-        
-      }else{
-          handleToast("info", "Your OTP has expired, send again",2000, () => {
-              // navigation.navigate("SignUp", {resentOPT:true, ...route.params})
-              navigation.dispatch(state => {
-              
-              const routes = state.routes.slice(0,-3);
-              
-              routes.push({
-                name: 'SignUp',
-                params: payload
-              });
-              
-              return CommonActions.reset({
-                ...state,
-                index: routes.length - 1,
-                routes
-              });
-            });
-          })
-        setIsloading(false)
-
+      if (isSuccess) {
+        setIsloading(false);
+        navigation.navigate("CreatePassword", payload);
+      } else {
+        handleToast("info", "Your OTP has expired, send again", 2000, () => {
+          navigation.dispatch(state => {
+            const routes = state.routes.slice(0, -3);
+            routes.push({ name: 'SignUp', params: payload });
+            return CommonActions.reset({ ...state, index: routes.length - 1, routes });
+          });
+        });
+        setIsloading(false);
       }
-    })
-  }
+    });
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
 
-      <View style={styles.subContainer}>
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => <Text />}
+        RightComponent={() => <Text />}
+      />
 
-        <Text style={styles.title}>Enter confirmation Code</Text>
+      <Pressable onPress={() => Keyboard.dismiss()} className="flex-1">
 
-        <View style={{paddingTop:30, paddingBottom: 80, textAlign:'left'}}>
-          <Text style={styles.subtitle}>
-          The 4-digit confirmation code has been sent to
-          </Text>
-          <Text style={styles.email}>{email}</Text>
-        </View>
-   
-        {/* Code Input */}
-        <OTPInput 
-          length={4}
-          onChange={(otp) => console.log('OTP changed:', otp)}
-          onComplete={(otp) => {
-            if(change){
-              changeEmailVerify(otp)
-            }
-            else if(type == "reset"){
-              handleReset(otp)
-            }
-            else{
-              handleComplete(otp)
-            }
-          }}
-          error={false}
-          focusColor="#005A55"
-          errorColor="#B00020"
-        />
-        
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="flex-1 px-5 pt-16">
 
-        {/* Resend Link */}
-        <View style={{height:20}}></View>
-        <TouchableOpacity style={styles.resendContainer}>
-          <Text style={styles.resendText}>
-            Didn't get it? <Text style={styles.resendLink}>Resend code</Text>
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={{ fontFamily: 'DMSerifDisplay' }}
+              className="text-3xl text-[#0B172A] mb-2"
+            >
+              Enter confirmation Code
+            </Text>
 
+            <View className="pt-8 pb-20">
+              <Text style={{ fontFamily: 'NunitoSemiBold', fontSize: 17 }} className="text-[#2B4752]">
+                The 4-digit confirmation code has been sent to
+              </Text>
+              <Text style={{ fontFamily: 'NunitoSemiBold', fontSize: 17 }} className="text-[#2B4752]">
+                {email}
+              </Text>
+            </View>
 
-      </View>
+            <OTPInput
+              length={4}
+              onChange={(otp) => console.log('OTP changed:', otp)}
+              onComplete={(otp) => {
+                if (change) changeEmailVerify(otp);
+                else if (type == "reset") handleReset(otp);
+                else handleComplete(otp);
+              }}
+              error={false}
+              focusColor="#005A55"
+              errorColor="#B00020"
+            />
 
+            <View className="h-5" />
 
-      {isLoading  && 
+            <TouchableOpacity className="mb-10 items-center">
+              <Text style={{ fontFamily: 'NunitoSemiBold', fontSize: 16, color: lighgreen }}>
+                Didn't get it?{' '}
+                <Text style={{ color: '#005A55', fontWeight: 'bold' }}>
+                  Resend code
+                </Text>
+              </Text>
+            </TouchableOpacity>
+
+          </View>
+        </ScrollView>
+
+      </Pressable>
+
+      {isLoading &&
         <Indicator onClose={() => setIsloading(false)} visible={isLoading}>
-          <ActivityIndicator size="large"/>
+          <ActivityIndicator size="large" />
         </Indicator>
       }
-    </View>
+
+    </SafeAreaView>
   );
 };
-
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex:1,
-    justifyContent:'space-between',
-    backgroundColor:'#fff'
-  },
-
-  subContainer:{
-    padding:20,
-    paddingTop:50
-  },
-  title: {
-    fontFamily:'DMSerifDisplay',
-    fontSize:32,
-    color:'#0B172A'
-  },
-  subtitle: {
-    fontSize: 17,
-    color: '#2B4752',
-    textAlign: 'center',
-    fontFamily:'NunitoSemiBold'
-  },
-  email: {
-    fontSize: 17,
-    fontFamily: 'NunitoSemiBold',
-    color: '#2B4752',
-    textAlign: 'left',
-  },
-  codeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 32,
-  },
-  codeDigit: {
-    width: 50,
-    alignItems: 'center',
-    marginHorizontal: 8,
-  },
-  codeText: {
-    fontSize:  20,
-  },
-  underline: {
-    height: 1,
-    backgroundColor: lighgreen,
-    width: '100%',
-  },
-  resendContainer: {
-    marginBottom: 40,
-    alignItems: 'center',
-  },
-  resendText: {
-    fontSize: 16,
-    color: lighgreen,
-    fontFamily:'NunitoSemiBold'
-  },
-  resendLink: {
-    color: '#005A55',
-    fontWeight: 'bold',
-    // textDecorationLine:'underline',
-    // textDecorationColor:"red"
-    
-  },
-  keypad: {
-   display:'flex',
-   flexDirection:'column',
-   justifyContent:'space-between',
-   backgroundColor:'#d0d4dc',
-   gap:7,
-   padding:10,
-   paddingBottom: 100
-  },
-  keypadRow: {
-    display:'flex',
-    flexDirection:'row',
-    justifyContent:'space-between',
-    gap:7
-  },
-  keypadKey: {
-    height: 55,
-    width: '32%',
-    backgroundColor: '#fff',
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius: 7,
-    borderBottomWidth: .8,
-    borderBottomColor: '#000',
-    backgroundColor: '#ffffff',
-
-  },
-  number:{
-    fontSize:25,
-    fontWeight:'bold',
-  },
-  abc:{
-    fontSize:12,
-    fontWeight:'600'
-  }
-});
 
 export default ConfirmationCode;

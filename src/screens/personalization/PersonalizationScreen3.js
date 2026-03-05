@@ -1,38 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import ProgressBar from '../../components/ProgressBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CommonButton from '../../components/CommonButton';
-import { deepGreen, lightgreen1, primaryText } from '../../components/Constant';
+import { deepGreen, primaryText } from '../../components/Constant';
 import SelectableCard from '../../components/SelectableCard';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import useLayoutDimention from '../../hooks/useLayoutDimention';
-import { getStyles } from './PersonalizationScreen3Style';
 import { tone_preference } from './PersonalizationAPIs';
 import { useNavigation } from '@react-navigation/native';
 import Indicator from '../../components/Indicator';
-import { isValid } from 'date-fns';
-import useStaticData from '../../hooks/useStaticData';
 import useAppStore from '@/context/useAppStore';
-
+import ReusableNavigation from '../../components/ReusabeNavigation';
+import BackButton from '../../components/BackButton';
 
 export default function PersonalizationScreen3() {
-  const {store} = useAuth();
-
-  const tone_preference_data = useAppStore((s) => s.onboarding.tone_preference_data)
+  const { store } = useAuth();
+  const tone_preference_data = useAppStore((s) => s.onboarding.tone_preference_data);
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [id, setId] = useState(null);
-  const navigation = useNavigation();
-  const {isSmall, isMedium, isLarge, isFold} =  useLayoutDimention()
-  const styles = getStyles(isSmall, isMedium, isLarge, isFold)
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
 
   const handleSubmit = () => {
-    const payload = {
-      "tone_preference_option": id
-    };
+    const payload = { tone_preference_option: id };
     setIsLoading(true);
     tone_preference(payload, (response, success) => {
       setIsLoading(false);
@@ -42,30 +33,40 @@ export default function PersonalizationScreen3() {
         console.error("Error submitting tone preference:", response);
       }
     });
-
-  }
-
+  };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView className="flex-1 bg-white">
 
-      <View>
-        <View style={{}}>
-          <ProgressBar progress={14.28 * 4} />
-        </View>
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => <Text />}
+        RightComponent={() => <Text />}
+      />
 
-        <Text style={styles.title}>What tone speaks to you?</Text>
+      <View className="flex-1 justify-between p-2.5">
 
-        <Text style={styles.text}>
-          Personalize how you receive inspired answers and insights to fit your journey
-        </Text>
-      </View>
-
-      <View style={{ flex: 1 }}>
-        <ScrollView 
-          contentContainerStyle={{ padding: 0 }}
+        <ScrollView
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
+          <ProgressBar progress={14.28 * 4} />
+
+          <Text
+            style={{ fontFamily: 'DMSerifDisplay', lineHeight: 35 }}
+            className="text-[32px] text-[#0B172A] text-center px-10 py-10"
+          >
+            What tone speaks to you?
+          </Text>
+
+          <Text
+            style={{ fontFamily: 'NunitoSemiBold' }}
+            className="text-lg text-[#2B4752] text-center px-5 pb-5"
+          >
+            Personalize how you receive inspired answers and insights to fit your journey
+          </Text>
+
           {tone_preference_data.map((item, idx) => (
             <SelectableCard
               key={idx}
@@ -82,28 +83,35 @@ export default function PersonalizationScreen3() {
             />
           ))}
         </ScrollView>
+
+        <View className="pb-8">
+          <CommonButton
+            btnText={"Select Tone"}
+            bgColor={deepGreen}
+            navigation={navigation}
+            route={""}
+            handler={handleSubmit}
+            txtColor={primaryText}
+            bold='bold'
+            opacity={selectedIndex !== null ? 1 : 0.5}
+            disabled={selectedIndex === null}
+          />
+          <Text
+            style={{ fontFamily: 'NunitoSemiBold' }}
+            className="text-sm text-[#2B4752] text-center pt-3"
+          >
+            Not sure? You can change your tone later in your profile settings
+          </Text>
+        </View>
+
       </View>
 
-      <View>
-        <CommonButton
-          btnText={"Select Tone"}
-          bgColor={deepGreen}
-          navigation={navigation}
-          route={""}
-          handler={handleSubmit}
-          txtColor={primaryText}
-          bold='bold'
-          opacity={selectedIndex !== null ? 1 : 0.5}
-          disabled={selectedIndex === null}
-        />
-        <Text style={styles.footerText}>
-          Not sure? You can change your tone later in your profile settings
-        </Text>
-      </View>
-      {isLoading &&  <Indicator visible={isLoading} onClose={() => setIsLoading(false)} >
-        <ActivityIndicator size="large"  />
-       </Indicator>}
-    </View>
+      {isLoading &&
+        <Indicator visible={isLoading} onClose={() => setIsLoading(false)}>
+          <ActivityIndicator size="large" />
+        </Indicator>
+      }
+
+    </SafeAreaView>
   );
 }
-

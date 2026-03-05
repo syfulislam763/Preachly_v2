@@ -1,54 +1,82 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image} from 'react-native';
-import { useAuth } from '../../context/AuthContext';
-import ProgressBar from '../../components/ProgressBar';
+import React from 'react';
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CommonButton from '../../components/CommonButton';
 import { deepGreen, primaryText, lightgreen1 } from '../../components/Constant';
-import CustomSelect from '../../components/CustomSelect';
-import SelectableCard from '../../components/SelectableCard';
-import QuestionSlider from '../../components/QuestionSlider';
+import useAppStore from '@/context/useAppStore';
+import ReusableNavigation from '../../components/ReusabeNavigation';
+import BackButton from '../../components/BackButton';
+import { useNavigation } from '@react-navigation/native';
 
+export default function Notification() {
+  const navigation = useNavigation();
+  const setOnboardingCompleted = useAppStore((s) => s.setOnboardingCompleted);
 
-export default function Notification({navigation}) {
-    
+  const finishOnboarding = () => {
+    setOnboardingCompleted(true);
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      
-      <View style={{alignItems:'center', justifyContent:'center', backgroundColor:'#fff', height:'80%'}}>
-         <Image source={require("../../../assets/img/bell-alert.png")}/>
-         <Text style={styles.title}>Turn On Notifications</Text>
-         <Text style={styles.subtitle}>Never miss a moment to grow in faith. Get gentle reminders, uplifting messages,and timely insights to keep you inspired on your journey</Text>
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
+
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => <Text />}
+        RightComponent={() => (
+          <TouchableOpacity onPress={() => finishOnboarding()}>
+            <Text
+              style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 15 }}
+              className="mr-5 underline"
+            >
+              Skip
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+
+      <View className="flex-1 justify-between p-2.5">
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <View className="flex-1 items-center justify-center px-5 py-10">
+            <Image source={require("../../../assets/img/bell-alert.png")} />
+
+            <Text
+              style={{ fontFamily: 'DMSerifDisplay' }}
+              className="text-[32px] text-[#0B172A] text-center px-5 pt-5 pb-2"
+            >
+              Turn On Notifications
+            </Text>
+
+            <Text
+              style={{ fontFamily: 'NunitoSemiBold', lineHeight: 23 }}
+              className="text-lg text-[#2B4752] text-center px-4"
+            >
+              Never miss a moment to grow in faith. Get gentle reminders, uplifting messages, and timely insights to keep you inspired on your journey
+            </Text>
+          </View>
+        </ScrollView>
+
+        <View className="pb-16">
+          
+          <CommonButton
+            btnText={"Continue"}
+            bgColor={deepGreen}
+            navigation={navigation}
+            route={""}
+            handler={finishOnboarding}
+            txtColor={primaryText}
+            bold='bold'
+            opacity={1}
+          />
+        </View>
+
       </View>
 
-      <View style={{paddingBottom:45}}>
-        <CommonButton
-          btnText={"Skip"}
-          bgColor={lightgreen1}
-          navigation={navigation}
-          route={"SubscriptionScreen"}
-          txtColor={deepGreen}
-          bold='bold'
-          opacity={1}
-        />
-        <View style={{height:10}}/>
-        <CommonButton
-          btnText={"Continue"}
-          bgColor={deepGreen}
-          navigation={navigation}
-          route={"SubscriptionScreen"}
-          txtColor={primaryText}
-          bold='bold'
-          opacity={1}
-        />
-      </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {flex:1,backgroundColor:'#fff',justifyContent:'space-between', padding:10},
-  title: {fontFamily:'DMSerifDisplay', fontSize:32, padding: 20, textAlign:'center', color:'#0B172A'},
-  subtitle: {fontFamily:'NunitoSemiBold', color:'#2B4752', fontSize:18, textAlign:'center', paddingHorizontal:18, lineHeight: 23}
-})

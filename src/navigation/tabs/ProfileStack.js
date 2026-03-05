@@ -37,94 +37,24 @@ export default function ProfileStack() {
       <Stack.Screen options={{headerShown:false}} name="ProfileScreen" component={ProfileScreen} />
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Setting',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoSemiBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false
       })} name="SettingHome" component={SettingHome} />
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Personal Info',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoSemiBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false
       })} name="PersonalInfo" component={PersonalInfo} />
       {/* {} */}
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Edit Personal Info',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoSemiBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false
       })} name="EditPersonalInfo" component={PersonalInfo} />
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Subscription',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoSemiBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false
       })} name="ProfileSubscription" component={ProfileSubscription} />
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'About the app',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoSemiBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false
       })} name="AboutApp" component={AboutApp} />
 
       <Stack.Screen options={({navigation}) => ({
@@ -166,21 +96,7 @@ export default function ProfileStack() {
       })} name="TermsAndCondition" component={TermsAndCondition} />
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Notifications',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoSemiBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false
       })} name="ProfileNotification" component={ProfileNotification} />
 
       <Stack.Screen options={({navigation}) => ({
@@ -208,77 +124,21 @@ export default function ProfileStack() {
       })} name="Calendar" component={Calendar} />
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Your Current Goals',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false
       })} name="CurrentGoals" component={CurrentGoals} />
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Weekly Check-In',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false
       })} name="WeeklyCheckIn" component={WeeklyCheckIn} />
       
       <Stack.Screen options={({navigation}) => ({
         headerShown:false,
-        title: 'Weekly Check-In',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
       })} name="WeeklyCheckIn_" component={WeeklyCheckIn_} />
 
 
       <Stack.Screen 
         options={({navigation}) => ({
-          headerTitleAlign: "center",
-          headerShadowVisible: false,
-          headerTitleStyle: {
-            fontFamily: 'NunitoBold',
-            color: '#0b172A',
-            fontSize: 18
-          },
-          headerStyle: {
-            elevation: 0,
-            shadowOpacity: 0,
-            borderBottomWidth: 0,
-            backgroundColor: '#fff',
-          },
-          headerLeft: () => <BackButton navigation={navigation}/>
+          headerShown:false
       })}
       
       name="RegularCheckIn" component={RegularCheckIn} />

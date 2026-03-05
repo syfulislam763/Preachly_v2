@@ -252,8 +252,10 @@ export default function PreachlyScreen() {
   )
 
   const handleZoom = () => {
-    if(zoomText < 25){
+    if(zoomText < 20){
       setZoomText(n => n+1)
+    }else{
+      setZoomText(14)
     }
   }
 

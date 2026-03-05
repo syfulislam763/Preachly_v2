@@ -12,19 +12,18 @@ import DatePicker from './PersonalInfoUtils/DatePicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import CommonButton from '../../../components/CommonButton';
 import { deepGreen } from '../../../components/Constant';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { get_profile_info, update_profile_info, handleToast } from '../../auth/AuthAPI';
 import { post_onboarding_user_data } from '../../personalization/PersonalizationAPIs';
 import ProfileImage from './PersonalInfoUtils/ProfileImage';
 import DropdownModal from './PersonalInfoUtils/DropdownModal';
-import useLayoutDimention from '../../../hooks/useLayoutDimention';
-import { getStyles } from './PersonalInfoUtils/PersonalInfoStyle';
 import useLogout from '../../../hooks/useLogout';
-import { useRoute } from '@react-navigation/native';
 import Indicator from '../../../components/Indicator';
 import dayjs from 'dayjs';
-
 import useAppStore from '@/context/useAppStore';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ReusableNavigation from '../../../components/ReusabeNavigation';
+import BackButton from '../../../components/BackButton';
 
 const faith_goal = [
   { id: 1, goal_type: 'conversation', name: 'Confidence Goal' },
@@ -33,8 +32,6 @@ const faith_goal = [
 ];
 
 const PersonalInfo = () => {
-
-
   const denominations = useAppStore((s) => s.onboarding.denominations);
   const bible_versions = useAppStore((s) => s.onboarding.bible_versions);
   const tone_preference_data = useAppStore((s) => s.onboarding.tone_preference_data);
@@ -48,14 +45,10 @@ const PersonalInfo = () => {
   const profileTonePreference = useAppStore((s) => s.profile.tone_preference);
   const profileGoalPreference = useAppStore((s) => s.profile.goal_preference);
   const profileBibleFamiliarity = useAppStore((s) => s.profile.bible_familiarity);
-  const access = useAppStore((s) => s.auth.access)
-
-
+  const access = useAppStore((s) => s.auth.access);
   const setProfileData = useAppStore((s) => s.setProfileData);
 
   const route = useRoute();
-  const { isSmall, isMedium, isLarge, isFold } = useLayoutDimention();
-  const styles = getStyles(isSmall, isMedium, isLarge, isFold);
   const navigation = useNavigation();
 
   const [editMode, setEditMode] = useState(false);
@@ -88,7 +81,6 @@ const PersonalInfo = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // ─── Populate form from store on mount ───
   useEffect(() => {
     setName(profileUserInfo?.name ?? '');
     setDob(profileUserInfo?.date_of_birth ?? '');
@@ -143,11 +135,11 @@ const PersonalInfo = () => {
     post_onboarding_user_data(payload, (res, success) => {
       if (!success) {
         setLoading(false);
-        handleToast('error', 'Failed to update onboarding data', 3000, () => {navigation.goBack()});
+        handleToast('error', 'Failed to update onboarding data', 3000, () => { navigation.goBack(); });
         return;
       }
 
-      update_profile_info(profileInfo_payload,access, (response, isOk) => {
+      update_profile_info(profileInfo_payload, access, (response, isOk) => {
         setLoading(false);
 
         if (!isOk) {
@@ -158,8 +150,8 @@ const PersonalInfo = () => {
             goal_preference: faithGoal,
             bible_familiarity: Answer,
           };
-          setProfileData(updatedProfile)
-          handleToast('error', 'Failed to update profile', 3000, () => {navigation.goBack()});
+          setProfileData(updatedProfile);
+          handleToast('error', 'Failed to update profile', 3000, () => { navigation.goBack(); });
           return;
         }
 
@@ -190,79 +182,98 @@ const PersonalInfo = () => {
   };
 
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={styles.scrollContainer}
-      enableOnAndroid={true}
-      extraScrollHeight={190}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
-      <ProfileImage
-        onChange={(image) => {
-          setImg(image.uri);
-          setImageData(image);
-        }}
-        disabled={!editMode}
-        uri={img ?? profileUserInfo?.profile_picture}
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
+
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => (
+          <Text
+            style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}
+            className="mr-10"
+          >
+            Personal Info
+          </Text>
+        )}
+        RightComponent={() => <Text />}
       />
 
-      <View style={styles.inputFieldCard}>
-        <InfoRow label="Name" value={name} onChange={setName} isEditable={editMode} />
-        <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
-        <InfoRow isDate={true} isEditable={editMode} label="Date of birth" value={dob} onChange={setDob} />
-        <InfoRow isEditable={editMode} label="Email" value={email} onChange={setEmail} />
-      </View>
-
-      <View style={styles.card}>
-        <DropdownRow label="Denomination" value={selectedDenomination?.name} onPress={() => setModalVisible(editMode)} />
-        <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
-        <DropdownRow label="Bible" value={selectedBibleVersion?.name} onPress={() => setBibleModalVisible(editMode)} />
-      </View>
-
-      <View style={styles.card}>
-        <DropdownRow label="Tone" value={tone?.name} onPress={() => setToneModalVisible(editMode)} />
-        <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
-        <DropdownRow label="Faith Goal" value={faithGoal?.name} onPress={() => setFaithGoalVisible(editMode)} />
-        <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
-        <DropdownRow label="Answer Depth" value={Answer?.name} onPress={() => setDepthAnsVisible(editMode)} />
-      </View>
-
-      <View style={{ margin: 20 }}>
-        <CommonButton
-          btnText={route.params?.editMode ? 'Save Info' : 'Edit Info'}
-          bgColor={deepGreen}
-          navigation={navigation}
-          route=""
-          txtColor="white"
-          handler={() => {
-            if (editMode) {
-              handleSaveUserInfo();
-            } else {
-              navigation.navigate('EditPersonalInfo', { editMode: true });
-            }
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 40 }}
+        enableOnAndroid={true}
+        extraScrollHeight={190}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <ProfileImage
+          onChange={(image) => {
+            setImg(image.uri);
+            setImageData(image);
           }}
-          bold="bold"
-          opacity={1}
+          disabled={!editMode}
+          uri={img ?? profileUserInfo?.profile_picture}
         />
-      </View>
 
-      {/* Dropdowns */}
-      <DropdownModal isVisible={faithGoalQuestionOneVisible} onClose={() => setFaithGoalQuestionOneVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setFaithGoalQuestionOne(o); }} options={faith_goal_questions?.[0]?.options} selectedItem={faithGoalQuestionOne} />
-      <DropdownModal isVisible={faithGoalQuestionTwoVisible} onClose={() => setFaithGoalQuestionTwoVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setFaithGoalQuestionTwo(o); }} options={faith_goal_questions?.[1]?.options} selectedItem={faithGoalQuestionTwo} />
-      <DropdownModal isVisible={faithGoalQuestionThreeVisible} onClose={() => setFaithGoalQuestionThreeVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setFaithGoalQuestionThree(o); }} options={faith_goal_questions?.[2]?.options} selectedItem={faithGoalQuestionThree} />
+        <View style={styles.inputFieldCard}>
+          <InfoRow label="Name" value={name} onChange={setName} isEditable={editMode} />
+          <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
+          <InfoRow isDate={true} isEditable={editMode} label="Date of birth" value={dob} onChange={setDob} />
+          <InfoRow isEditable={editMode} label="Email" value={email} onChange={setEmail} />
+        </View>
 
-      <DropdownModal isVisible={modalVisible} onClose={() => setModalVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setSelectedDenomination(o); }} options={denominations?.filter((it) => it.id > 0).sort((a, b) => a.id - b.id)} selectedItem={selectedDenomination} />
-      <DropdownModal isVisible={bibleModalVisible} onClose={() => setBibleModalVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setSelectedBibleVersion(o); }} options={bible_versions?.filter((it) => it.id > 0).sort((a, b) => a.id - b.id)} selectedItem={selectedBibleVersion} />
-      <DropdownModal isVisible={toneModalVisible} onClose={() => setToneModalVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setTone(o); }} options={tone_preference_data} selectedItem={tone} />
-      <DropdownModal isVisible={faithGoalVisible} onClose={() => setFaithGoalVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setFaithGoal(o); }} options={faith_goal} selectedItem={faithGoal} />
-      <DropdownModal isVisible={depthAnsVisible} onClose={() => setDepthAnsVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setAnswer(o); }} options={bible_familiarity_data} selectedItem={Answer} />
+        <View style={styles.card}>
+          <DropdownRow label="Denomination" value={selectedDenomination?.name} onPress={() => setModalVisible(editMode)} />
+          <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
+          <DropdownRow label="Bible" value={selectedBibleVersion?.name} onPress={() => setBibleModalVisible(editMode)} />
+        </View>
 
-      {loading && (
-        <Indicator visible={loading} onClose={() => setLoading(false)}>
-          <ActivityIndicator size="large" />
-        </Indicator>
-      )}
-    </KeyboardAwareScrollView>
+        <View style={styles.card}>
+          <DropdownRow label="Tone" value={tone?.name} onPress={() => setToneModalVisible(editMode)} />
+          <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
+          <DropdownRow label="Faith Goal" value={faithGoal?.name} onPress={() => setFaithGoalVisible(editMode)} />
+          <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
+          <DropdownRow label="Answer Depth" value={Answer?.name} onPress={() => setDepthAnsVisible(editMode)} />
+        </View>
+
+        <View style={{ margin: 20 }}>
+          <CommonButton
+            btnText={route.params?.editMode ? 'Save Info' : 'Edit Info'}
+            bgColor={deepGreen}
+            navigation={navigation}
+            route=""
+            txtColor="white"
+            handler={() => {
+              if (editMode) {
+                handleSaveUserInfo();
+              } else {
+                navigation.navigate('EditPersonalInfo', { editMode: true });
+              }
+            }}
+            bold="bold"
+            opacity={1}
+          />
+        </View>
+
+        {/* Dropdowns */}
+        <DropdownModal isVisible={faithGoalQuestionOneVisible} onClose={() => setFaithGoalQuestionOneVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setFaithGoalQuestionOne(o); }} options={faith_goal_questions?.[0]?.options} selectedItem={faithGoalQuestionOne} />
+        <DropdownModal isVisible={faithGoalQuestionTwoVisible} onClose={() => setFaithGoalQuestionTwoVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setFaithGoalQuestionTwo(o); }} options={faith_goal_questions?.[1]?.options} selectedItem={faithGoalQuestionTwo} />
+        <DropdownModal isVisible={faithGoalQuestionThreeVisible} onClose={() => setFaithGoalQuestionThreeVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setFaithGoalQuestionThree(o); }} options={faith_goal_questions?.[2]?.options} selectedItem={faithGoalQuestionThree} />
+
+        <DropdownModal isVisible={modalVisible} onClose={() => setModalVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setSelectedDenomination(o); }} options={denominations?.filter((it) => it.id > 0).sort((a, b) => a.id - b.id)} selectedItem={selectedDenomination} />
+        <DropdownModal isVisible={bibleModalVisible} onClose={() => setBibleModalVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setSelectedBibleVersion(o); }} options={bible_versions?.filter((it) => it.id > 0).sort((a, b) => a.id - b.id)} selectedItem={selectedBibleVersion} />
+        <DropdownModal isVisible={toneModalVisible} onClose={() => setToneModalVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setTone(o); }} options={tone_preference_data} selectedItem={tone} />
+        <DropdownModal isVisible={faithGoalVisible} onClose={() => setFaithGoalVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setFaithGoal(o); }} options={faith_goal} selectedItem={faithGoal} />
+        <DropdownModal isVisible={depthAnsVisible} onClose={() => setDepthAnsVisible(false)} handleChage={(o) => { Keyboard.dismiss(); setAnswer(o); }} options={bible_familiarity_data} selectedItem={Answer} />
+
+        {loading && (
+          <Indicator visible={loading} onClose={() => setLoading(false)}>
+            <ActivityIndicator size="large" />
+          </Indicator>
+        )}
+
+      </KeyboardAwareScrollView>
+
+    </SafeAreaView>
   );
 };
 
@@ -311,13 +322,25 @@ const DropdownRow = ({ label, value, onPress, rowStyle = {} }) => (
 );
 
 const styles = StyleSheet.create({
+  inputFieldCard: {
+    backgroundColor: '#F3F8F8',
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 16,
+  },
+  card: {
+    backgroundColor: '#F3F8F8',
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 16,
+  },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12 },
   label: { fontSize: 16, color: '#0B172A', fontFamily: 'NunitoBold', flex: 1 },
   valueContainer: { flex: 1, marginLeft: 10 },
   value: { fontSize: 16, color: '#2B4752', fontFamily: 'NunitoBold', textAlign: 'right' },
-  inputFieldRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 8, paddingBottom: 0 },
+  inputFieldRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 8 },
   inputFieldLabel: { fontSize: 16, color: '#0B172A', fontFamily: 'NunitoBold' },
-  inputField: { fontSize: 16, color: '#2B4752', fontFamily: 'NunitoBold', padding: 8, textAlign: 'right' },
+  inputField: { fontSize: 16, color: '#2B4752', fontFamily: 'NunitoBold', padding: 8, textAlign: 'right', flexWrap:'wrap' },
 });
 
 export default PersonalInfo;

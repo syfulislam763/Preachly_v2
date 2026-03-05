@@ -66,21 +66,7 @@ export default function PersonalizationStack() {
       </>: isPaymentTab? <>
           <Stack.Screen 
             options={({navigation}) => ({
-              title: 'Subscription',
-              headerTitleAlign: "center",
-              headerShadowVisible: false,
-              headerTitleStyle: {
-                fontFamily: 'NunitoSemiBold',
-                color: '#0b172A',
-                fontSize: 18
-              },
-              headerStyle: {
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-                backgroundColor: '#ffeac2',
-              },
-              headerLeft: () => <BackButton navigation={navigation}/>
+              headerShown:false,
             })}
             name="SubscriptionScreen" 
             component={SubscriptionScreen} 
@@ -88,21 +74,7 @@ export default function PersonalizationStack() {
           
           <Stack.Screen 
             options={({navigation}) => ({
-              title: 'Subscription',
-              headerTitleAlign: "center",
-              headerShadowVisible: false,
-              headerTitleStyle: {
-                fontFamily: 'NunitoSemiBold',
-                color: '#0b172A',
-                fontSize: 18
-              },
-              headerStyle: {
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-                backgroundColor: '#fff',
-              },
-              headerLeft: () => <BackButton navigation={navigation}/>
+              headerShown:false
             })}
             name="SubscriptionConfirmedScreen" 
             component={SubscriptionConfirmedScreen} 
@@ -118,91 +90,45 @@ export default function PersonalizationStack() {
             component={PersonalizationScreen} 
           />
           <Stack.Screen 
-            options={commonNavigationOptions}
+            options={{headerShown: false}}
             name="Personalization1" 
             component={PersonalizationScreen1} 
           />
           <Stack.Screen 
-            options={commonNavigationOptions}
+            options={{headerShown: false}}
             name="Personalization2" 
             component={PersonalizationScreen2} 
           />
           <Stack.Screen 
-            options={commonNavigationOptions}
+            options={{headerShown: false}}
             name="Personalization3" 
             component={PersonalizationScreen3} 
           />
           <Stack.Screen 
-            options={commonNavigationOptions}
+            options={{headerShown: false}}
             name="Personalization4" 
             component={PersonalizationScreen4} 
           />
           <Stack.Screen 
-            options={commonNavigationOptions}
+            options={{headerShown: false}}
             name="Personalization5" 
             component={PersonalizationScreen5} 
           />
 
           <Stack.Screen 
-            options={commonNavigationOptions}
+            options={{headerShown: false}}
             name="Personalization6" 
             component={PersonalizationScreen6} 
           />
 
           <Stack.Screen 
-            options={commonNavigationOptions}
+            options={{headerShown: false}}
             name="Notification" 
             component={Notification} 
           />
 
-          <Stack.Screen 
-            options={({navigation}) => ({
-              title: 'Subscription',
-              headerTitleAlign: "center",
-              headerShadowVisible: false,
-              headerTitleStyle: {
-                fontFamily: 'NunitoSemiBold',
-                color: '#0b172A',
-                fontSize: 18
-              },
-              headerStyle: {
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-                backgroundColor: '#ffeac2',
-              },
-              headerLeft: () => <BackButton navigation={navigation}/>
-            })}
-            name="SubscriptionScreen" 
-            component={SubscriptionScreen} 
-          />
-
-          <Stack.Screen 
-            options={({navigation}) => ({
-              title: 'Subscription',
-              headerTitleAlign: "center",
-              headerShadowVisible: false,
-              headerTitleStyle: {
-                fontFamily: 'NunitoSemiBold',
-                color: '#0b172A',
-                fontSize: 18
-              },
-              headerStyle: {
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-                backgroundColor: '#fff',
-              },
-              headerLeft: () => <BackButton navigation={navigation}/>
-            })}
-            name="SubscriptionConfirmedScreen" 
-            component={SubscriptionConfirmedScreen} 
-          />
-
-
           
-
-
+  
         
         </>
       }

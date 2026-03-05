@@ -3,11 +3,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
 
-const BackButton = ({navigation, cb}) => {
+const BackButton = ({navigation, cb, customStyle}) => {
   return (
     <TouchableOpacity
         onPress={cb?()=>cb():() => navigation.goBack()}
-        style={styles.backButtonContainer}
+        style={{...styles.backButtonContainer, ...customStyle}}
         >
         <Ionicons name="arrow-back" size={20} color="#0b172A" />
     </TouchableOpacity>
@@ -19,7 +19,7 @@ export default BackButton;
 
 const styles = StyleSheet.create({
   backButtonContainer: {
-    backgroundColor: '#EDF3F3',
+    backgroundColor: '#edf3f3',
     height:40,
     width:40,
     padding: 8,

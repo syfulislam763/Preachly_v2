@@ -38,7 +38,7 @@ export default function MainTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => { 
         const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-        const hiddenRoutes = ['WeeklyCheckIn', 'CurrentGoals', 'RegularCheckIn', 'PorfileFaith', 'ProfileNotification', 'SettingHome', 'PersonalInfo', 'ProfileSubscription', 'EditPersonalInfo', 'ConfirmEmail', 'MessageScreen']
+        const hiddenRoutes = ['WeeklyCheckIn', 'CurrentGoals', 'RegularCheckIn', 'WeeklyCheckIn_','PorfileFaith', 'ProfileNotification', 'SettingHome', 'PersonalInfo', 'ProfileSubscription', 'EditPersonalInfo', 'ConfirmEmail', 'MessageScreen', 'AboutApp']
         const shouldHideTabBar = hiddenRoutes.includes(routeName);
         return {
           headerShown: false,
@@ -59,8 +59,8 @@ export default function MainTabs() {
               icon = focused ? profileActive : profileInactive;
             }
             return <Image style={{
-              height:24,
-              width:24,
+              height:30,
+              width:30,
               objectFit:'contain'
             }} source={icon}/>;
           },

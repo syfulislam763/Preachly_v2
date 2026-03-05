@@ -1,4 +1,3 @@
-
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -10,10 +9,13 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../../context/AuthContext';
 import { delete_notifications, get_notifications } from '../TabsAPI';
 import { Swipeable } from 'react-native-gesture-handler';
 import Indicator from '../../../components/Indicator';
+import ReusableNavigation from '../../../components/ReusabeNavigation';
+import BackButton from '../../../components/BackButton';
 
 const trash = require('../../../../assets/img/Trash.png');
 
@@ -23,18 +25,15 @@ function ProfileNotification() {
   const [loading, setLoading] = useState(false);
   const [notifications, setNotifications] = useState([]);
 
-  const swipeableRowRef = useRef(null); // Track the currently open swipeable
+  const swipeableRowRef = useRef(null);
 
   const handleDeleteNotification = (id) => {
-    // Close current swipeable if any
-    
-
     setLoading(true);
     delete_notifications(id, (res, success) => {
       if (success) {
         if (swipeableRowRef.current) {
-            swipeableRowRef.current.close();
-            swipeableRowRef.current = null;
+          swipeableRowRef.current.close();
+          swipeableRowRef.current = null;
         }
         get_notifications((res, success) => {
           setLoading(false);
@@ -45,7 +44,6 @@ function ProfileNotification() {
         });
       } else {
         setLoading(false);
-   
       }
     });
   };
@@ -57,11 +55,7 @@ function ProfileNotification() {
     >
       <Image
         source={trash}
-        style={{
-          width: 20,
-          height: 20,
-          resizeMode: 'contain',
-        }}
+        style={{ width: 20, height: 20, resizeMode: 'contain' }}
       />
     </TouchableOpacity>
   );
@@ -70,29 +64,23 @@ function ProfileNotification() {
     let localRef;
 
     return (
-        <Swipeable
-            ref={(ref) => {
-            localRef = ref;
-            }}
-            onSwipeableOpen={() => {
-            if (
-                swipeableRowRef.current &&
-                swipeableRowRef.current !== localRef
-            ) {
-                swipeableRowRef.current.close();
-            }
-            swipeableRowRef.current = localRef;
-            }}
-            renderRightActions={(progress, dragX) =>
-            renderRightActions(progress, dragX, item.id)
-            }
-            
-        >
-            <View style={styles.notificationCard}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.message}>{item.message}</Text>
-            </View>
-        </Swipeable>
+      <Swipeable
+        ref={(ref) => { localRef = ref; }}
+        onSwipeableOpen={() => {
+          if (swipeableRowRef.current && swipeableRowRef.current !== localRef) {
+            swipeableRowRef.current.close();
+          }
+          swipeableRowRef.current = localRef;
+        }}
+        renderRightActions={(progress, dragX) =>
+          renderRightActions(progress, dragX, item.id)
+        }
+      >
+        <View style={styles.notificationCard}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.message}>{item.message}</Text>
+        </View>
+      </Swipeable>
     );
   };
 
@@ -101,39 +89,50 @@ function ProfileNotification() {
   }, [socket.notifications]);
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={notifications}
-        keyExtractor={(_, idx) => idx.toString()}
-        showsVerticalScrollIndicator={false}
-        renderItem={renderItem}
-        ItemSeparatorComponent={()=> <View style={{height:20}} />}
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
+
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => (
+          <Text
+            style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}
+            className="mr-10"
+          >
+            Notifications
+          </Text>
+        )}
+        RightComponent={() => <Text />}
       />
+
+      <View className="flex-1 px-5 pt-5 pb-2">
+        <FlatList
+          data={notifications}
+          keyExtractor={(_, idx) => idx.toString()}
+          showsVerticalScrollIndicator={false}
+          renderItem={renderItem}
+          ItemSeparatorComponent={() => <View className="h-5" />}
+        />
+      </View>
+
       {loading && (
         <Indicator onClose={() => setLoading(false)} visible={loading}>
           <ActivityIndicator size="large" />
         </Indicator>
       )}
-    </View>
+
+    </SafeAreaView>
   );
 }
 
 export default ProfileNotification;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
-  },
   notificationCard: {
     backgroundColor: '#f3f8f8',
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    // marginBottom: 20,
     overflow: 'hidden',
   },
   title: {
@@ -154,7 +153,5 @@ const styles = StyleSheet.create({
     width: 70,
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
-    // marginVertical: 10,
   },
 });
-

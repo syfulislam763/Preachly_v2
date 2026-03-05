@@ -258,7 +258,7 @@ const HistoryScreen = () => {
           <MaterialIcons
             name={item.isFavorite ? 'star' : 'star-border'}
             size={24}
-            color={item.isFavorite ? '#f4c10f' : '#aaa'}
+            color={item.isFavorite ? '#f4c10f' : '#fdd263'}
           />
         </TouchableOpacity>}
       </View>

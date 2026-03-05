@@ -61,7 +61,7 @@ export default function BibleVersionList({selectedItem, setSelectedItem, onClose
         <View style={{
             paddingVertical:10,
             paddingHorizontal:20,
-            backgroundColor:'#fff'
+            backgroundColor:'#fff',
         }}>
             <ModalHeader
                 title={"Bible Version"}
@@ -75,6 +75,7 @@ export default function BibleVersionList({selectedItem, setSelectedItem, onClose
             ItemSeparatorComponent={() => <View style={styles.separator} />}
             contentContainerStyle={styles.container}
             extraData={selectedId}
+            style={{height: "80%"}}
         />
     </View>
   );

@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, Keyboard, Pressable,
+  View, Text, Keyboard, Pressable,
   KeyboardAvoidingView, Platform, ScrollView,
   ActivityIndicator, LayoutAnimation,
 } from 'react-native';
 import CommonInput from '../../components/CommonInput';
-import { deepGreen, lightgreen1, primaryText } from '../../components/Constant';
+import { deepGreen, lightgreen1 } from '../../components/Constant';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CommonButton from '../../components/CommonButton';
 import { handleToast, login } from './AuthAPI';
 import Indicator from '../../components/Indicator';
 import { useNavigation } from '@react-navigation/native';
 import { onboarding_status, get_onboarding_all_data } from '../personalization/PersonalizationAPIs';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setAuthToken } from '../../context/api';
 import { get_payment_status } from './AuthAPI';
-
-
 import useAppStore from '@/context/useAppStore';
+import ReusableNavigation from '../../components/ReusabeNavigation';
+import BackButton from '../../components/BackButton';
 
 export default function SignInScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [keyboardOffset, setKeyboardOffset] = useState(30);
   const navigation = useNavigation();
 
   const setAuth = useAppStore((s) => s.setAuth);
@@ -57,16 +57,14 @@ export default function SignInScreen() {
 
           get_payment_status(access, (payment, isPayment) => {
             setLoading(false);
-
             if (!isPayment) return;
 
             const onboarding_completed = statusRes?.data?.onboarding_completed ?? false;
 
-      
             setOnboardingData(allData.data);
             setPayment(payment.data);
-            
             setOnboardingCompleted(onboarding_completed);
+
             if (onboarding_completed) {
               setAuth({
                 access,
@@ -83,17 +81,13 @@ export default function SignInScreen() {
                 user: res.data?.user,
               });
               navigation.navigate('FinishAuthentication');
-              
             }
-            
           });
         });
       });
     });
   };
 
-
-  const [keyboardOffset, setKeyboardOffset] = useState(30);
   useEffect(() => {
     const show = Keyboard.addListener('keyboardDidShow', (e) => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -109,77 +103,111 @@ export default function SignInScreen() {
   const isReady = email.length > 0 && password.length > 0;
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-          <View style={styles.content}>
-            <Text style={styles.label}>Email</Text>
-            <CommonInput
-              type="email"
-              placeholder=""
-              value={email}
-              onChangeText={setEmail}
-              style={email.length > 0 ? { ...styles.input, ...styles.activeInput } : styles.input}
-            />
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
 
-            <Text style={styles.label}>Password</Text>
-            <CommonInput
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChangeText={setPassword}
-              style={password.length > 0 ? { ...styles.input, ...styles.activeInput } : styles.input}
-              placeholderColor="#607373"
-            />
+      {/* Navigation Header — matches SignUp pattern */}
+      <ReusableNavigation
+        backgroundStyle={{ backgroundColor: '#fff' }}
+        leftComponent={() => <BackButton navigation={navigation} />}
+        middleComponent={() => (
+          <Text
+            style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}
+            className="mr-10"
+          >
+            Sign In
+          </Text>
+        )}
+        RightComponent={() => <Text />}
+      />
 
-            <Pressable onPress={() => navigation.navigate('SignUp', { type: 'reset', email })}>
-              <Text style={styles.forgotPass}>Forgot password?</Text>
-            </Pressable>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
+        <Pressable onPress={Keyboard.dismiss} className="flex-1">
+
+          {/* Full ScrollView so content never gets cut off */}
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="flex-1 px-5 pt-16">
+
+              <Text
+                style={{ fontFamily: 'NunitoSemiBold' }}
+                className="text-base text-[#2B4752] mb-1"
+              >
+                Email
+              </Text>
+              <CommonInput
+                type="email"
+                placeholder=""
+                value={email}
+                onChangeText={setEmail}
+                style={{
+                  marginBottom: 20,
+                  height: 57,
+                  borderWidth: 1,
+                  borderColor: email.length > 0 ? '#005A55' : '#ACC6C5',
+                }}
+              />
+
+              <Text
+                style={{ fontFamily: 'NunitoSemiBold' }}
+                className="text-base text-[#2B4752] mb-1"
+              >
+                Password
+              </Text>
+              <CommonInput
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChangeText={setPassword}
+                style={{
+                  marginBottom: 20,
+                  height: 57,
+                  borderWidth: 1,
+                  borderColor: password.length > 0 ? '#005A55' : '#ACC6C5',
+                }}
+                placeholderColor="#607373"
+              />
+
+              <Pressable onPress={() => navigation.navigate('SignUp', { type: 'reset', email })}>
+                <Text
+                  style={{ fontFamily: 'NunitoExtraBold' }}
+                  className="text-base text-[#0B172A] underline"
+                >
+                  Forgot password?
+                </Text>
+              </Pressable>
+
+            </View>
+          </ScrollView>
+
+          {/* Button pinned at bottom — matches SignUp spacing exactly */}
+          <View className="px-5" style={{ paddingBottom: keyboardOffset }}>
+            <CommonButton
+              btnText="Log in"
+              bgColor={!isReady ? lightgreen1 : deepGreen}
+              navigation={navigation}
+              route=""
+              handler={handleLogin}
+              txtColor={!isReady ? deepGreen : 'white'}
+              disabled={!isReady}
+              opacity={1}
+            />
           </View>
-        </ScrollView>
 
-        <View style={[styles.buttonContainer, { paddingBottom: keyboardOffset }]}>
-          <CommonButton
-            btnText="Log in"
-            bgColor={!isReady ? lightgreen1 : deepGreen}
-            navigation={navigation}
-            route=""
-            handler={handleLogin}
-            txtColor={!isReady ? deepGreen : 'white'}
-            disabled={!isReady}
-            opacity={1}
-          />
-        </View>
-      </Pressable>
+        </Pressable>
+      </KeyboardAvoidingView>
 
       {loading && (
         <Indicator visible={loading} onClose={() => setLoading(false)}>
           <ActivityIndicator size="large" />
         </Indicator>
       )}
-    </KeyboardAvoidingView>
+
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  scrollContent: { flexGrow: 1, padding: 20 },
-  content: { flex: 1, backgroundColor: '#fff', paddingVertical: 35 },
-  label: { fontFamily: 'NunitoSemiBold', fontSize: 16, color: '#2B4752' },
-  input: {
-    marginBottom: 20, height: 57,
-    borderWidth: 1, borderColor: '#ACC6C5',
-  },
-  activeInput: { borderColor: '#005A55' },
-  buttonContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'ios' ? 30 : 90,
-  },
-  forgotPass: {
-    fontFamily: 'NunitoExtraBold', fontSize: 16,
-    textDecorationLine: 'underline', color: '#0B172A',
-  },
-});

@@ -17,7 +17,7 @@ const SNAP_INTERVAL = ITEM_WIDTH + SPACING;
 const SIDE_ITEM_VERTICAL_OFFSET = 50;
 const CAPTION_LEFT_OFFSET = -((SCREEN_WIDTH - ITEM_WIDTH) / 2);
 const IMAGE_HEIGHT = SCREEN_HEIGHT * 0.48;
-const SLIDE_MARGIN_TOP = SCREEN_HEIGHT * 0.19;
+const SLIDE_MARGIN_TOP = SCREEN_HEIGHT * 0.20; 
 const CONTAINER_MARGIN_TOP = SCREEN_HEIGHT * 0.05;
 
 const imageData = [
@@ -131,14 +131,12 @@ function CustomCarousel() {
               <Animated.View
                 style={{
                   position: 'absolute',
-                  top: 0,
+                  top: -15,
                   left: CAPTION_LEFT_OFFSET,
                   width: SCREEN_WIDTH,
                   opacity: captionOpacity,
                   zIndex: 1,
                   alignItems: 'center',
-                  paddingHorizontal: 20,
-                  paddingBottom: 15,
                 }}
               >
                 <Text
@@ -148,7 +146,7 @@ function CustomCarousel() {
                     color: '#0B172A',
                     textAlign: 'center',
                     paddingTop: 20,
-                    marginBottom: 8,
+                    marginBottom: 0,
                     width: '100%',
                   }}
                 >
@@ -162,7 +160,7 @@ function CustomCarousel() {
                     color: '#2B4752',
                     textAlign: 'center',
                     paddingTop: 10,
-                    paddingBottom: 10,
+                    paddingBottom: 0,
                     width: '100%',
                   }}
                 >

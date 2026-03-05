@@ -11,9 +11,9 @@ const Divider = ({text}) => {
         marginTop: 0,
         fontFamily: 'NunitoSemiBold'
     }}>
-        <View style={{height:2, backgroundColor:'#90B2B2', width:'47%'}}></View>
-        <Text style={{paddingRight:4, paddingLeft:4, fontSize: 16}}>{text}</Text>
-        <View style={{height:2, backgroundColor:'#90B2B2', width:'47%'}}></View>
+        <View style={{height:2, backgroundColor:'#90B2B2', width:'45%'}}></View>
+        <Text style={{paddingRight:10, paddingLeft:10, fontSize: 16}}>{text}</Text>
+        <View style={{height:2, backgroundColor:'#90B2B2', width:'45%'}}></View>
     </View>
   )
 }

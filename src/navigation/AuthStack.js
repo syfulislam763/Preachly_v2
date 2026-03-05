@@ -31,6 +31,7 @@ export default function AuthStack() {
 
       <Stack.Screen  
         options={({ navigation }) => ({
+        headerShown:false,
         title: "Sign Up",
         headerTitleAlign: "center",
         headerShadowVisible: false,
@@ -52,29 +53,30 @@ export default function AuthStack() {
       />
 
       <Stack.Screen 
-          options={commonNavigationOptions}
+        options={{headerShown:false}}
         name="ConfirmationEmail" 
         component={ConfirmationEmail} 
       />
         <Stack.Screen
-          options={commonNavigationOptions} 
+        options={{headerShown:false}}
         name="ConfirmationCode" 
         component={ConfirmationCode} 
       />
 
-       <Stack.Screen 
-       options={commonNavigationOptions} 
-      name="CreatePassword" 
-      component={CreatePassword} 
+      <Stack.Screen 
+        options={{headerShown:false}}
+        name="CreatePassword" 
+        component={CreatePassword} 
       />
       <Stack.Screen 
-      options={commonNavigationOptions} 
+      options={{headerShown:false}}
       name="FinishAuthentication" 
       component={FinishAuthentication} 
       />
 
       <Stack.Screen 
       options={({ navigation }) => ({
+        headerShown:false,
           title: "Log in",
           headerTitleAlign: "center",
           headerShadowVisible: false,

@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import Foundation from '@expo/vector-icons/Foundation';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 
+const thumbsUp = require("../../../../assets/img/ThumbsUp.png");
+const thumbsDown = require("../../../../assets/img/ThumbsDown.png");
 
 const Feedback = ({visible, onClose, feedback, setFeedback}) => {
 
@@ -38,30 +40,32 @@ const Feedback = ({visible, onClose, feedback, setFeedback}) => {
                 justifyContent:'center',
                 marginVertical: 30
             }}>
-                {/* <Image
-                    source={require("../../../../assets/img/ThumbsUp.png")}
-                    style={styles.star}
-                /> */}
+                
                 <Pressable onPress={() => {
                     setLiked(true);
                     setToggle(false);
                 }} style={{
-                    marginRight: "10%"
+                    marginRight: "1%"
                 }}>
-                    <Foundation name="like" size={50} color={liked?"green":"black"} />
+                    <Image
+                        source={thumbsUp}
+                        style={styles.star}
+                    />
+                    {/* <Foundation name="like" size={50} color={liked?"green":"black"} /> */}
                 </Pressable>
            
                 <Pressable onPress={() => {
                     setLiked(false);
                     setToggle(true)
                 }}>
-                    <Foundation name="dislike" size={50} color={toggle?"green":"black"} />
+                    <Image
+                        source={thumbsDown}
+                        style={[styles.star,{marginRight:0}]}
+                    />
+                    {/* <Foundation name="dislike" size={50} color={toggle?"green":"black"} /> */}
                 </Pressable>
                 
-                {/* <Image
-                    source={require("../../../../assets/img/ThumbsDown.png")}
-                    style={[styles.star,{marginRight:0}]}
-                /> */}
+                
             </View>
 
             <View style={{paddingBottom:20}}>
@@ -89,7 +93,7 @@ const styles = StyleSheet.create({
         width:40,
         objectFit:'contain',
         marginRight:20,
-        marginVertical: 30
+        marginVertical: 30,
     },
     title: {
         fontFamily:"DMSerifDisplay",
