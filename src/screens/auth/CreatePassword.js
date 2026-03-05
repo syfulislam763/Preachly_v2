@@ -127,7 +127,7 @@ export default function CreatePassword() {
                 style={{ fontFamily: 'NunitoSemiBold', fontSize: 17 }}
                 className="text-[#2B4752] mb-10"
               >
-                The password must be longer than 8 characters, contain numbers(0 - 9), letters (A-Z,a-z), and special characters (! # $ % & * + , - . : ; ? @ ^ )
+                The password must be longer than 8 characters, contain numbers(0 - 9), letters (A-Z,a-z), and special characters (! # $ &  @)
               </Text>
 
               <CommonInput
