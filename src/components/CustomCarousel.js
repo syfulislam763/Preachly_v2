@@ -137,6 +137,7 @@ function CustomCarousel() {
                   opacity: captionOpacity,
                   zIndex: 1,
                   alignItems: 'center',
+                  paddingHorizontal: 20,
                 }}
               >
                 <Text
@@ -155,7 +156,7 @@ function CustomCarousel() {
                 <Text
                   style={{
                     fontFamily: 'NunitoSemiBold',
-                    fontSize: SCREEN_WIDTH < 360 ? 14 : 19,
+                    fontSize: SCREEN_WIDTH < 360 ? 17 : 17,
                     lineHeight: SCREEN_WIDTH < 360 ? 18 : 24,
                     color: '#2B4752',
                     textAlign: 'center',

@@ -6,9 +6,10 @@ import { deepGreen, primaryText } from '../../../components/Constant';
 import { useNavigation } from '@react-navigation/native';
 import Foundation from '@expo/vector-icons/Foundation';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
-
+const thumbsUpJ = require("../../../../assets/img/ThumbsUp.jpg");
 const thumbsUp = require("../../../../assets/img/ThumbsUp.png");
 const thumbsDown = require("../../../../assets/img/ThumbsDown.png");
+const thumbsDownJ = require("../../../../assets/img/ThumbsDown.jpg");
 
 const Feedback = ({visible, onClose, feedback, setFeedback}) => {
 
@@ -38,7 +39,6 @@ const Feedback = ({visible, onClose, feedback, setFeedback}) => {
                 flexDirection:'row',
                 alignItems:'center',
                 justifyContent:'center',
-                marginVertical: 30
             }}>
                 
                 <Pressable onPress={() => {
@@ -48,7 +48,7 @@ const Feedback = ({visible, onClose, feedback, setFeedback}) => {
                     marginRight: "1%"
                 }}>
                     <Image
-                        source={thumbsUp}
+                        source={liked?thumbsUpJ:thumbsUp}
                         style={styles.star}
                     />
                     {/* <Foundation name="like" size={50} color={liked?"green":"black"} /> */}
@@ -59,7 +59,7 @@ const Feedback = ({visible, onClose, feedback, setFeedback}) => {
                     setToggle(true)
                 }}>
                     <Image
-                        source={thumbsDown}
+                        source={toggle? thumbsDownJ: thumbsDown}
                         style={[styles.star,{marginRight:0}]}
                     />
                     {/* <Foundation name="dislike" size={50} color={toggle?"green":"black"} /> */}
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         width:40,
         objectFit:'contain',
         marginRight:20,
-        marginVertical: 30,
+        marginVertical: 15,
     },
     title: {
         fontFamily:"DMSerifDisplay",

@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ReusableNavigation from '../../../components/ReusabeNavigation';
 import BackButton from '../../../components/BackButton';
 import Feedback from './Feedback';
-import { get_session_id, bookmark_message, get_message_by_session_id } from '../TabsAPI';
+import { get_session_id, bookmark_message, get_message_by_session_id, get_new_session } from '../TabsAPI';
 import Indicator from '../../../components/Indicator'
 import { WEBSOCKET_URL } from '../../../context/Paths';
 import {useAuth} from '../../../context/AuthContext';
@@ -86,7 +86,43 @@ export default function MessageScreen() {
         setMessages([])
         setPrevMsg("");
         setRecordings(null);
+        //7de74674-e3b8-4a18-a985-5f62a346d3ba
+        console.log("new session -> [", JSON.stringify(res, null, 2));
         let temp = JSON.stringify({ ...res.data, isNewSession: true});
+        setCurrentSession(JSON.parse(temp))
+        setDoneOne(true)
+        setFeedback(true);
+        setIsFeedback(false);
+        
+        if(feedback){
+          ws.current?.close();
+          ws.current = null;
+        }
+        
+        
+      }else{
+        console.log("ss->", JSON.stringify(res.response.config, null, 2));
+        console.log("code ->", res.status)
+        setFeedback(false);
+        setIsFeedback(false);
+      }
+      
+      setLoading(false);
+    })
+  }
+
+  const start_new_session = (feedback=false) => {
+    const payload = {session_id: currentSession?.id}
+    get_new_session(payload, (res, success) => {
+      if(success){
+        setMessage("");
+        setMessages([])
+        setPrevMsg("");
+        setRecordings(null);
+        //7de74674-e3b8-4a18-a985-5f62a346d3ba
+        const new_session = res?.data?.new_session ?? {}
+        console.log("start a new one session -> [", JSON.stringify(res, null, 2));
+        let temp = JSON.stringify({ ...new_session, isNewSession: true});
         setCurrentSession(JSON.parse(temp))
         setDoneOne(true)
         setFeedback(true);
@@ -111,7 +147,7 @@ export default function MessageScreen() {
 
 
   useEffect(() =>{
-    
+      console.log("current session- ", JSON.stringify(currentSession, null, 2))
     if((currentSession?.id)){
       setLoading(true);
       
@@ -311,55 +347,63 @@ export default function MessageScreen() {
   }, [ access, currentSession]);
 
   const handleSendPredefinedMessage = (message) => {
-    const payload = {
-      message: message,
-      session_id: currentSession?.id,
-      type: "message",
-      message_type: (message.trim().toLowerCase() === "no" || message.trim().toLowerCase() == "yes")?"yes_no":"objection"
-    }
-
-    if(ws.current && message.trim()){
-      ws.current.send(JSON.stringify(payload));
-      const res = {
-        id: new Date().getTime(),
-        message_id: "",
-        type: 'user',
-        verseLink: "",
-        message: message
+    try {
+        const payload = {
+        message: message,
+        session_id: currentSession?.id,
+        type: "message",
+        message_type: (message.trim().toLowerCase() === "no" || message.trim().toLowerCase() == "yes")?"yes_no":"objection"
       }
 
-      setMessages(prev => [...prev, res]);
-      setPrevMsg(message);
-      setMessage("")
-      setRecordings(null);
-    }else{
-      
+      if(ws.current && message.trim()){
+        ws.current?.send(JSON.stringify(payload));
+        const res = {
+          id: new Date().getTime(),
+          message_id: "",
+          type: 'user',
+          verseLink: "",
+          message: message
+        }
+
+        setMessages(prev => [...prev, res]);
+        setPrevMsg(message);
+        setMessage("")
+        setRecordings(null);
+      }else{
+        
+      }
+    }catch(e){
+      console.log("wait a minute")
     }
   }
  
   const sendMessage = () =>{
-    const payload = {
-      message: message,
-      session_id: currentSession?.id,
-      type: "message",
-      message_type: (message.trim().toLowerCase() === "no" || message.trim().toLowerCase() == "yes")?"yes_no":"objection"
-    }
-    console.log(payload)
-    if(ws.current && message.trim()){
-      ws.current.send(JSON.stringify(payload));
-      const res = {
-        id: new Date().getTime(),
-        message_id: "",
-        type: 'user',
-        verseLink: "",
-        message: message
+    try{
+      const payload = {
+        message: message,
+        session_id: currentSession?.id,
+        type: "message",
+        message_type: (message.trim().toLowerCase() === "no" || message.trim().toLowerCase() == "yes")?"yes_no":"objection"
       }
-      setMessages(prev => [...prev, res]);
-      setPrevMsg(message);
-      setMessage("")
-      setRecordings(null);
-    }else{
-      
+      console.log(payload)
+      if(ws.current && message.trim()){
+        ws.current.send(JSON.stringify(payload));
+        const res = {
+          id: new Date().getTime(),
+          message_id: "",
+          type: 'user',
+          verseLink: "",
+          message: message
+        }
+        setMessages(prev => [...prev, res]);
+        setPrevMsg(message);
+        setMessage("")
+        setRecordings(null);
+      }else{
+        
+      }
+    }catch(e){
+      console.log("message cant be sent..")
     }
     
   }
@@ -388,63 +432,67 @@ export default function MessageScreen() {
   }, [messages]);
 
   const handleSendMessage = (newMessage) => {
-    if(audio){
-      const payload = new FormData();
-      const temp = audio.file.split("/")
-      const voice_file = {
-        uri: audio.file,
-        name: audio.name,
-        type: 'audio/'+ temp[temp.length-1].split(".")[1]
-      }
-      payload.append("voice_file", voice_file)
-      payload.append("session_id", currentSession?.id)
-
-
-      const res = {
-        id: Date.now(),
-        message_id: Date.now(),
-        type: 'user',
-        verseLink: "",
-        message: "",
-        bookmark:false,
-      }
-      res.message = "sending..."
-      setMessages(prev => [...prev, res])
-     
-      
-      send_voice_message(payload, (res, success) => {
-        if(success){
-          const data = {
-            id: Date.now(),
-            message_id: res?.data.message_id,
-            type: 'audio',
-            verseLink: "",
-            message: res?.data?.transcript,
-            bookmark:false,
-            uri: res?.data?.voice_url
-          }
-          const payload = {
-            message: res?.data?.transcript,
-            session_id: currentSession?.id,
-            type: "message",
-            message_type: "objection"
-          }
-          console.log("t", payload)
-          ws.current.send(JSON.stringify(payload))
-          setMessages(prev => [...prev.filter(item=> item.message != "sending..."), data])
-          setAudio(null);
-          setMessage("")
-        }else{
-          setMessages(prev => [...prev.filter(item=> item.message != "sending...")])
-          setAudio(null);
-          setMessage("")
-          console.log("err ", JSON.stringify(res, null, 2));
+    try {
+      if(audio){
+        const payload = new FormData();
+        const temp = audio.file.split("/")
+        const voice_file = {
+          uri: audio.file,
+          name: audio.name,
+          type: 'audio/'+ temp[temp.length-1].split(".")[1]
         }
-      })
-  
+        payload.append("voice_file", voice_file)
+        payload.append("session_id", currentSession?.id)
 
-    }else{
-      sendMessage()
+
+        const res = {
+          id: Date.now(),
+          message_id: Date.now(),
+          type: 'user',
+          verseLink: "",
+          message: "",
+          bookmark:false,
+        }
+        res.message = "sending..."
+        setMessages(prev => [...prev, res])
+      
+        
+        send_voice_message(payload, (res, success) => {
+          if(success){
+            const data = {
+              id: Date.now(),
+              message_id: res?.data.message_id,
+              type: 'audio',
+              verseLink: "",
+              message: res?.data?.transcript,
+              bookmark:false,
+              uri: res?.data?.voice_url
+            }
+            const payload = {
+              message: res?.data?.transcript,
+              session_id: currentSession?.id,
+              type: "message",
+              message_type: "objection"
+            }
+            console.log("t", payload)
+            ws.current.send(JSON.stringify(payload))
+            setMessages(prev => [...prev.filter(item=> item.message != "sending..."), data])
+            setAudio(null);
+            setMessage("")
+          }else{
+            setMessages(prev => [...prev.filter(item=> item.message != "sending...")])
+            setAudio(null);
+            setMessage("")
+            console.log("err ", JSON.stringify(res, null, 2));
+          }
+        })
+    
+
+      }else{
+        sendMessage()
+      }
+    }catch(e){
+      console.log("something went wrong")
     }
 
     
@@ -565,14 +613,14 @@ export default function MessageScreen() {
             finish_conversation((res, success) => {
               console.log(res, "feedback");
               if(success){
-                create_session(res)
+                start_new_session(res)
               }else{
                 setIsFeedback(false);
               }
             })
           }else{
             
-            create_session(true)
+            start_new_session(true)
             
           }
           

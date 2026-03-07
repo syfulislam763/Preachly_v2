@@ -43,7 +43,7 @@ export const VERIFY_CHANGE_EMAIL = "/auth/profile/verify-email-change/"
 export const BIBLE_BIBLE_VERSIONS = "/bible/bible-versions/"
 
 //Chat
-export const SESSION_ID = "/chat/sessions/create/"
+export const SESSION_ID = "/chat/sessions/start/"
 
 //Home page
 export const RANDOM_VERSE = "/homepage/daily-verse/";

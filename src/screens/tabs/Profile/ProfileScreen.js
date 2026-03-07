@@ -142,7 +142,7 @@ const ProfileScreen = () => {
           />
           <Text style={{ ...styles.semitext, fontSize: 14 }}>
             You're on <Text style={{ color: '#2B4752', fontFamily: 'NunitoBold' }}>
-              Day {dashboard?.streak?.longest_streak ?? 0}
+              Day {dashboard?.streak?.current_streak ?? 0}
             </Text> of growing your faith confidence!
           </Text>
         </View>

@@ -180,13 +180,16 @@ const AuthHome = () => {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.footerText}>
-          By singing up, you agree to the app's{' '}
-          <Text style={styles.footerHighlighter}>Terms of Use</Text> and{' '}
-          <Text style={styles.footerHighlighter}>Privacy Policy</Text>
-        </Text>
+        <View className="flex-row items-center justify-center flex-wrap px-7  ">
+          <Text className="text-[#90B2B2]">By singing up, you agree to the app's {' '}</Text>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate("TermsAndCondition")
+          }} ><Text className='text-black font-[NunitoSemiBold] mr-3 underline' >Terms of Use</Text></TouchableOpacity> <Text className="text-[#90B2B2]" >and {' '}</Text>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate("PrivacyPolicy")
+          }}><Text className='text-black font-[NunitoSemiBold] mr-3 underline' >Privacy Policy</Text></TouchableOpacity>
+        </View>
       </View>
-
       <Indicator onClose={() => setLoading(false)} visible={loading}>
         <ActivityIndicator size="large" />
       </Indicator>

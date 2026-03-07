@@ -12,6 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { backNavigationStyle, commonNavigationOptions } from '../components/Constant';
 import BackButton from '../components/BackButton';
+import PrivacyPolicy from '@/screens/tabs/Profile/PrivacyPolicy';
+import TermsAndCondition from '@/screens/tabs/Profile/TermsAndCondition';
 
 
 const Stack = createNativeStackNavigator();
@@ -72,6 +74,16 @@ export default function AuthStack() {
       options={{headerShown:false}}
       name="FinishAuthentication" 
       component={FinishAuthentication} 
+      />
+      <Stack.Screen 
+        options={{headerShown:false}}
+        name="TermsAndCondition" 
+        component={TermsAndCondition} 
+      />
+      <Stack.Screen 
+        options={{headerShown:false}}
+        name="PrivacyPolicy" 
+        component={PrivacyPolicy} 
       />
 
       <Stack.Screen 

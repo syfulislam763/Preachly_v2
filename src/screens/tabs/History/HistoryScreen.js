@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import HistoryNotFound from './HistoryNotFound';
 import useLayoutDimention from '../../../hooks/useLayoutDimention'
 import {getStyles} from './HistoryScreenStyle';
-import { get_all_sessions, delete_session, make_favorite_session, bookmark_message } from '../TabsAPI';
+import { get_all_sessions, delete_session, make_favorite_session, bookmark_message, delete_chat_history} from '../TabsAPI';
 import Indicator from '../../../components/Indicator';
 import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
@@ -24,10 +24,15 @@ import { useAuth } from '../../../context/AuthContext';
 import useLogout from '../../../hooks/useLogout'
 import useAppStore from '@/context/useAppStore';
 
-const star = require("../../../../assets/img/VectorStar.png")
+
+const star = require("../../../../assets/img/VectorStar.png");
+const star1 = require("../../../../assets/img/Star_24.png")
+const star2 = require("../../../../assets/img/Star_24_.png")
 const bookmark = require("../../../../assets/img/24-bookmark.png")
 const bookmark1 = require("../../../../assets/img/Bookmark1.png")
 const trash = require("../../../../assets/img/Trash.png")
+const replay = require("../../../../assets/img/ArrowBendDoubleUpLeft.png");
+const timer = require("../../../../assets/img/Timer.png");
 
 const FILTERS = [{img:'', txt:'All chats'}, {img:star,txt:'Favorites'}, {img:bookmark, txt: 'Answers'}];
 
@@ -44,7 +49,9 @@ const HistoryScreen = () => {
   const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
   const styles = getStyles(isSmall, isMedium, isLarge, isFold);
 
-  const setCurrentSession = useAppStore((s) => s.setCurrentSession)
+  const setCurrentSession = useAppStore((s) => s.setCurrentSession);
+  const resetCurrentSession = useAppStore( (s) => s.resetCurrentSession);
+  const currentSession = useAppStore((s) => s.current_session)
 
   const handleDelete = (id) => {
     setData((prev) => prev.filter((item) => item.id !== id));
@@ -54,6 +61,9 @@ const HistoryScreen = () => {
   const handleDeleteSession = (session_id) =>{
     delete_session(session_id, (res, success) =>{
       if(success){
+        if(currentSession?.isHistoryOpened){
+          resetCurrentSession()
+        };
         handleGetAllData();
       }
     })
@@ -107,13 +117,32 @@ const HistoryScreen = () => {
   }
 
 
-  const handleGetAllData = () => {
+  const handleDeleteHistory = () => {
+    setLoading(true);
+    delete_chat_history((res, success) => {
+      setLoading(false);
+      console.log("res", res);
+      if(success){
+        if(currentSession?.isHistoryOpened){
+          resetCurrentSession()
+        };
+        //handleGetAllData();
+        setData([]);
+        setFilteredData([])
+      }else{
+
+      }
+    })
+  }
+
+  const handleGetAllData = (param="default") => {
     
     setLoading(true);
     get_all_sessions((res, success) => {
+      //console.log(param, JSON.stringify(res, null, 2))
       if(success){
         //const temp_data = res?.data
-        let temp_data = res?.data?.sessions?.map(item => {
+        let temp_data = (res?.data?.sessions ?? []).map(item => {
           let snippet = "";
           let searchContent = "";
           if(item?.messages?.length){
@@ -136,9 +165,9 @@ const HistoryScreen = () => {
           }
         });
 
-        res?.data?.sessions.forEach(item => {
+        (res?.data?.sessions ?? []).forEach(item => {
           ///chat/messages/bookmarked/
-          item?.messages.forEach(msg => {
+          (item?.messages ?? []).forEach(msg => {
             if(msg.bookmark){
               temp_data.push(
                 {
@@ -167,6 +196,10 @@ const HistoryScreen = () => {
     })
   }
 
+
+  // useEffect(() => {
+  //   handleGetAllData()
+  // }, [])
   useFocusEffect(
     useCallback(() =>{
       handleGetAllData()
@@ -200,7 +233,11 @@ const HistoryScreen = () => {
     return charArr.join(" ").includes(searchText.toLowerCase());
   })
   
-  searchedData = searchText.length?searchedData:filteredData
+  searchedData = searchText.length?searchedData: filteredData
+
+
+
+
 
 
   //console.log("data", JSON.stringify(searchedData, null, 2))
@@ -228,8 +265,19 @@ const HistoryScreen = () => {
   const renderContent = (item) => (
     <TouchableOpacity onPress={() => {
       if(item.type != "answer"){
-        console.log("id_", item.id)
-        setCurrentSession(item)
+        setCurrentSession({
+          ...item,
+          id: item?.id,
+          title: item?.title,
+          snippet: item.snippet,
+          replies: item?.messages?.length,
+          timeAgo: timeAgo(item?.created_at),
+          isFavorite: item?.is_favorite,
+          searchContent: '',
+          time: new Date(item?.created_at).getTime(),
+          type: 'chat',
+          isHistoryOpened: true
+        })
         navigation.navigate("MessageScreen", {session_id: item.id})
       }
     }}>
@@ -238,9 +286,9 @@ const HistoryScreen = () => {
           {(item?.type != "answer") && <Text style={styles.itemTitle}>{item.title}</Text>}
           <Text style={(item?.type != "answer")?{...styles.itemSnippet}:{...styles.itemSnippet, paddingVertical:0}}>{item.snippet}</Text>
           <View style={styles.metaRow}>
-            {(item?.type != "answer") && <MaterialCommunityIcons name="reply" size={16} color="#966F44" />}
+            {(item?.type != "answer") && <Image className='h-6 w-6' source={replay}/>}
             {(item?.type != "answer") && <Text style={{...styles.metaText, marginRight:10}}>{item.replies} replies</Text>}
-            <MaterialIcons name="access-time" size={16} color="#966F44"  />
+            <Image className='h-6 w-6' source={timer}/>
             <Text style={styles.metaText}>{item.timeAgo}</Text>
           </View>
         </View>
@@ -255,11 +303,12 @@ const HistoryScreen = () => {
           }}
         />
         </TouchableOpacity> : <TouchableOpacity onPress={() => handleMakeFavorite(item)}>
-          <MaterialIcons
+          {(item?.isFavorite) ? <Image className='h-6 w-6' source={star2}/>: <Image className='h-6 w-6' source={star1}/>}
+          {/* <MaterialIcons
             name={item.isFavorite ? 'star' : 'star-border'}
             size={24}
             color={item.isFavorite ? '#f4c10f' : '#fdd263'}
-          />
+          /> */}
         </TouchableOpacity>}
       </View>
     </TouchableOpacity>
@@ -273,24 +322,29 @@ const HistoryScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>History</Text>
+      <View className="flex-row items-center justify-between mb-7">
+        <Text className="font-[DMSerifDisplay] text-[#0B172A] text-3xl" >History</Text>
+
+        <TouchableOpacity onPress={() => handleDeleteHistory()} ><Text className='underline text-[#3F5862] font-[DMSerifDisplay]'>Clear History</Text></TouchableOpacity>
+      </View>
 
       <View style={styles.searchBar}>
-        <Image 
-          source={require("../../../../assets/img/24-search.png")}
-          style={{
-            height:30,
-            width: 30,
-            objectFit:'contain',
-            marginHorizontal: 10
-          }}
-        />
+        
         <TextInput
           placeholder="Ask or search for answers..."
           style={styles.searchInput}
           value={searchText}
           placeholderTextColor={"#607373"}
           onChangeText={e => handleSearch(e)}
+        />
+        <Image 
+          source={require("../../../../assets/img/MagnifyingGlass.png")}
+          style={{
+            height:30,
+            width: 30,
+            objectFit:'contain',
+            marginHorizontal: 5
+          }}
         />
       </View>
 
@@ -367,7 +421,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1.5,
     borderColor: '#ACC6C5',
-    borderRadius: 12,
+    borderRadius: 25,
     paddingHorizontal: 10,
     paddingVertical: 6,
     marginBottom: 16,

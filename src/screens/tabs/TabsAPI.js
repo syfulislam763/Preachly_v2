@@ -273,6 +273,17 @@ export const finish_conversation = async(cb) => {
     }
 }
 
+export const get_new_session = async (payload, cb) => {
+    const URL = '/chat/sessions/create/';
+    try{
+        const res = await api.post(URL, payload);
+        cb(res.data, true);
+    }catch(e){
+        console.log(JSON.stringify(e, null, 2), "show")
+        cb(e, false);
+    }
+}
+
 
 export const finish_share = async (cb) => {
     const URL = `/goals/track/share/`;
@@ -308,6 +319,17 @@ export const get_notifications = async (cb) => {
 export const delete_notifications = async (id, cb) => {
     
     const url = `/notifications/list/${id}/`;
+    try{
+        const res = await api.delete(url);
+        cb(res.data, true);
+    }catch(e){
+        cb(e, false);
+    }
+}
+
+export const delete_chat_history = async (cb) => {
+    
+    const url = `/chat/history/clear/`;
     try{
         const res = await api.delete(url);
         cb(res.data, true);
