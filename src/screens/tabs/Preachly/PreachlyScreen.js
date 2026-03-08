@@ -37,6 +37,7 @@ export default function PreachlyScreen() {
   const [selected, setSelected] = useState("");
   const [content, setContent] = useState([]);
   const [isPaused, setIsPaused] = useState(true);
+  const [currentVerseIndex, setCurrentVerseIndex] = useState(-1);
 
   const [chapter, setChapter] = useState({});
 
@@ -46,12 +47,14 @@ export default function PreachlyScreen() {
   const stopRef = useRef(true);
   const count = useRef(0);
   const sessionRef = useRef(0);
+  const isInitialLoad = useRef(true); // ← prevents infinite loop on mount
 
   const stop_audio = () => {
     stopRef.current = true;
     sessionRef.current += 1;
     Speech.stop();
     setIsPaused(true);
+    setCurrentVerseIndex(-1);
   }
 
 
@@ -76,7 +79,7 @@ export default function PreachlyScreen() {
     const len = arr.length * 1.2;
     const scrollBy = contentHeight / len;
 
-    let startIndex = val < 0 ? 0 : val >= arr.length ? arr.length - 1 : val;
+    let startIndex = val < 0 ? 0 : val >= arr.length ? 0 : val;
     count.current = startIndex;
 
     setIsPaused(false);
@@ -90,15 +93,18 @@ export default function PreachlyScreen() {
       if (sessionRef.current !== currentSession) return;
       if (stopRef.current) {
         setIsPaused(true);
+        setCurrentVerseIndex(-1);
         return;
       }
 
       if (count.current >= len) {
         setIsPaused(true);
+        setCurrentVerseIndex(-1);
         return;
       }
 
       if (count.current < arr.length) {
+        setCurrentVerseIndex(count.current);
         const currentText = arr[count.current].text;
         Speech.speak(currentText, {
           voice: voices[1].identifier,
@@ -214,13 +220,13 @@ export default function PreachlyScreen() {
   useEffect(()=>{getVoices()}, []);
 
   useEffect(() => {
+  
+    const versionToUse = isInitialLoad.current ? bible_version : selectedBibleVersion;
+
+    if (!versionToUse?.api_bible_id) return;
+
     const payload = {
-      version_id: selectedBibleVersion?.api_bible_id,
-    }
-    if(Object.keys(selectedBibleVersion).length > 0){
-      payload.version_id = selectedBibleVersion?.api_bible_id
-    } else {
-      payload.version_id = bible_version?.api_bible_id
+      version_id: versionToUse?.api_bible_id,
     }
 
     console.log("bible issue", payload);
@@ -229,8 +235,10 @@ export default function PreachlyScreen() {
       if(success){
         setBibleBooks(res?.data);
         setOpenBibleVersion(false)
-        if(Object.keys(selectedBibleVersion).length <= 0){
-          setSelectedBibleVersion(bible_version)
+
+        if (isInitialLoad.current) {
+          setSelectedBibleVersion(bible_version); // safe now — isInitialLoad will be false next render
+          isInitialLoad.current = false;
         }
 
         const book = res?.data?.books[0];
@@ -338,12 +346,16 @@ export default function PreachlyScreen() {
               fontFamily: 'NunitoSemiBold',
               fontSize: zoomText,
               color:'#0B172A',
-              marginTop:20
+              marginTop:20,
+              backgroundColor: currentVerseIndex === idx ? '#fdf2d8' : 'transparent',
+              borderRadius: 4,
+              paddingHorizontal: currentVerseIndex === idx ? 4 : 0,
             }}
           >
             <Text style={{
               color:'#966F44',
-              fontFamily:'NunitoBold'
+              fontFamily:'NunitoBold',
+              backgroundColor: currentVerseIndex === idx ? '#fdf2d8' : '#edf3f3',
             }}>{item?.number+ " "}</Text>
             {item?.text}
           </Text>) : null}

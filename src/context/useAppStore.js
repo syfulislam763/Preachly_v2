@@ -81,6 +81,25 @@ const useAppStore = create(
         })
       },
 
+      deleteAccount: () => {
+        delete api.defaults.headers.common['Authorization']; 
+        AsyncStorage.clear();
+        return set({
+          auth: {
+            access: null,
+            refresh: null,
+            isLoggedIn: false,
+            onboarding_completed: false,
+            user: { email: null, name: null, social_auth_provider: null },
+          },
+          profile: useAppStore.getInitialState().profile,
+          payment: useAppStore.getInitialState().payment,
+          goal: useAppStore.getInitialState().goal,
+          current_session: useAppStore.getInitialState().current_session,
+          ui: useAppStore.getInitialState().ui
+        })
+      },
+
       onboarding: {
         denominations: [],
         bible_versions: [],

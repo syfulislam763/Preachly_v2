@@ -17,6 +17,7 @@ export const CHANGE_PASSWORD = "/auth/password/change/"
 export const LOGIN = "/auth/login/"
 export const CREATE_PASS = "/auth/register/complete/"
 export const SOCIAL_LOGIN = "/auth/social-auth/"
+export const DELETE_URL = "auth/parmanent/delete/"
 
 //Onboarding API
 export const ONBOARDING = "/onboarding"

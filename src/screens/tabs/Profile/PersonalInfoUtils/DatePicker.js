@@ -4,6 +4,7 @@ import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 import Indicator from '../../../../components/Indicator';
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import CustomModal from '@/components/CustomModal';
 
 dayjs.extend(customParseFormat);
 
@@ -34,7 +35,7 @@ const DatePicker = ({
   };
 
   return (
-    <View style={{backgroundColor:'white'}}>
+    <View className="bg-white/90 p-2 rounded-[5px]">
   
       <TouchableOpacity onPress={() => setIsOpen(true)} >
         <Text
@@ -48,18 +49,19 @@ const DatePicker = ({
 
 
       {isOpen && (
-        <Indicator
+        <CustomModal
           visible={isOpen}
           onClose={() => setIsOpen(false)}
+          headerStyle={{paddingHorizontal:20}}
         >
-          <View style={{backgroundColor:'white'}}>
+          <View className="bg-white px-5 py-2">
             <DateTimePicker
               mode="single"
               date={selectedDate ?? dayjs()}
               onChange={handleDateSelect}
             />
           </View>
-        </Indicator>
+        </CustomModal>
       )}
     </View>
   );

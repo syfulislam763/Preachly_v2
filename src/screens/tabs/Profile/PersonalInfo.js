@@ -192,7 +192,7 @@ const PersonalInfo = () => {
             style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}
             className="mr-10"
           >
-            Personal Info
+            {(route.params?.editMode ?? false) ? "Edit Personal Info": "Personal Info"}
           </Text>
         )}
         RightComponent={() => <Text />}
@@ -218,6 +218,7 @@ const PersonalInfo = () => {
           <InfoRow label="Name" value={name} onChange={setName} isEditable={editMode} />
           <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
           <InfoRow isDate={true} isEditable={editMode} label="Date of birth" value={dob} onChange={setDob} />
+          <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
           <InfoRow isEditable={editMode} label="Email" value={email} onChange={setEmail} />
         </View>
 

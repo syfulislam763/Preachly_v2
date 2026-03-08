@@ -36,7 +36,7 @@ export default function SignInScreen() {
     login({ email, password }, (res, success) => {
       if (!success) {
         setLoading(false);
-        handleToast('error', res.message, 3000, () => {});
+        handleToast('error', "Your email or password is not correct", 3000, () => {});
         return;
       }
 

@@ -6,11 +6,15 @@ import { logoutUser } from '../../../context/api';
 import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../../components/ReusabeNavigation';
 import BackButton from '../../../components/BackButton';
+import { delete_account } from '@/screens/auth/AuthAPI';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingHome = () => {
   const logout = useAppStore((s) => s.logout);
+  const deleteAccount = useAppStore((s) => s.deleteAccount)
   const navigation = useNavigation();
   const [isOpenModal, setOpenModal] = useState(false);
+  const [isOpenDeleteModal, setOpenDeleteModal] = useState(false);
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white">
@@ -78,11 +82,38 @@ const SettingHome = () => {
           </Text>
         </Pressable>
 
+        <Pressable
+          onPress={() => setOpenDeleteModal(true)}
+          className="flex-row items-center justify-start mt-3"
+        >
+          <Image
+            source={require("../../../../assets/img/Delete.png")}
+            style={{ height: 30, width: 30, objectFit: 'contain' }}
+          />
+          <Text style={{
+            color: '#D85B4B',
+            fontFamily: 'NunitoBold',
+            fontSize: 16,
+            marginLeft: 15,
+            borderBottomWidth: 0.6,
+            borderBottomColor: '#D85B4B',
+          }}>
+            Delete Account
+          </Text>
+        </Pressable>
+
       </View>
 
       <LogoutModal
         isVisible={isOpenModal}
         onClose={() => setOpenModal(false)}
+        logout={logout}
+        navigation={navigation}
+      />
+
+      <DeleteModal
+        isVisible={isOpenDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
         logout={logout}
         navigation={navigation}
       />
@@ -122,9 +153,57 @@ const LogoutModal = ({ isVisible, onClose, logout, navigation }) => (
 
           <TouchableOpacity
             style={{ ...styles.selectBtn, backgroundColor: '#EDF3F3' }}
-            onPress={() => logoutUser(() => logout())}
+            onPress={() => {logout()}}
           >
             <Text style={{ ...styles.selectBtnText, color: '#000' }}>Logout</Text>
+          </TouchableOpacity>
+
+        </View>
+
+      </View>
+    </View>
+  </Modal>
+);
+
+const DeleteModal = ({ isVisible, onClose, logout, navigation }) => (
+  <Modal
+    visible={isVisible}
+    transparent
+    animationType="slide"
+    onRequestClose={onClose}
+    statusBarTranslucent={true}
+  >
+    <View style={styles.modalOverlay}>
+      <View style={styles.modalContainer}>
+
+        <Text style={{
+          color: '#0B172A',
+          fontFamily: 'DMSerifDisplay',
+          fontSize: 25,
+          textAlign: 'center',
+          paddingVertical: 20,
+        }}>
+          Delete account permanently?
+        </Text>
+
+        <View className="flex-row justify-between items-center">
+
+          <TouchableOpacity style={styles.selectBtn} onPress={onClose}>
+            <Text style={styles.selectBtnText}>Cancel</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ ...styles.selectBtn, backgroundColor: '#EDF3F3' }}
+            onPress={() => {
+              const payload = {confirm: true}
+              delete_account(payload, (res, success) => {
+                if(success){
+                  deleteAccount()
+                }
+              })
+            }}
+          >
+            <Text style={{ ...styles.selectBtnText, color: '#000' }}>Confirm</Text>
           </TouchableOpacity>
 
         </View>
@@ -178,6 +257,6 @@ const styles = StyleSheet.create({
     maxHeight: '50%',
     paddingHorizontal: 20,
     paddingTop: 12,
-    paddingBottom: 20,
+    paddingBottom: 50,
   },
 });

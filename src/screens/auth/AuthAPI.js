@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ROOT_URL, SIGNUP, VERIFY_EMAIL, RESEND_OTP, CREATE_PASS, LOGIN, SOCIAL_LOGIN , PROFILE_UPDATE, VERIFY_CHANGE_EMAIL} from "../../context/Paths";
+import { ROOT_URL, SIGNUP, VERIFY_EMAIL, RESEND_OTP, CREATE_PASS, LOGIN, SOCIAL_LOGIN , PROFILE_UPDATE, VERIFY_CHANGE_EMAIL, DELETE_URL} from "../../context/Paths";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
  
@@ -75,6 +75,15 @@ export const handleToast = (type, msg,duration=1000, goTo, show=()=>{}) => {
 export const sign_up = async (payload, cb) => {
     try{
         const response = await axios.post(ROOT_URL+SIGNUP, payload)
+        cb(response.data, true)
+    }catch(error){
+        cb(error, false)
+    }
+}
+
+export const delete_account = async (payload, cb) => {
+    try{
+        const response = await api.post(DELETE_URL, payload)
         cb(response.data, true)
     }catch(error){
         cb(error, false)

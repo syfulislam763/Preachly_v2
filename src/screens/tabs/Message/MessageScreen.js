@@ -119,7 +119,7 @@ export default function MessageScreen() {
         setMessages([])
         setPrevMsg("");
         setRecordings(null);
-        //7de74674-e3b8-4a18-a985-5f62a346d3ba
+        //a48b8624-36bc-4fb8-8416-7683fc9ae3a0
         const new_session = res?.data?.new_session ?? {}
         console.log("start a new one session -> [", JSON.stringify(res, null, 2));
         let temp = JSON.stringify({ ...new_session, isNewSession: true});

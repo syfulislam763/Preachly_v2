@@ -59,6 +59,7 @@ const HistoryScreen = () => {
 
 
   const handleDeleteSession = (session_id) =>{
+    
     delete_session(session_id, (res, success) =>{
       if(success){
         if(currentSession?.isHistoryOpened){
@@ -118,7 +119,10 @@ const HistoryScreen = () => {
 
 
   const handleDeleteHistory = () => {
+    // resetCurrentSession();
+    // return;
     setLoading(true);
+    
     delete_chat_history((res, success) => {
       setLoading(false);
       console.log("res", res);

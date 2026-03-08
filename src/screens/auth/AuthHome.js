@@ -184,7 +184,8 @@ const AuthHome = () => {
           <Text className="text-[#90B2B2]">By singing up, you agree to the app's {' '}</Text>
           <TouchableOpacity onPress={() => {
             navigation.navigate("TermsAndCondition")
-          }} ><Text className='text-black font-[NunitoSemiBold] mr-3 underline' >Terms of Use</Text></TouchableOpacity> <Text className="text-[#90B2B2]" >and {' '}</Text>
+          }} ><Text className='text-black font-[NunitoSemiBold] mr-3 underline' >Terms of Use</Text></TouchableOpacity>
+          <Text className="text-[#90B2B2]" >and {' '}</Text>
           <TouchableOpacity onPress={() => {
             navigation.navigate("PrivacyPolicy")
           }}><Text className='text-black font-[NunitoSemiBold] mr-3 underline' >Privacy Policy</Text></TouchableOpacity>
