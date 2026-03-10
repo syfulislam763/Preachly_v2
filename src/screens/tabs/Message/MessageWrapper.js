@@ -12,7 +12,7 @@ import {
   TextInput,
   Pressable,
   PanResponder,
-  Animated
+  Animated, 
 } from 'react-native';
 import Conversations from './Conversations';
 import { useFocusEffect } from '@react-navigation/native';
@@ -20,6 +20,7 @@ import VoiceMessageBubble from './VoiceMessageBubble';
 import { Audio } from 'expo-av';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system';
+import TooltipButton from '@/components/TooltipButton';
 
 
 const lock = require("../../../../assets/img/lock_voice.png");
@@ -50,6 +51,7 @@ const MessageWrapper = ({
     const [seconds, setSeconds] = useState(0);
     const [flag, setFlag] = useState(false);
     const [isFollowUpQuestion, setIsFollowUpQuestion] = useState(true);
+    const [isTooltip, setTooltip] = useState(false);
 
 
     const startTimer = () => {
@@ -192,7 +194,14 @@ const MessageWrapper = ({
 
         onPanResponderGrant: () => {
           // This is called when the responder is granted
+          if(!isRecordingRef.current){
+            setTooltip(true);
+          }else{
+            //handleMicPressOut();
+          }
+          
           holdPress.current = setTimeout(() => {
+            setTooltip(false)
             handleMicPressIn();
           }, 700)
         },
@@ -213,6 +222,7 @@ const MessageWrapper = ({
 
         onPanResponderRelease: () => {
           // Only stop recording if not locked
+          setTimeout(() => setTooltip(false), 1000);
           clearTimeout(holdPress.current);
           if (!lockedRef.current && isRecordingRef.current) {
             console.log("error2")
@@ -374,7 +384,7 @@ const MessageWrapper = ({
                     <View style={isRecordingRef.current?styles.micMiddle:{}}>
                       <View style={isRecordingRef.current?styles.micInner:{backgroundColor:'none'}}>
                         {isRecordingRef.current?<MaterialCommunityIcons name="microphone" size={24} color="white" />:
-                        // <MaterialCommunityIcons name="microphone" size={33} color="black" />
+                        //<MaterialCommunityIcons name="microphone" size={33} color="black" />
                           <Image
                             source={require("../../../../assets/img/24-microphone.png")}
                             style={styles.inputIcon}
@@ -400,6 +410,9 @@ const MessageWrapper = ({
           </View>
         </View>
       {/* </TouchableWithoutFeedback> */}
+      {isTooltip && <View className='absolute bottom-28 right-10 bg-white p-2 rounded-xl'>
+          <Text className='text-[#607373] text-base font-[Nunito] align-center'>Hold to record</Text>
+        </View>}
     </KeyboardAvoidingView>
 }
 

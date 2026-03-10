@@ -10,6 +10,7 @@ import RegularCheckIn from '../../screens/tabs/Profile/RegularCheckIn';
 import ProfileFaith from '../../screens/tabs/Profile/ProfileFaith';
 import QuestionScreen from '../../screens/tabs/Profile/QuestionScreen';
 import MessageScreen from '../../screens/tabs/Message/MessageScreen';
+import PersonalInfo from '@/screens/tabs/Profile/PersonalInfo';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,61 +29,18 @@ export default function HistoryStack() {
 
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Weekly Check-In',
-        headerTitleAlign: "center",
-        headerShown:true,
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
+        headerShown:false,
       })} name="WeeklyCheckIn" component={WeeklyCheckIn} />
 
 
       <Stack.Screen options={({navigation}) => ({
         headerShown:false,
-        title: 'Weekly Check-In',
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
       })} name="WeeklyCheckIn_" component={WeeklyCheckIn_} />
 
 
       <Stack.Screen 
         options={({navigation}) => ({
-          headerTitleAlign: "center",
-          headerShadowVisible: false,
-          headerTitleStyle: {
-            fontFamily: 'NunitoBold',
-            color: '#0b172A',
-            fontSize: 18
-          },
-          headerStyle: {
-            elevation: 0,
-            shadowOpacity: 0,
-            borderBottomWidth: 0,
-            backgroundColor: '#fff',
-          },
-          headerLeft: () => <BackButton navigation={navigation}/>
+          headerShown:false,
       })}
       
       name="RegularCheckIn" component={RegularCheckIn} />
@@ -107,33 +65,18 @@ export default function HistoryStack() {
 
 
       <Stack.Screen options={({navigation}) => ({
-        title: 'Your Current Goals',
-        headerTitleAlign: "center",
         headerShown: true,
-        headerShadowVisible: false,
-        headerTitleStyle: {
-          fontFamily: 'NunitoBold',
-          color: '#0b172A',
-          fontSize: 18
-        },
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-          backgroundColor: '#fff',
-        },
-        headerLeft: () => <BackButton navigation={navigation}/>
       })} name="CurrentGoals" component={CurrentGoals} />
 
 
-      {/* <Stack.Screen 
-        name="MessageScreen" 
-        component={MessageScreen} 
-        options={{
-          presentation: 'modal',
-          headerBackTitleVisible: false
-        }}
-      /> */}
+      <Stack.Screen options={({navigation}) => ({
+        headerShown:false
+      })} name="PersonalInfo" component={PersonalInfo} />
+      {/* {} */}
+
+      <Stack.Screen options={({navigation}) => ({
+        headerShown:false
+      })} name="EditPersonalInfo" component={PersonalInfo} />
     </Stack.Navigator>
   );
 }

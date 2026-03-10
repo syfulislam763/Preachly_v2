@@ -35,13 +35,11 @@ const DatePicker = ({
   };
 
   return (
-    <View className="bg-white/90 p-2 rounded-[5px]">
+    <View className="">
   
       <TouchableOpacity onPress={() => setIsOpen(true)} >
         <Text
-          className={`text-base ${
-            selectedDate ? 'text-gray-900' : 'text-gray-500'
-          }`}
+          className={`text-[16px] font-[NunitoBold] text-[#3F5862]`}
         >
           {selectedDate ? formatDateForDisplay(selectedDate) : 'Select a date'}{" "}
         </Text>

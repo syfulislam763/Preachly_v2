@@ -25,10 +25,12 @@ const HomepageHeader = ({userInfo, dashboard}) => {
           />:
           <EvilIcons style={{...styles.avatar}} name="user" size={40} color="black" />
           } */}
-          <Image
+          <TouchableOpacity onPress={() => navigation.navigate("PersonalInfo")}>
+            <Image
             source={userInfo?.profile_picture?{uri:userInfo?.profile_picture}:require("../../assets/img/user1.png")} 
             style={styles.avatar}
           />
+          </TouchableOpacity>
         </View>
         <View>
           <Text style={styles.welcome}>Welcome</Text>

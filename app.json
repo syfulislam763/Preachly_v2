@@ -21,8 +21,12 @@
         "CFBundleLocalizations": [
           "en",
           "es",
+          "fr",
+          "en",
+          "es",
           "fr"
-        ]
+        ],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -52,11 +56,11 @@
         }
       ]
     ],
+    "owner": "bdcalling",
     "extra": {
       "eas": {
-        "projectId": "5e6a2b01-3873-40cc-89a6-a6594a0f667e"
+        "projectId": "9b768b53-6267-4a3b-ba25-5bd6b7aa439f"
       }
-    },
-    "owner": "bdcalling"
+    }
   }
 }

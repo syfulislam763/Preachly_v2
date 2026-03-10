@@ -3,7 +3,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, Image, Pressable, ActivityIndicator,
-  StatusBar, ScrollView
+  StatusBar, ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -87,7 +88,7 @@ const ProfileScreen = () => {
           source={require("../../../../assets/img/profileBackground.png")}
           style={styles.bgImage}
         />
-        <View style={styles.profileContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate("PersonalInfo")} style={styles.profileContainer}>
           <View style={{
             width: 110,
             height: 110,
@@ -113,7 +114,7 @@ const ProfileScreen = () => {
           <Text style={styles.profileText}>
             {userInfo?.name || "User"}
           </Text>
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.iconContainer}>
           <Pressable onPress={() => navigation.navigate("ProfileNotification")}>
