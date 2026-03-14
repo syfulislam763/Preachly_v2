@@ -51,7 +51,8 @@ const HistoryScreen = () => {
 
   const setCurrentSession = useAppStore((s) => s.setCurrentSession);
   const resetCurrentSession = useAppStore( (s) => s.resetCurrentSession);
-  const currentSession = useAppStore((s) => s.current_session)
+  const currentSession = useAppStore((s) => s.current_session);
+  const setSessionHistory = useAppStore( (s) => s.setSessionHistory);
 
   const handleDelete = (id) => {
     setData((prev) => prev.filter((item) => item.id !== id));
@@ -269,7 +270,7 @@ const HistoryScreen = () => {
   const renderContent = (item) => (
     <TouchableOpacity onPress={() => {
       if(item.type != "answer"){
-        setCurrentSession({
+        setSessionHistory({
           ...item,
           id: item?.id,
           title: item?.title,

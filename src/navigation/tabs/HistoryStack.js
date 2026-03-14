@@ -2,6 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HistoryScreen from '../../screens/tabs/History/HistoryScreen';
 import MessageScreen from '../../screens/tabs/Message/MessageScreen';
+import HistoryWrapper from '@/screens/tabs/History/HistoryWrapper';
 
 const Stack = createNativeStackNavigator();
 

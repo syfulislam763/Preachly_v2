@@ -353,6 +353,13 @@ const useAppStore = create(
         return set( (state) => ({
           current_session: useAppStore.getInitialState().current_session
         }))
+      },
+      session_history: {},
+
+      setSessionHistory: (session) => {
+        return set( (state) => ({
+          session_history: {...session}
+        }))
       }
 
     }),
