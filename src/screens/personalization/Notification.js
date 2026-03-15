@@ -35,7 +35,7 @@ export default function Notification() {
         )}
       />
 
-      <View className="flex-1 justify-between p-2.5">
+      <View className="flex-1 justify-between px-5 py-2.5">
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -47,14 +47,14 @@ export default function Notification() {
 
             <Text
               style={{ fontFamily: 'DMSerifDisplay' }}
-              className="text-[32px] text-[#0B172A] text-center px-5 pt-5 pb-2"
+              className="text-[26px] text-[#0B172A] text-center px-5 pt-5 pb-2"
             >
               Turn On Notifications
             </Text>
 
             <Text
               style={{ fontFamily: 'NunitoSemiBold', lineHeight: 23 }}
-              className="text-lg text-[#2B4752] text-center px-4"
+              className="text-base text-[#2B4752] text-center px-4"
             >
               Never miss a moment to grow in faith. Get gentle reminders, uplifting messages, and timely insights to keep you inspired on your journey
             </Text>

@@ -367,7 +367,7 @@ const MessageWrapper = ({
                   {/* Center - Cancel (only show when locked) */}
                   {lockedRef.current && (
                     <TouchableOpacity onPress={handleCancelRecording}>
-                      <Text style={styles.cancelText}>Cancel</Text>
+                      <Text style={styles.cancelText}></Text>
                     </TouchableOpacity>
                   )}
 
@@ -383,7 +383,7 @@ const MessageWrapper = ({
                   >
                     <View style={isRecordingRef.current?styles.micMiddle:{}}>
                       <View style={isRecordingRef.current?styles.micInner:{backgroundColor:'none'}}>
-                        {isRecordingRef.current?<MaterialCommunityIcons name="microphone" size={24} color="white" />:
+                        {isRecordingRef.current?<MaterialCommunityIcons onPress={() => handleCancelRecording()} name="microphone" size={24} color="white" />:
                         //<MaterialCommunityIcons name="microphone" size={33} color="black" />
                           <Image
                             source={require("../../../../assets/img/24-microphone.png")}

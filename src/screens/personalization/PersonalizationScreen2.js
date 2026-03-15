@@ -44,7 +44,7 @@ export default function PersonalizationScreen2() {
         RightComponent={() => <Text />}
       />
 
-      <View className="flex-1 justify-between p-2.5">
+      <View className="flex-1 justify-between px-5 py-2.5">
 
         <ScrollView
           showsVerticalScrollIndicator={false}

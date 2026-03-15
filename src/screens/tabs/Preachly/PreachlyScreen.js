@@ -17,6 +17,10 @@ import { useFocusEffect } from '@react-navigation/native';
 import { finish_scripture } from '../TabsAPI';
 import useAppStore from '@/context/useAppStore';
 
+const removeParagraphMark = (text) => {
+  return text.replace(/¶\s*/g, '').trim();
+};
+
 export default function PreachlyScreen() {
 
   const [openBibleVersion, setOpenBibleVersion] = useState(false)
@@ -60,6 +64,7 @@ export default function PreachlyScreen() {
 
   const getVoices = async () => {
     const voices = await Speech.getAvailableVoicesAsync();
+    console.log("voice ", JSON.stringify(voices, null, 2))
     setVoices(voices)
   }
 
@@ -103,11 +108,15 @@ export default function PreachlyScreen() {
         return;
       }
 
+
+
       if (count.current < arr.length) {
         setCurrentVerseIndex(count.current);
         const currentText = arr[count.current].text;
+
+        
         Speech.speak(currentText, {
-          voice: voices[1].identifier,
+          voice: 'com.apple.voice.super-compact.en-GB.Daniel',
           onDone: () => {
             if (sessionRef.current !== currentSession) return;
             scrollRef.current?.scrollTo({
@@ -126,6 +135,7 @@ export default function PreachlyScreen() {
             speakNext();
           },
         });
+
       } else {
         scrollRef.current?.scrollTo({
           y: count.current * scrollBy,
@@ -205,7 +215,8 @@ export default function PreachlyScreen() {
         if(res?.data?.chapter?.verses?.length > 0){
           setContent([res?.data?.chapter]);
           setSelected(res?.data?.chapter?.id?.split(".")[1]);
-          setChapter({id: res?.data?.chapter?.id, reference: res?.data?.chapter?.reference})
+          setChapter({id: res?.data?.chapter?.id, reference: res?.data?.chapter?.reference});
+          scrollRef.current?.scrollTo({y: 0,animated: true, });
         }
       }
       setLoading(false);
@@ -318,7 +329,7 @@ export default function PreachlyScreen() {
         </View>
       </View>
 
-      <ScrollView onContentSizeChange={(width, height) => setContentHeight(height)} ref={scrollRef} style={{
+      <ScrollView showsVerticalScrollIndicator={false} onContentSizeChange={(width, height) => setContentHeight(height)} ref={scrollRef} style={{
         flexGrow:1,
         padding:20,
       }}>
@@ -356,8 +367,8 @@ export default function PreachlyScreen() {
               color:'#966F44',
               fontFamily:'NunitoBold',
               backgroundColor: currentVerseIndex === idx ? '#fdf2d8' : '#edf3f3',
-            }}>{item?.number+ " "}</Text>
-            {item?.text}
+            }}>{item?.number+ "  "}</Text>
+            { removeParagraphMark(item?.text)}
           </Text>) : null}
         </View>)}
 

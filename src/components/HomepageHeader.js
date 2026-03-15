@@ -33,7 +33,7 @@ const HomepageHeader = ({userInfo, dashboard}) => {
           </TouchableOpacity>
         </View>
         <View>
-          <Text style={styles.welcome}>Welcome</Text>
+          <Text style={styles.welcome}>Welcome,</Text>
           <Text style={styles.welcome}>{userInfo?.name}</Text>
         </View>
       </View> 
@@ -75,7 +75,7 @@ export default HomepageHeader;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
     paddingVertical: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -86,15 +86,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     marginRight: 12,
   },
   welcome: {
-    fontSize: 14,
+    fontSize: 17,
     color: '#0B172A',
-    fontFamily:'NunitoSemiBold'
+    fontFamily:'NunitoBold'
   },
   name: {
     fontSize: 16,

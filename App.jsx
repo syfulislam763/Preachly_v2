@@ -6,6 +6,7 @@ import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import FontLoader from './src/components/FontLoader';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'react-native';
 import 'global.css'
@@ -18,10 +19,10 @@ export default function App() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NavigationContainer>
           <AuthProvider>
-            <SafeAreaView style={{flex:1}} edges={['bottom',]}>
+            <View style={{flex:1}}>
               <StatusBar translucent={false} backgroundColor="#ffffff" barStyle="dark-content" />
               <RootNavigator />
-            </SafeAreaView>
+            </View>
           </AuthProvider>
         </NavigationContainer>
       </GestureHandlerRootView>

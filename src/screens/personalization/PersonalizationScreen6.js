@@ -41,7 +41,7 @@ export default function PersonalizationScreen() {
         RightComponent={() => <Text />}
       />
 
-      <View className="flex-1 justify-between p-2.5">
+      <View className="flex-1 justify-between px-5 py-2.5">
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -51,13 +51,13 @@ export default function PersonalizationScreen() {
 
           <Text
             style={{ fontFamily: 'DMSerifDisplay', lineHeight: 35 }}
-            className="text-[32px] text-[#0B172A] text-center px-10 py-10"
+            className="text-[26px] text-[#0B172A] text-center py-7"
           >
             Your Daily Dose of Clarity, and Inspired Confidence
           </Text>
 
           {/* Text block */}
-          <View className="items-center px-5 pb-4">
+          <View className="items-center pb-4">
             <Text style={{ fontFamily: 'NunitoSemiBold' }} className="text-base text-[#2B4752] text-center">
               Each day you show up strengthen your spiritual foundation. Build your streak, check in weekly, and unlock badges that reflect your growth
             </Text>

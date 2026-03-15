@@ -16,13 +16,13 @@ import useAppStore from '@/context/useAppStore';
 
 export default function PersonalizationScreen() {
  
-  const { logout, store } = useAuth();
 
   const [cardOne, setCardOne] = useState(false)
   const [cardTwo, setCardTwo] = useState(false)
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState(-1);
-  const faith_journey_reasons = useAppStore(s => s.onboarding.faith_journey_reasons)
+  const faith_journey_reasons = useAppStore(s => s.onboarding.faith_journey_reasons);
+  const logout = useAppStore( (s) => s.logout)
 
   const navigation = useNavigation();
 
@@ -41,6 +41,9 @@ export default function PersonalizationScreen() {
   }
 
   const handleJourneyReason = () => {
+    // logout();
+
+    // return;
     const payload = {
       "journey_reason": id
     } 
@@ -69,7 +72,7 @@ export default function PersonalizationScreen() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className='px-5 py-2.5' style={styles.container}>
       
       <View>
         <View style={{marginTop:"10%"}}>
@@ -152,9 +155,9 @@ const PhotoCard = ({isActive, setIsActive, img, text}) => {
 }
 
 const styles = StyleSheet.create({
-  container: {flex:1, backgroundColor:'#fff', justifyContent:'space-between', padding: 20, paddingBottom:27},
-  title: {fontFamily:'DMSerifDisplay', fontSize:30, textAlign:'center', flexWrap:'wrap', paddingTop: 40, paddingBottom: 30,color:'#0B172A', lineHeight: 35},
-  text: {fontFamily:'NunitoBold', fontSize:18, color: '#2B4752', textAlign:'center', flexWrap:'wrap', paddingBottom: 50},
+  container: {flex:1, backgroundColor:'#fff', justifyContent:'space-between'},
+  title: {fontFamily:'DMSerifDisplay', fontSize:26, textAlign:'center', flexWrap:'wrap', paddingTop: 40, paddingBottom: 30,color:'#0B172A', lineHeight: 35},
+  text: {fontFamily:'NunitoSemiBold', fontSize:17, color: '#2B4752', textAlign:'center', flexWrap:'wrap', paddingBottom: 50},
   img: { 
     height:hp("12%"),
     width: wp("42%"), 

@@ -127,7 +127,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 }}>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 }}>
       <HomepageHeader dashboard={profile.dashboard} userInfo={profile.userInfo} />
 
       <ScrollView showsVerticalScrollIndicator={false}>

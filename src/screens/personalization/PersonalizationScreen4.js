@@ -45,7 +45,7 @@ export default function PersonalizationScreen() {
         RightComponent={() => <Text />}
       />
 
-      <View className="flex-1 justify-between p-2.5">
+      <View className="flex-1 justify-between px-5 py-2.5">
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -55,13 +55,13 @@ export default function PersonalizationScreen() {
 
           <Text
             style={{ fontFamily: 'DMSerifDisplay', lineHeight: 35 }}
-            className="text-[32px] text-[#0B172A] text-center px-10 py-10"
+            className="text-[32px] text-[#0B172A] text-center  py-10"
           >
             How familiar are you with the Bible
           </Text>
 
           {/* Photo Cards Row */}
-          <View className="flex-row justify-around px-2 pb-4">
+          <View className="flex-row justify-around pb-4">
             <PhotoCard
               isActive={index === 0}
               setIsActive={() => { setIndex(0); setId(bible_familiarity_data[0].id); }}
@@ -116,7 +116,7 @@ const Content = ({ data }) => {
   return (
     <View>
       <View className="px-5 pt-4">
-        <Text style={{ fontFamily: 'NunitoSemiBold' }} className="text-xl text-[#3F5862] text-center">
+        <Text style={{ fontFamily: 'NunitoSemiBold' }} className="text-base text-[#3F5862] text-center">
           {data?.text1}
         </Text>
         {!data && (
@@ -126,7 +126,7 @@ const Content = ({ data }) => {
         )}
         <View className="h-4" />
         {data?.text2 && (
-          <Text style={{ fontFamily: 'NunitoSemiBold' }} className="text-xl text-[#3F5862] text-center">
+          <Text style={{ fontFamily: 'NunitoSemiBold' }} className="text-base text-[#3F5862] text-center">
             {data?.text2}
           </Text>
         )}
@@ -136,7 +136,7 @@ const Content = ({ data }) => {
         <Text style={{ fontFamily: 'DMSerifDisplay' }} className="text-2xl text-[#005A55] text-center">
           {data?.title}
         </Text>
-        <Text style={{ fontFamily: 'NunitoSemiBold' }} className="text-xl text-[#90B2B2] text-center px-5 pt-10">
+        <Text style={{ fontFamily: 'NunitoSemiBold' }} className="text-base text-[#90B2B2] text-center  pt-10">
           {data?.caption}
         </Text>
       </View>

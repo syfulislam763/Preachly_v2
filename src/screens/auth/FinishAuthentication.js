@@ -42,20 +42,12 @@ const FinishAuthentication = () => {
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white">
 
-      <ReusableNavigation
-        backgroundStyle={{ backgroundColor: '#fff' }}
-        leftComponent={() => <BackButton navigation={navigation} />}
-        middleComponent={() => <Text />}
-        RightComponent={() => <Text />}
-      />
-
       {/* Main container — relative so image and button can be absolutely positioned */}
       <View className="flex-1 bg-white relative">
 
         {/* Text block at top */}
         <View
-          className="w-full bg-white items-center px-5"
-          style={{ marginTop: isSmall ? 0 : '8%' }}
+          className="w-full bg-white items-center px-5 mt-16"
         >
           <Text
             style={{ fontFamily: 'DMSerifDisplay' }}
@@ -87,7 +79,7 @@ const FinishAuthentication = () => {
             height: '100%',
             objectFit: 'contain',
             position: 'absolute',
-            top: (height * 17) / 100,
+            top: (height * 18) / 100,
             left: 0,
             right: 0,
             bottom: 0,

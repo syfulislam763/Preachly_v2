@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HistoryScreen from '../../screens/tabs/History/HistoryScreen';
 import MessageScreen from '../../screens/tabs/Message/MessageScreen';
 import HistoryWrapper from '@/screens/tabs/History/HistoryWrapper';
+import HistoryDetails from '@/screens/tabs/History/HistoryDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,14 +16,13 @@ export default function HistoryStack() {
     >
       <Stack.Screen name="HistoryStack" component={HistoryScreen} />
 
-      {/* <Stack.Screen 
-          name="MessageScreen" 
-          component={MessageScreen} 
+      <Stack.Screen 
+          name="HistoryDetails" 
+          component={HistoryDetails} 
           options={{
-            presentation: 'modal',
             headerBackTitleVisible: false
           }}
-        /> */}
+        />
     </Stack.Navigator>
   );
 }

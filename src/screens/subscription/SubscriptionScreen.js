@@ -28,11 +28,11 @@ export default function SubscriptionScreen() {
       {/* Navigation header — same pattern as all other screens */}
       <ReusableNavigation
         backgroundStyle={{ backgroundColor: '#FFE9BD' }}
-        leftComponent={() => <BackButton navigation={navigation} customStyle={{backgroundColor: '#FFE9BD'}}/>}
+        leftComponent={() => <Text/>}
         middleComponent={() => (
           <Text
             style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}
-            className="mr-10"
+            className=""
           >
             Subscription
           </Text>

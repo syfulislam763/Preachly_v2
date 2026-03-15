@@ -21,6 +21,7 @@ import { Audio } from 'expo-av';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system';
 import TooltipButton from '@/components/TooltipButton';
+import HistoryConversations from './HistoryConversations';
 
 
 const lock = require("../../../../assets/img/lock_voice.png");
@@ -294,7 +295,7 @@ const HistoryWrapper = ({
             data={messages}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <Conversations
+              <HistoryConversations
                 type={item.type}
                 message={item.message}
                 verseLink={item.verseLink}
@@ -314,7 +315,7 @@ const HistoryWrapper = ({
               flexGrow:1
             }}
             ListEmptyComponent={() => {
-              return isFollowUpQuestion?<DummyQuestion setIsFollowUpQuestion={setIsFollowUpQuestion} onChange={onPredefinedMsg}/>:null
+              return null
             }}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
@@ -324,90 +325,7 @@ const HistoryWrapper = ({
           />
 
           
-          <View style={styles.inputContainer}>
-              
-            {recordings?<>
-
-                <VoiceMessageBubble playSound={playSound} stopSound={stopSound} currentId={currentId} recordings={recordings} setRecordings={(a) => {
-                  setRecordings(a);
-                  setIsTest(false)
-                }}/>
-                <Pressable 
-                    onPress={()=>handleSendMessage(message)}
-                >
-                    <Image
-                    source={require("../../../../assets/img/send_message.png")}
-                    style={styles.inputIcon}
-                    />
-                </Pressable>
-
-              </> :<>
-                {}
-                {
-                  !isRecordingRef.current && <TextInput
-                    style={styles.inputField}
-                    multiline={true}
-                    numberOfLines={2}
-                    value={message}
-                    onChangeText={e=>onChange(e)}
-                    placeholder={"What's on your heart? Ask anything - lets find and inspired answer.."}
-                    placeholderTextColor={'#607373'}
-                />
-                }
-
-                <View style={isRecordingRef.current?styles.container:{...styles.container, width:50}}>
-                  {/* Left - Duration */}
-                  {isRecordingRef.current && (
-                    <View style={styles.durationContainer}>
-                      <View style={styles.redDot} />
-                      <Text style={styles.durationText}>{seconds}s</Text>
-                    </View>
-                  )}
-
-                  {/* Center - Cancel (only show when locked) */}
-                  {lockedRef.current && (
-                    <TouchableOpacity onPress={handleCancelRecording}>
-                      <Text style={styles.cancelText}>Cancel</Text>
-                    </TouchableOpacity>
-                  )}
-
-                  {/* Lock Icon */}
-                  {(isRecordingRef.current && !lockedRef.current) && <View style={styles.lockIcon}>
-                    <Image source={lock} style={{ height: 50, width: 50, resizeMode: 'contain' }} />
-                  </View>}
-
-                  {/* Mic Button */}
-                  <AnimatedView
-                    style={[isRecordingRef.current?styles.micOuter:{}, { transform: [{ translateY }] }]}
-                    {...panResponder.panHandlers}
-                  >
-                    <View style={isRecordingRef.current?styles.micMiddle:{}}>
-                      <View style={isRecordingRef.current?styles.micInner:{backgroundColor:'none'}}>
-                        {isRecordingRef.current?<MaterialCommunityIcons name="microphone" size={24} color="white" />:
-                        //<MaterialCommunityIcons name="microphone" size={33} color="black" />
-                          <Image
-                            source={require("../../../../assets/img/24-microphone.png")}
-                            style={styles.inputIcon}
-                          />
-                        }
-                      </View>
-                    </View>
-                  </AnimatedView>
-                </View>
-
-                {
-                  !isRecordingRef.current && <Pressable 
-                    onPress={()=>handleSendMessage(message)}
-                >
-                    <Image
-                    //source={require("../../../../assets/img/24-microphone.png")}
-                    source={require("../../../../assets/img/send_message.png")}
-                    style={styles.inputIcon}
-                    />
-                </Pressable>
-                }
-            </>}
-          </View>
+          
         </View>
       {/* </TouchableWithoutFeedback> */}
       {isTooltip && <View className='absolute bottom-28 right-10 bg-white p-2 rounded-xl'>

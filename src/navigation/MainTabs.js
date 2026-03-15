@@ -9,6 +9,7 @@ import { Image, View } from 'react-native';
 import { getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native';
 import useLayoutDimention from '../hooks/useLayoutDimention';
 import MessageScreen from '../screens/tabs/Message/MessageScreen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,14 +32,15 @@ const NullComponent = () => {
 }
 
 export default function MainTabs() {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const inset = useSafeAreaInsets();
  
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => { 
         const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-        const hiddenRoutes = ['WeeklyCheckIn', 'CurrentGoals', 'RegularCheckIn', 'WeeklyCheckIn_','PorfileFaith', 'ProfileNotification', 'SettingHome', 'PersonalInfo', 'ProfileSubscription', 'EditPersonalInfo', 'ConfirmEmail', 'MessageScreen', 'AboutApp']
+        const hiddenRoutes = ['WeeklyCheckIn', 'CurrentGoals', 'RegularCheckIn', 'WeeklyCheckIn_','PorfileFaith', 'ProfileNotification', 'SettingHome', 'PersonalInfo', 'ProfileSubscription', 'EditPersonalInfo', 'ConfirmEmail', 'MessageScreen', 'AboutApp', 'HistoryDetails', 'Calendar']
         const shouldHideTabBar = hiddenRoutes.includes(routeName);
         return {
           headerShown: false,
@@ -70,7 +72,7 @@ export default function MainTabs() {
             backgroundColor: '#fff',
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
-            height: 60,
+            height: 60+inset.bottom,
             paddingBottom: 20,
             paddingTop: 10,
             marginBottom: 0,

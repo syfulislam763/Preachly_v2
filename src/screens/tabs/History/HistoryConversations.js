@@ -2,18 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity ,Image, Pressable} from 'react-native';
 import { FontAwesome, MaterialIcons, Feather } from '@expo/vector-icons';
 import IconContainer from '../../../components/IconContainer';
-import AudioPlayerCard from './AudioPlayCard';
-import TypingIndicator from './TypingIndicator';
+import AudioPlayerCard from '../Message/AudioPlayCard';
+import TypingIndicator from '../Message/TypingIndicator';
 
 const cpy1 = require("../../../../assets/img/24-copy.png")
 const cpy2 = require("../../../../assets/img/Copy.png")
-
-const Conversations = ({ type = 'user', message,message_id, verseLink, methods, item, currentId, playSound, stopSound, isTyping, onPredefinedMsg=()=>{}}) => {
-
+const HistoryConversations = ({ type = 'user', message,message_id, verseLink, methods, item, currentId, playSound, stopSound, isTyping, onPredefinedMsg=()=>{}}) => {
   
   const [isCopied, setIsCopied] = useState(false);
-  
-
   const handleCopy = () => {
     setIsCopied(true);
     methods?.handleCopy(message)
@@ -22,13 +18,6 @@ const Conversations = ({ type = 'user', message,message_id, verseLink, methods, 
       clearTimeout(timer);
     }, 1000)
   }
-
-  const handleRegenerate = () => {
-
-  }
-
-
-
   
   return (
     <View style={styles.container}>
@@ -66,7 +55,7 @@ const Conversations = ({ type = 'user', message,message_id, verseLink, methods, 
           {message != "typing..." && <View style={styles.actions}>
             <IconContainer
                 containerStyle={{width:50}}
-                onPress={() => methods.handleBookmark(item)}
+                onPress={() => methods.handleBookmark(message_id)}
             >
               {
                 item.bookmark?<Image
@@ -89,6 +78,7 @@ const Conversations = ({ type = 'user', message,message_id, verseLink, methods, 
               <Text style={{...styles.text}}>Copy</Text>
                
             </IconContainer>
+
             <IconContainer onPress={()=> methods.handleShare(message)}>
                 <Image 
                     source={require("../../../../assets/img/24-share_.png")}
@@ -97,7 +87,7 @@ const Conversations = ({ type = 'user', message,message_id, verseLink, methods, 
                 <Text style={{...styles.text}}>Share</Text>
             </IconContainer>
 
-            <IconContainer
+            {/* <IconContainer
                 containerStyle={{width:50}}
                 onPress={() => methods.handleRegenerate()}
             >
@@ -105,27 +95,11 @@ const Conversations = ({ type = 'user', message,message_id, verseLink, methods, 
                     source={require("../../../../assets/img/24-retry.png")}
                     style={{...styles.minIcon}}
                 />
-            </IconContainer>
+            </IconContainer> */}
 
 
           </View>}
 
-          {/* Follow-up Prompt */}
-          {
-            (item?.message_type==="yes_no")?null: (
-              <View style={styles.promptContainer}>
-                <Text style={styles.promptText}>Need more clarity?</Text>
-                <View style={styles.promptButtons}>
-                  <TouchableOpacity style={{...styles.promptButton, backgroundColor:'#005A55',}} onPress={()=>onPredefinedMsg("Yes")}>
-                    <Text style={{...styles.promptButtonText, color:'white'}}>Yes</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.promptButton} onPress={()=>onPredefinedMsg("No")}>
-                    <Text style={styles.promptButtonText}>No</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )
-          }
 
 
         </View>
@@ -213,4 +187,4 @@ const styles = StyleSheet.create({
   promptButtonText: { color: '#0B172A',fontFamily:'NunitoSemiBold' },
 });
 
-export default Conversations;
+export default HistoryConversations;

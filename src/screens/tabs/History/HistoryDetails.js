@@ -445,7 +445,7 @@ export default function HistoryDetails() {
 
 
   return (
-    <SafeAreaView edges={["top"]} style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1, backgroundColor: 'white' }}>
       <ReusableNavigation
         leftComponent={() => <BackButton navigation={navigation} 
             cb={() => {
@@ -481,8 +481,7 @@ export default function HistoryDetails() {
           >
             <Pressable
               onPress={() => {
-                console.log("heelo")
-                setIsFeedback(prev => !prev);
+                
               }}
             >
               <Image

@@ -58,6 +58,7 @@ export default function MessageScreen() {
   const ws = useRef(null);
 
 
+
   const handleStopRecording = async () => {
     if(recordings){
       const data = await stopRecording(recordings, setRecordings);
@@ -224,27 +225,29 @@ export default function MessageScreen() {
     await Clipboard.setStringAsync(message);
     console.log("copy...");
   };
-  const handleBookmark = (message_id) =>{
+  const handleBookmark = (item) =>{
+
     const payload = {
-      bookmark: true,
-      message_id: message_id
+      bookmark: (item?.bookmark) ? false: true,
+      message_id: item?.message_id
     }
+
     bookmark_message(payload, (res, success) => {
-      if(success){
+      if(1){
         let temp = [];
-        messages.forEach(item => {
-          if(item.id == message_id){
-            let x = {...item};
-            x.bookmark = true;
+        messages.forEach(msg => {
+          if(msg.id == item?.message_id){
+            let x = {...msg};
+            x.bookmark = (item?.bookmark) ? false: true;
             temp.push(x);
           }else{
-            temp.push(item)
+            temp.push(msg)
           }
         });
         setMessages(temp);
       }
     })
-    console.log("book mark...");
+
   }
   const handleShare = async (message) =>{
     const options = {
@@ -515,7 +518,7 @@ export default function MessageScreen() {
 
 
   return (
-    <SafeAreaView edges={["top"]} style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1, backgroundColor: 'white' }}>
       <ReusableNavigation
         leftComponent={() => <BackButton navigation={navigation} 
             cb={() => {

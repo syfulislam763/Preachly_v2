@@ -89,7 +89,7 @@ function ProfileNotification() {
   }, [socket.notifications]);
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
+    <SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-white">
 
       <ReusableNavigation
         backgroundStyle={{ backgroundColor: '#fff' }}
@@ -136,14 +136,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'NunitoSemiBold',
     color: '#0B172A',
   },
   message: {
-    fontFamily: 'NunitoBold',
+    fontFamily: 'NunitoSemiBold',
     fontSize: 14,
-    color: '#2B4752',
+    color: '#3F5862',
     paddingTop: 15,
   },
   deleteButton: {

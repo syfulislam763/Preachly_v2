@@ -283,7 +283,7 @@ const HistoryScreen = () => {
           type: 'chat',
           isHistoryOpened: true
         })
-        navigation.navigate("MessageScreen", {session_id: item.id})
+        navigation.navigate("HistoryDetails", {session_id: item.id})
       }
     }}>
       <View style={styles.itemContainer}>

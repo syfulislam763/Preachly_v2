@@ -37,8 +37,8 @@ const ProfileFaith = () => {
             <Text style={styles.title}>Well Done!</Text>
             <Text style={styles.title}>Keep Growing in Faith</Text>
         </View>
-        <View style={{marginTop:hp("2%")}}>
-            <Text style={styles.text}> Your commitment to deepening your faithis building a strong foundation.Keep going—there’s more ahead!</Text>
+        <View className="px-3 py-5">
+            <Text className='text-[16px] text-[#3F5862] font-[NunitoSemiBold] text-center'> Your commitment to deepening your faithis building a strong foundation.Keep going—there’s more ahead!</Text>
         </View>
         <Image
             source={require('../../../../assets/img/bg_bible_frame.png')}
