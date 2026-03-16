@@ -59,6 +59,15 @@ export default function MessageScreen() {
 
 
 
+  const isAtBottom = useRef(true);
+
+  const handleScroll = (event) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const threshold = 50;
+    isAtBottom.current = 
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - threshold;
+  };
+
   const handleStopRecording = async () => {
     if(recordings){
       const data = await stopRecording(recordings, setRecordings);
@@ -225,6 +234,7 @@ export default function MessageScreen() {
     await Clipboard.setStringAsync(message);
     console.log("copy...");
   };
+
   const handleBookmark = (item) =>{
 
     const payload = {
@@ -249,6 +259,7 @@ export default function MessageScreen() {
     })
 
   }
+  
   const handleShare = async (message) =>{
     const options = {
       message: message
@@ -425,8 +436,8 @@ export default function MessageScreen() {
   )
 
   useEffect(() => {
-    if (flatListRef.current) {
-     flatListRef.current.scrollToEnd({ animated: true });
+    if (flatListRef.current && isAtBottom.current) {
+      flatListRef.current.scrollToEnd({ animated: true });
     }
     
     return ()=>{
@@ -591,6 +602,7 @@ export default function MessageScreen() {
         isTest={isTest}
         setIsTest={setIsTest}
         isTyping={isTyping}
+        handleScroll={handleScroll}
       />
 
       {/* {isRating && <RatingMessage 

@@ -45,7 +45,8 @@ const HistoryWrapper = ({
   setRecordings,
   isTest,
   setIsTest,
-  isTyping
+  isTyping,
+  handleScroll
 }) => {
     
     const intervalRef = useRef(null);
@@ -319,6 +320,7 @@ const HistoryWrapper = ({
             }}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
             onContentSizeChange={() =>
               flatListRef.current?.scrollToEnd({ animated: true })
             }

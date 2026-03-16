@@ -206,13 +206,13 @@ const ProfileScreen = () => {
             <View style={{...styles.weeklyCheckIn, paddingVertical:10}}>
               <View>
                 <Text style={styles.menuText}>Weekly Check-In</Text>
-                <View style={styles.tooltip}>
+                {/* <View style={styles.tooltip}>
                   <Text style={styles.tooltipText}>Completed</Text>
                   <Image
                     source={require("../../../../assets/img/Check.png")}
                     style={styles.caretRight}
                   />
-                </View>
+                </View> */}
               </View>
               <Image
                 source={require("../../../../assets/img/CaretRight.png")}

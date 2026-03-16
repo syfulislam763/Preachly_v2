@@ -55,7 +55,7 @@ const HistoryConversations = ({ type = 'user', message,message_id, verseLink, me
           {message != "typing..." && <View style={styles.actions}>
             <IconContainer
                 containerStyle={{width:50}}
-                onPress={() => methods.handleBookmark(message_id)}
+                onPress={() => methods.handleBookmark(item)}
             >
               {
                 item.bookmark?<Image

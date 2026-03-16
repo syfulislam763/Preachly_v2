@@ -74,10 +74,10 @@ const useAppStore = create(
             onboarding_completed: false,
             user: { email: null, name: null, social_auth_provider: null },
           },
-          // profile: useAppStore.getInitialState().profile,
-          // payment: useAppStore.getInitialState().payment,
-          // goal: useAppStore.getInitialState().goal,
-          // current_session: useAppStore.getInitialState().current_session
+          profile: useAppStore.getInitialState().profile,
+          payment: useAppStore.getInitialState().payment,
+          goal: useAppStore.getInitialState().goal,
+          current_session: useAppStore.getInitialState().current_session
         })
       },
 
