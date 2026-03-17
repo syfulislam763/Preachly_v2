@@ -163,8 +163,12 @@ export default function MessageScreen() {
       
       get_message_by_session_id(currentSession?.id, (res, success) => {
         if(success){
+          const quote = "Answer this question more deeply and precisely";
+          const conversations = (res?.data?.messages ?? []).filter(m => !m.content.includes(quote));
 
-          let msgs = res?.data?.messages?.map(item => {
+
+
+          let msgs = conversations.map(item => {
             
             return (item.is_user && !item.has_voice )?{
                 id: item?.id,
@@ -204,7 +208,7 @@ export default function MessageScreen() {
           }
           
 
-          //console.log(JSON.stringify(res?.data, null, 2), "etm")
+          //console.log(JSON.stringify(conversations, null, 2), "etm")
 
           setMessages(temp);
           setLoading(false);

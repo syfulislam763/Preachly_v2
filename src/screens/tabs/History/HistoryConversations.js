@@ -9,15 +9,48 @@ const cpy1 = require("../../../../assets/img/24-copy.png")
 const cpy2 = require("../../../../assets/img/Copy.png")
 const HistoryConversations = ({ type = 'user', message,message_id, verseLink, methods, item, currentId, playSound, stopSound, isTyping, onPredefinedMsg=()=>{}}) => {
   
-  const [isCopied, setIsCopied] = useState(false);
+  const [bookmarkColor, setBookMarkColor] = useState("");
+  const [shareColor, setShareColor] = useState("");
+  const [retryColor, setRetryColor] = useState("");
+  const [copyColor, setCopyColor] = useState("");
+  
+
   const handleCopy = () => {
-    setIsCopied(true);
+    setCopyColor("#acc6c5")
     methods?.handleCopy(message)
     const timer = setTimeout(() => {
-      setIsCopied(false);
+      setCopyColor("")
       clearTimeout(timer);
-    }, 1000)
+    }, 1500)
   }
+
+  const handleRegenerate = () => {
+    setRetryColor("#acc6c5")
+    methods.handleRegenerate()
+    const timer = setTimeout(() => {
+      setRetryColor("")
+      clearTimeout(timer);
+    }, 1500)
+  }
+
+  const handleBookMark = () => {
+    setBookMarkColor("#acc6c5")
+    methods.handleBookmark(item)
+    const timer = setTimeout(() => {
+      setBookMarkColor("")
+      clearTimeout(timer);
+    }, 1500)
+  }
+
+  const handleShare = () => {
+    setShareColor("#acc6c5")
+    methods.handleShare(message)
+    const timer = setTimeout(() => {
+      setShareColor("")
+      clearTimeout(timer);
+    }, 1500)
+  }
+  
   
   return (
     <View style={styles.container}>
@@ -54,8 +87,8 @@ const HistoryConversations = ({ type = 'user', message,message_id, verseLink, me
           {/* Icon Actions */}
           {message != "typing..." && <View style={styles.actions}>
             <IconContainer
-                containerStyle={{width:50}}
-                onPress={() => methods.handleBookmark(item)}
+                containerStyle={ bookmarkColor?{backgroundColor: bookmarkColor, width:50}:{width:50}}
+                onPress={() => handleBookMark()}
             >
               {
                 item.bookmark?<Image
@@ -69,17 +102,17 @@ const HistoryConversations = ({ type = 'user', message,message_id, verseLink, me
                 
             </IconContainer>
            
-            <IconContainer onPress={() => handleCopy()}>
+            <IconContainer containerStyle={copyColor?{backgroundColor: copyColor}:{}} onPress={() => handleCopy()}>
                 
               <Image 
-                source={isCopied?cpy2:cpy1}
+                source={cpy1}
                 style={{...styles.minIcon}}
               />
               <Text style={{...styles.text}}>Copy</Text>
                
             </IconContainer>
 
-            <IconContainer onPress={()=> methods.handleShare(message)}>
+            <IconContainer containerStyle={shareColor?{backgroundColor: shareColor}:{}} onPress={()=> handleShare()}>
                 <Image 
                     source={require("../../../../assets/img/24-share_.png")}
                     style={{...styles.minIcon}}
