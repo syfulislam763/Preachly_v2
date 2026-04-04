@@ -27,9 +27,11 @@ const WeeklyCheckIn = () => {
   const handleGetHistory = () => {
     setLoading(true);
     get_weekly_check_in_history((res, success) => {
+      console.log("hdf")
       setLoading(false);
       if (success) {
-        const filtered = res?.data?.completed_weekly_checkins.filter(i => i.status !== "locked");
+        console.log("fdds", JSON.stringify(res.data, null, 2))
+        const filtered = res?.data?.weeks ?? []
         setHistory(filtered);
       }
     });
@@ -47,7 +49,7 @@ const WeeklyCheckIn = () => {
     return (
       <Pressable
         onPress={() => {
-          if (item.is_completed) {
+          if (item?.status === 'completed') {
             navigation.navigate("WeeklyCheckIn_", { ...item, title: `${item.week_number} Weekly Check-In` });
           } else {
             navigation.navigate("RegularCheckIn", { title: `${item.week_number} Weekly Check-In` });

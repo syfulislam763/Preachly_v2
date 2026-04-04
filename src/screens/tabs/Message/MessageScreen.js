@@ -247,18 +247,18 @@ export default function MessageScreen() {
     }
 
     bookmark_message(payload, (res, success) => {
-      if(1){
+      if(res){
         let temp = [];
         messages.forEach(msg => {
-          if(msg.id == item?.message_id){
+          if(msg.message_id == item?.message_id){
             let x = {...msg};
-            x.bookmark = (item?.bookmark) ? false: true;
-            temp.push(x);
+            x.bookmark = res?.data?.bookmarked;
+            temp.push(JSON.parse(JSON.stringify(x)));
           }else{
-            temp.push(msg)
+            temp.push(JSON.parse(JSON.stringify(msg)))
           }
         });
-        setMessages(temp);
+        setMessages(JSON.parse(JSON.stringify(temp)));
       }
     })
 
@@ -326,7 +326,14 @@ export default function MessageScreen() {
         if((data?.type === "exploration_options")){
           res.message = data.message;
           res.message_id = Date.now();
-          res.message_type="yes_no"
+          res.message_type= data?.show_clarification ? "" :"yes_no" 
+          setIsTyping(false);
+          setMessages(prev => [...prev.filter(item=> item.message != "typing..."), res])
+        }
+
+        if( (data?.type === "conversation_continuation")){
+          //console.log("t", JSON.stringify(data, null, 2))
+          res.message_type= data?.show_clarification ? "" :"yes_no" 
           setIsTyping(false);
           setMessages(prev => [...prev.filter(item=> item.message != "typing..."), res])
         }
@@ -337,7 +344,7 @@ export default function MessageScreen() {
             res.message = res.message.substring(idx, res.message.length);
           }
           if((data?.type === "clarification_response")){
-            res.message_type="yes_no"
+            res.message_type=data?.show_clarification ? "" :"yes_no" 
           }
           setIsTyping(false);
           setMessages(prev => [...prev.filter(item=> item.message != "typing..."), res])
@@ -347,7 +354,7 @@ export default function MessageScreen() {
         if( (data?.type == "error")) {
           res.message = 'Something went wrong';
           res.message_id = Date.now();
-          res.message_type="yes_no"
+          res.message_type=data?.show_clarification ? "" :"yes_no" 
           setIsTyping(false);
           setMessages(prev => [...prev.filter(item=> item.message != "typing..."), res])
         }

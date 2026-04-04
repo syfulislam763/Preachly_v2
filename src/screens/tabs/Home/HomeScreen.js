@@ -172,7 +172,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('History')} style={styles.commonMultiImage}>
             <Image source={require('../../../../assets/img/ReligeousBook.png')} style={styles.multiImage} />
-            <Text style={styles.multiText}>Saved Answers</Text>
+            <Text style={styles.multiText}>Faith Library</Text>
           </TouchableOpacity>
         </View>
 

@@ -159,7 +159,7 @@ const HistoryScreen = () => {
 
           return {
             id: item?.id,
-            title: item?.title,
+            title: item?.preview,
             snippet: snippet,
             replies: item?.messages?.length,
             timeAgo: timeAgo(item?.created_at),
@@ -193,7 +193,7 @@ const HistoryScreen = () => {
         })
         temp_data = temp_data.sort((a,b) => b.time-a.time)
         setData(temp_data)
-        handleFilter(selectedFilter, temp_data);
+        handleFilter('All chats', temp_data);
       }else{
         console.log("hddsfs", res)
       }
@@ -389,21 +389,21 @@ const HistoryScreen = () => {
         ListEmptyComponent={() => {
           if(selectedFilter == 'All chats'){
             return <HistoryNotFound
-              title={"No Chats Yet"}
-              text={"Ask Preachly for clarity, insight, and scripture-bvacked answers. Your past chats will be saved here for easy reference"}
+              title={"No Conversations Yet"}
+              text={`Every meaningful conversation starts somewhere.\n Ask Preachly a question and your chats will appear here for easy reference.`}
               route={"MessageScreen"}
             />
           }else if(selectedFilter == "Favorites"){
             return  <HistoryNotFound
               title={"No Favorites Yet"}
-              text={"Looks like you haven't saved any chats yet. When you find a conversation that resonates tap the {{}} to keep it handy"}
+              text={`When a conversation resonates with you, tab {{}} to save it.\nKeep meaningful insights close for the conversations that matter`}
               route={"MessageScreen"}
               starIcon={star}
             />
           }else {
             return <HistoryNotFound 
               title={"No Saved Answers Yet"}
-              text={"Looks like you haven't saved any key answers. When you find an answer worth keeping, tap the {{}} to store it for quick reference"}
+              text={`When you find an answer that helps you speak clearly about your faith, tap {{}} to save it for quick reference`}
               route={"MessageScreen"}
               starIcon={bookmark}
             />

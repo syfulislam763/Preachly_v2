@@ -219,7 +219,7 @@ const PersonalInfo = () => {
           <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
           <InfoRow isDate={true} isEditable={editMode} label="Date of birth" value={dob} onChange={setDob} />
           <View style={{ height: 1, backgroundColor: '#dce3e4' }} />
-          <InfoRow isEditable={editMode} label="Email" value={email} onChange={setEmail} />
+          <InfoRow isEditable={false} label="Email" value={email} onChange={setEmail} />
         </View>
 
         <View style={styles.card}>

@@ -40,7 +40,7 @@ const HomepageHeader = ({userInfo, dashboard}) => {
 
       {/* Right: Icons */}
       <View style={styles.rightSection}>
-        <TouchableOpacity onPress={() => navigation.navigate("Calendar", {flag:true})} style={styles.iconButton}>
+        <TouchableOpacity onPress={() => navigation.navigate("Calendar", {flag:false})} style={styles.iconButton}>
             <Image
                 source={require('../../assets/img/24-calendar.png')} 
                 style={{

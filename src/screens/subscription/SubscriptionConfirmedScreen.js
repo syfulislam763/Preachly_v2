@@ -22,7 +22,7 @@ const SubscriptionConfirmedScreen = () => {
 
       <ReusableNavigation
         backgroundStyle={{ backgroundColor: '#fff' }}
-        leftComponent={() => <BackButton navigation={navigation} />}
+        leftComponent={() => <Text/>}
         middleComponent={() => (
           <Text
             style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}

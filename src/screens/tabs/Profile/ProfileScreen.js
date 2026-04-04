@@ -60,7 +60,7 @@ const ProfileScreen = () => {
       if (success) {
         get_static_badge((data, isOk) => {
           setLoading(false);
-          console.log("da", data)
+          console.log("da", JSON.stringify(data, null,2))
           if (isOk) {
             setBadge(data?.data?.latest_badge);
           }

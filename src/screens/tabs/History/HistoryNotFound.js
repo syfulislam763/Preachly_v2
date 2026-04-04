@@ -16,7 +16,14 @@ const HistoryNotFound = ({title, text, route, starIcon}) => {
         return (
             <Text style={styles.text}>
                 {before}
-                <Image source={starIcon} style={{ width: 15, height: 15 }} />
+                <Image 
+                    source={starIcon} 
+                    style={{ 
+                        width: 16, 
+                        height: 16,
+                        transform: [{ translateY: 2 }]
+                    }} 
+                />
                 {after}
             </Text>
         );
@@ -42,7 +49,6 @@ const HistoryNotFound = ({title, text, route, starIcon}) => {
 }
 
 export default HistoryNotFound
-
 
 const styles = StyleSheet.create({
     container:{
