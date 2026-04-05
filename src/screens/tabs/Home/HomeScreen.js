@@ -127,7 +127,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 }}>
+    <SafeAreaView edges={['top',]} style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 }}>
       <HomepageHeader dashboard={profile.dashboard} userInfo={profile.userInfo} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -200,6 +200,7 @@ export default function HomeScreen() {
           text={`Days left ${goal?.days_remaining ?? 0} days`}
           onPress={() => navigation.navigate('WeeklyCheckIn')}
         />
+        <View className='h-36'></View>
       </ScrollView>
 
       <HomeModal

@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import {
   View, Text, Image, StyleSheet, Pressable,
-  ActivityIndicator, ImageBackground, FlatList
+  ActivityIndicator, ImageBackground, FlatList,
+  Modal, TouchableOpacity, TouchableWithoutFeedback
 } from 'react-native';
 import CommonButton from '../../../components/CommonButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -44,16 +45,112 @@ const goal_description = {
   },
 };
 
+// ── Modal content per goal type ──────────────────────────────────────────────
+const modal_info = {
+  conversation: {
+    emoji: "🔥",
+    badge: "Confidence",
+    heading: "How to Grow Your Confidence",
+    body: "Start new conversations inside Preachly. Each conversation strengthens your confidence in responding to real-life questions.",
+  },
+  scripture: {
+    emoji: "📙",
+    badge: "Scripture Knowledge",
+    heading: "Your Faith IQ is Rising",
+    body: "You're building a strong foundation in God's Word. Each chapter you complete deepens your understanding and builds confidence in scripture.",
+    extra: "Read and complete chapters in the Bible section. Each chapter deepens your understanding and strengthens your foundation.",
+  },
+  share_faith: {
+    emoji: "✨",
+    badge: "Inspiration",
+    heading: "How to Grow Your Inspiration",
+    body: "Share your faith boldly! Every time you inspire someone, your own light grows brighter and reaches further than you know.",
+  },
+};
+// ─────────────────────────────────────────────────────────────────────────────
+
 const images = {
   "conversation": conversation,
   "scripture": scripture,
   "share_faith": share_faith,
 };
 
+// ── GoalInfoModal ─────────────────────────────────────────────────────────────
+const GoalInfoModal = ({ visible, onClose, goalType }) => {
+  const info = modal_info[goalType] || modal_info.conversation;
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View className="flex-1 justify-center items-center px-5" style={{ backgroundColor: 'rgba(11,23,42,0.5)' }}>
+          <TouchableWithoutFeedback>
+            <View className="bg-white rounded-3xl px-6 pt-8 pb-7 w-full">
+
+              {/* Emoji circle */}
+              <View className="self-center w-14 h-14 rounded-full bg-green-50 items-center justify-center mb-4">
+                <Text style={{ fontSize: 28 }}>{info.emoji}</Text>
+              </View>
+
+              {/* Badge */}
+              <View className="self-center bg-green-50 rounded-full px-4 py-1 border border-green-100 mb-3">
+                <Text className="text-xs text-green-800" style={{ fontFamily: 'NunitoSemiBold' }}>
+                  {info.badge}
+                </Text>
+              </View>
+
+              {/* Heading */}
+              <Text className="text-xl text-center text-gray-900 mb-3" style={{ fontFamily: 'DMSerifDisplay' }}>
+                {info.heading}
+              </Text>
+
+              {/* Divider */}
+              <View className="h-px bg-gray-100 mb-4" />
+
+              {/* Body */}
+              <Text className="text-sm text-center leading-6 text-gray-500 mb-4" style={{ fontFamily: 'NunitoSemiBold' }}>
+                {info.body}
+              </Text>
+
+              {/* Optional extra tip block */}
+              {info.extra && (
+                <View className="flex-row bg-gray-50 rounded-2xl p-4 mb-4 items-start" style={{ gap: 10 }}>
+                  <Text style={{ fontSize: 16, marginTop: 1 }}>💡</Text>
+                  <Text className="flex-1 text-sm leading-6 text-gray-500" style={{ fontFamily: 'NunitoSemiBold' }}>
+                    {info.extra}
+                  </Text>
+                </View>
+              )}
+
+              {/* Got it button */}
+              <TouchableOpacity
+                className="bg-gray-900 rounded-full py-4 items-center mt-1"
+                onPress={onClose}
+                activeOpacity={0.85}
+              >
+                <Text className="text-white text-base" style={{ fontFamily: 'NunitoSemiBold', letterSpacing: 0.3 }}>
+                  Got it!
+                </Text>
+              </TouchableOpacity>
+
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+};
+// ─────────────────────────────────────────────────────────────────────────────
+
 const CurrentGoals = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [currentWeek, setCurrentWeek] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);   // ← NEW
   const { store } = useAuth();
 
   console.log(JSON.stringify(currentWeek, null, 2), "..");
@@ -97,27 +194,33 @@ const CurrentGoals = () => {
           <View className="h-5" />
           <Text style={styles.text1}>{`${week_start} - ${week_end} ${current}`}{" "}</Text>
           <Text style={styles.text1}>{`Remaining days ${item?.days_remaining}`}{" "}</Text>
+
+
         </View>
       </Pressable>
     );
   };
 
   const handle_get_current_goal = () => {
-    setLoading(true);
+    //setLoading(true);
     get_current_goal((res, success) => {
       if (success) {
         console.log(res, "res");
         setCurrentWeek(res?.data);
       }
-      setLoading(false);
+      //setLoading(false);
     });
   };
 
   useFocusEffect(
     useCallback(() => {
       handle_get_current_goal();
+      setModalVisible(true);
     }, [])
   );
+
+  // Derive goal type for modal
+  const goalType = currentWeek?.goal?.goal_type || 'conversation';
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white">
@@ -151,6 +254,14 @@ const CurrentGoals = () => {
           <ActivityIndicator size="large" />
         </Indicator>
       }
+
+      {/* ── Goal Info Modal ── */}
+      <GoalInfoModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        goalType={goalType}
+      />
+      {/* ──────────────────── */}
 
     </SafeAreaView>
   );

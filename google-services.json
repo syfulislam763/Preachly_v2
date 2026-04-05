@@ -1,43 +1,41 @@
 {
   "project_info": {
-    "project_number": "311211597732",
-    "firebase_url": "https://photophiya-default-rtdb.firebaseio.com",
-    "project_id": "photophiya",
-    "storage_bucket": "photophiya.appspot.com"
+    "project_number": "286524043496",
+    "project_id": "preachly-app",
+    "storage_bucket": "preachly-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:311211597732:android:325f5f45cc70e05672ab31",
+        "mobilesdk_app_id": "1:286524043496:android:a2cf161b9cdfcb5897195d",
         "android_client_info": {
-          "package_name": "com.syful151.preachly"
+          "package_name": "com.darrin.preachly"
         }
       },
       "oauth_client": [
         {
-          "client_id": "311211597732-5hcssqhmj3j23u00nh1vm50rgctmj5qr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.syful151.preachly",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "311211597732-drk14eajg29l9rhld1hkr0g1m7dnr4p8.apps.googleusercontent.com",
+          "client_id": "286524043496-8d6eg6u0ailph7gosrvhm418er820j3s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyApBrnP8Q5wRAUltAf0WXPiywkfjmgzqAM"
+          "current_key": "AIzaSyB6lC1ihOXtRk7C2upc6XfxvNt1CuwqsTI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "311211597732-drk14eajg29l9rhld1hkr0g1m7dnr4p8.apps.googleusercontent.com",
+              "client_id": "286524043496-8d6eg6u0ailph7gosrvhm418er820j3s.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "286524043496-h57vncf5idoravbdl2fel472uh1ammda.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.darrin.preachly"
+              }
             }
           ]
         }

@@ -77,8 +77,9 @@ const ProfileScreen = () => {
     }, [])
   );
 
-  let badge_uri = badge?.badge_template?.image || "";
-  if (badge_uri) badge_uri = BASE_URL + badge_uri;
+  let badge_uri = badge?.badge_template?.image ?? "";
+  console.log("badge ", badge)
+  // if (badge_uri) badge_uri = BASE_URL + badge_uri;
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>

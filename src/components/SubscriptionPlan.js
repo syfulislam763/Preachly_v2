@@ -44,7 +44,7 @@ const PlanSelector = ({OtherPlan=null, setSelectedPlanType, plan}) => {
         </View>
 
         <View style={styles.rightSection}>
-          <Text style={styles.priceText}>$11.99 / Month</Text>
+          <Text style={styles.priceText}>$6.67 / Month</Text>
           <View style={[styles.radioOuter, selectedPlan === 'monthly' && styles.radioOuterSelected]}>
             {selectedPlan === 'monthly' && <View style={styles.radioInner} />}
           </View>

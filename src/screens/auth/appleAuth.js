@@ -1,6 +1,7 @@
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 
 export const appleSignIn = async (cb) => {
+    console.log("hello")
     try {
 
         if (!appleAuth.isSupported) {

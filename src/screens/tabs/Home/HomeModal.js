@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet} from "react-native";
 import CustomModal from "../../../components/CustomModal";
 import CommonButton from "../../../components/CommonButton";
 import { deepGreen, primaryText } from "../../../components/Constant";
 import { useNavigation } from "@react-navigation/native";
-
+import { update_static_badge, get_static_badge } from "../TabsAPI";
+import useAppStore from "@/context/useAppStore";
 
 const HomeModal = ({modalVisible, setModalVisible, current_streak}) => {
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const dashboard = useAppStore((s) => s.profile.dashboard)
+    console.log("bd", dashboard?.latest_badge)
+    const badge_image = dashboard?.latest_badge?.badge_template?.image ?? ""
 
     return modalVisible && <CustomModal
           visible={modalVisible}
@@ -30,7 +34,7 @@ const HomeModal = ({modalVisible, setModalVisible, current_streak}) => {
             </View>
 
             <Image 
-              source={require("../../../../assets/img/imgModal.png")}
+              source={{uri: badge_image}}
               style={{
                 height:200,
                 width:200,

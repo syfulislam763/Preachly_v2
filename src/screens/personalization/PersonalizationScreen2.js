@@ -81,8 +81,8 @@ export default function PersonalizationScreen2() {
             handler={handleSubmit}
             txtColor={primaryText}
             bold='bold'
-            opacity={selectedOptions.length < 6 ? 0.5 : 1}
-            disabled={selectedOptions.length < 6}
+            opacity={selectedOptions.length < 3 ? 0.5 : 1}
+            disabled={selectedOptions.length < 3}
           />
         </View>
 

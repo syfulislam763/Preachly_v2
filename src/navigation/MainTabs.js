@@ -72,19 +72,24 @@ export default function MainTabs() {
             backgroundColor: '#fff',
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
-            height: 60+inset.bottom,
+            height: 80+inset.bottom,
             paddingBottom: 20,
             paddingTop: 10,
             marginBottom: 0,
-            // position: 'absolute',
-            shadowColor: '#000',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            shadowColor: '#000000',
             shadowOpacity: 0.1,
             shadowOffset: { width: 0, height: -2 },
             elevation: 10,
+
           },
           tabBarLabelStyle: {
             fontSize: 12,
             fontWeight: '600',
+            backgroundColor:'#fff'
           },
         }
       }}

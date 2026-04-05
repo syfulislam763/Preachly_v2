@@ -147,28 +147,17 @@ const AuthHome = () => {
           <Divider text="or" />
         </View>
 
+
         <View style={styles.googleAppleAuth}>
           {/* Apple — image visible, AppleButton transparent on top */}
-          <View style={{ position: 'relative' }}>
+          <TouchableOpacity onPress={() => appleSignIn(handleAppleLogin)}> 
             <Image
               source={require('../../../assets/img/appleAuth.png')}
               height={50}
               width={50}
             />
-            <AppleButton
-              buttonStyle={AppleButton.Style.BLACK}
-              buttonType={AppleButton.Type.SIGN_IN}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: 50,
-                height: 50,
-                opacity: 0.01,
-              }}
-              onPress={() => appleSignIn(handleAppleLogin)}
-            />
-          </View>
+            
+          </TouchableOpacity>
 
           {/* Google */}
           <TouchableOpacity onPress={handleGoogleLogin}>
