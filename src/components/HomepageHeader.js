@@ -42,7 +42,7 @@ const HomepageHeader = ({userInfo, dashboard}) => {
       <View style={styles.rightSection}>
         <TouchableOpacity onPress={() => navigation.navigate("Calendar", {flag:false})} style={styles.iconButton}>
             <Image
-                source={require('../../assets/img/24-calendar.png')} 
+                source={require('../../assets/updated_img/Calendar.png')} 
                 style={{
                     height:26,
                     width:26,
@@ -53,7 +53,7 @@ const HomepageHeader = ({userInfo, dashboard}) => {
 
         <TouchableOpacity onPress={()=>{setModalVisible(true)}} style={styles.countButton}>
             <Image
-                source={require('../../assets/img/Fire.png')} 
+                source={require('../../assets/updated_img/Fire.png')} 
                 style={{
                     height:18,
                     width:18,

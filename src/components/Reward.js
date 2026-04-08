@@ -14,7 +14,7 @@ const Reward = ({count=0, handler}) => {
      }}
     style={styles.countButton}>
         <Image
-            source={require('../../assets/img/Fire.png')} 
+            source={require('../../assets/updated_img/Fire.png')} 
             style={{
                 height:18,
                 width:18,

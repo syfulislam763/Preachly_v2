@@ -21,6 +21,14 @@ const scripture = require("../../../../assets/img/scripture.png");
 const conversation = require("../../../../assets/img/conversation.png");
 const share_faith = require("../../../../assets/img/share_faith.png");
 
+// ── FIX: Static require map (Metro bundler requires static paths) ─────────────
+const logoImages = {
+  rocket: require("../../../../assets/updated_img/rocket_black.png"),
+  open_book: require("../../../../assets/updated_img/open_book_black.png"),
+  bulb: require("../../../../assets/updated_img/bulb_black.png"),
+};
+// ─────────────────────────────────────────────────────────────────────────────
+
 const lavel = {
   "conversation": "Confidence Goal",
   "scripture": "Scripture Knowledge",
@@ -48,23 +56,25 @@ const goal_description = {
 // ── Modal content per goal type ──────────────────────────────────────────────
 const modal_info = {
   conversation: {
-    emoji: "🔥",
     badge: "Confidence",
+    logoKey: "rocket",   // <-- use key instead of path string
     heading: "How to Grow Your Confidence",
     body: "Start new conversations inside Preachly. Each conversation strengthens your confidence in responding to real-life questions.",
+    extra: "Start new conversations inside Preachly. Each conversation strengthens your confidence in responding to real-life questions.",
   },
   scripture: {
-    emoji: "📙",
     badge: "Scripture Knowledge",
+    logoKey: "open_book", // <-- use key instead of path string
     heading: "Your Faith IQ is Rising",
     body: "You're building a strong foundation in God's Word. Each chapter you complete deepens your understanding and builds confidence in scripture.",
     extra: "Read and complete chapters in the Bible section. Each chapter deepens your understanding and strengthens your foundation.",
   },
   share_faith: {
-    emoji: "✨",
     badge: "Inspiration",
+    logoKey: "bulb",   // <-- use key instead of path string
     heading: "How to Grow Your Inspiration",
     body: "Share your faith boldly! Every time you inspire someone, your own light grows brighter and reaches further than you know.",
+    extra: "Share your faith boldly! Every time you inspire someone, your own light grows brighter and reaches further than you know.",
   },
 };
 // ─────────────────────────────────────────────────────────────────────────────
@@ -91,9 +101,14 @@ const GoalInfoModal = ({ visible, onClose, goalType }) => {
           <TouchableWithoutFeedback>
             <View className="bg-white rounded-3xl px-6 pt-8 pb-7 w-full">
 
-              {/* Emoji circle */}
+              {/* Logo icon */}
               <View className="self-center w-14 h-14 rounded-full bg-green-50 items-center justify-center mb-4">
-                <Text style={{ fontSize: 28 }}>{info.emoji}</Text>
+                {info.logoKey && (
+                  <Image
+                    source={logoImages[info.logoKey]}  // ← FIX: use map lookup
+                    style={{ height: 24, width: 24, objectFit: 'cover' }}
+                  />
+                )}
               </View>
 
               {/* Badge */}
@@ -103,23 +118,9 @@ const GoalInfoModal = ({ visible, onClose, goalType }) => {
                 </Text>
               </View>
 
-              {/* Heading */}
-              <Text className="text-xl text-center text-gray-900 mb-3" style={{ fontFamily: 'DMSerifDisplay' }}>
-                {info.heading}
-              </Text>
-
-              {/* Divider */}
-              <View className="h-px bg-gray-100 mb-4" />
-
-              {/* Body */}
-              <Text className="text-sm text-center leading-6 text-gray-500 mb-4" style={{ fontFamily: 'NunitoSemiBold' }}>
-                {info.body}
-              </Text>
-
               {/* Optional extra tip block */}
               {info.extra && (
                 <View className="flex-row bg-gray-50 rounded-2xl p-4 mb-4 items-start" style={{ gap: 10 }}>
-                  <Text style={{ fontSize: 16, marginTop: 1 }}>💡</Text>
                   <Text className="flex-1 text-sm leading-6 text-gray-500" style={{ fontFamily: 'NunitoSemiBold' }}>
                     {info.extra}
                   </Text>
@@ -150,7 +151,7 @@ const CurrentGoals = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [currentWeek, setCurrentWeek] = useState({});
-  const [modalVisible, setModalVisible] = useState(false);   // ← NEW
+  const [modalVisible, setModalVisible] = useState(false);
   const { store } = useAuth();
 
   console.log(JSON.stringify(currentWeek, null, 2), "..");
@@ -168,7 +169,6 @@ const CurrentGoals = () => {
   const renderItem = ({ item, isCurrent = false }) => {
     const week_end = (item?.week_end) ? timeAgo(item?.week_end) : "";
     const week_start = (item?.week_start) ? timeAgo(item?.week_start) : "";
-    const current = isCurrent ? "" : "";
     const goals = item.goal || {};
 
     console.log(goals);
@@ -192,23 +192,19 @@ const CurrentGoals = () => {
           <View className="h-5" />
           <ProgressBar filled={{}} container={{}} progress={`${goals.progress_percentage}`} />
           <View className="h-5" />
-          <Text style={styles.text1}>{`${week_start} - ${week_end} ${current}`}{" "}</Text>
+          <Text style={styles.text1}>{`${week_start} - ${week_end}`}{" "}</Text>
           <Text style={styles.text1}>{`Remaining days ${item?.days_remaining}`}{" "}</Text>
-
-
         </View>
       </Pressable>
     );
   };
 
   const handle_get_current_goal = () => {
-    //setLoading(true);
     get_current_goal((res, success) => {
       if (success) {
         console.log(res, "res");
         setCurrentWeek(res?.data);
       }
-      //setLoading(false);
     });
   };
 
@@ -219,7 +215,6 @@ const CurrentGoals = () => {
     }, [])
   );
 
-  // Derive goal type for modal
   const goalType = currentWeek?.goal?.goal_type || 'conversation';
 
   return (
@@ -255,13 +250,11 @@ const CurrentGoals = () => {
         </Indicator>
       }
 
-      {/* ── Goal Info Modal ── */}
       <GoalInfoModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         goalType={goalType}
       />
-      {/* ──────────────────── */}
 
     </SafeAreaView>
   );

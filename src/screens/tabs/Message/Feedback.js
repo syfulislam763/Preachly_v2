@@ -7,8 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import Foundation from '@expo/vector-icons/Foundation';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 const thumbsUpJ = require("../../../../assets/img/ThumbsUp.jpg");
-const thumbsUp = require("../../../../assets/img/ThumbsUp.png");
-const thumbsDown = require("../../../../assets/img/ThumbsDown.png");
+const thumbsUp = require("../../../../assets/img/ThumbsUp2.png");
+const thumbsDown = require("../../../../assets/img/ThumbsDown2.png");
 const thumbsDownJ = require("../../../../assets/img/ThumbsDown.jpg");
 
 const Feedback = ({visible, onClose, feedback, setFeedback}) => {

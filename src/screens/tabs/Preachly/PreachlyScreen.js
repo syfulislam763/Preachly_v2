@@ -16,12 +16,14 @@ import useLogout from '../../../hooks/useLogout';
 import { useFocusEffect } from '@react-navigation/native';
 import { finish_scripture } from '../TabsAPI';
 import useAppStore from '@/context/useAppStore';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const removeParagraphMark = (text) => {
   return text.replace(/¶\s*/g, '').trim();
 };
 
 export default function PreachlyScreen() {
+  const insets = useSafeAreaInsets();
 
   const [openBibleVersion, setOpenBibleVersion] = useState(false)
   const [openChapterList, setOpenChapterList] = useState(false)
@@ -312,7 +314,7 @@ export default function PreachlyScreen() {
           
           <TouchableOpacity onPress={handleZoom}>
             <Image
-              source={require("../../../../assets/img/24-smallcaps.png")}
+              source={require("../../../../assets/updated_img/text_zoom.png")}
               style={{...styles.icon, marginRight:20}}
             />
           </TouchableOpacity>
@@ -322,7 +324,7 @@ export default function PreachlyScreen() {
             setOpenSearch(true)
           }}>
             <Image
-              source={require("../../../../assets/img/24-search_.png")}
+              source={require("../../../../assets/updated_img/search_colored.png")}
               style={styles.icon}
             />
           </TouchableOpacity>
@@ -428,7 +430,7 @@ export default function PreachlyScreen() {
 
       </ScrollView>
 
-      <View style={styles.footerContainer}>
+      <View style={{...styles.footerContainer, paddingBottom: 80+insets.bottom}}>
         <View style={styles.playButtons}>
           <TouchableOpacity onPress={() => play_audio_script(count.current - 1)}>
             <Image
@@ -604,7 +606,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
+    borderTopRightRadius: 20,
+    // position:'absolute',
+    // bottom: 70,
+    // left:0, 
+    // right:0,
   },
   playButtons: {
     display:'flex',

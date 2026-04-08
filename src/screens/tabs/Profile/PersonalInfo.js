@@ -236,7 +236,7 @@ const PersonalInfo = () => {
           <DropdownRow label="Answer Depth" value={Answer?.name} onPress={() => setDepthAnsVisible(editMode)} />
         </View>
 
-        <View style={{ margin: 20 }}>
+        <View className='pb-10'>
           <CommonButton
             btnText={route.params?.editMode ? 'Save Info' : 'Edit Info'}
             bgColor={deepGreen}

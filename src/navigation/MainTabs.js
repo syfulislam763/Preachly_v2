@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStack from './tabs/HomeStack';
 import HistoryStack from './tabs/HistoryStack';
@@ -6,26 +6,26 @@ import MessageStack from './tabs/MessageStack';
 import PreachlyStack from './tabs/PreachlyStack';
 import ProfileStack from './tabs/ProfileStack';
 import { Image, View } from 'react-native';
-import { getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, useNavigation, useNavigationState } from '@react-navigation/native';
 import useLayoutDimention from '../hooks/useLayoutDimention';
 import MessageScreen from '../screens/tabs/Message/MessageScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
-const homeActive = require("../../assets/img/24-house.png")
-const homeInactive = require("../../assets/img/24-houseInactive.png")
-const historyInactive = require("../../assets/img/24-history.png")
-const historyActive = require("../../assets/img/ClockCounterClockwise.png")
+const homeActive = require("../../assets/updated_img/house_black.png")
+const homeInactive = require("../../assets/updated_img/house_green.png")
+const historyInactive = require("../../assets/updated_img/history_green.png")
+const historyActive = require("../../assets/updated_img/history_black.png")
 
 
-const chat = require("../../assets/img/24-chat.png")
+const chat = require("../../assets/updated_img/chat_green.png")
 
-const bookInactive = require("../../assets/img/24-Book.png")
-const bookActive = require("../../assets/img/24-BookActive.png")
+const bookInactive = require("../../assets/updated_img/bible_green.png")
+const bookActive = require("../../assets/updated_img/bible_black.png")
 
-const profileInactive = require("../../assets/img/24-user.png")
-const profileActive = require("../../assets/img/UserActive.png")
+const profileInactive = require("../../assets/updated_img/profile_green.png")
+const profileActive = require("../../assets/updated_img/profile_black.png")
 
 const NullComponent = () => {
   return null
@@ -34,7 +34,7 @@ const NullComponent = () => {
 export default function MainTabs() {
   const navigation = useNavigation();
   const inset = useSafeAreaInsets();
- 
+
 
   return (
     <Tab.Navigator
@@ -42,6 +42,12 @@ export default function MainTabs() {
         const routeName = getFocusedRouteNameFromRoute(route) ?? '';
         const hiddenRoutes = ['WeeklyCheckIn', 'CurrentGoals', 'RegularCheckIn', 'WeeklyCheckIn_','PorfileFaith', 'ProfileNotification', 'SettingHome', 'PersonalInfo', 'ProfileSubscription', 'EditPersonalInfo', 'ConfirmEmail', 'MessageScreen', 'AboutApp', 'HistoryDetails', 'Calendar']
         const shouldHideTabBar = hiddenRoutes.includes(routeName);
+
+        const preachly_obj = (route?.name === "Preachly" )? {}: {shadowColor: '#000000',
+            shadowOpacity: 0.1,
+            shadowOffset: { width: 0, height: -3 },
+            elevation: 10,}
+
         return {
           headerShown: false,
           tabBarShowLabel: true,
@@ -72,7 +78,7 @@ export default function MainTabs() {
             backgroundColor: '#fff',
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
-            height: 80+inset.bottom,
+            height: 70+inset.bottom,
             paddingBottom: 20,
             paddingTop: 10,
             marginBottom: 0,
@@ -80,10 +86,8 @@ export default function MainTabs() {
             left: 0,
             right: 0,
             bottom: 0,
-            shadowColor: '#000000',
-            shadowOpacity: 0.1,
-            shadowOffset: { width: 0, height: -2 },
-            elevation: 10,
+            ...preachly_obj,
+            borderTopColor: '#fff'
 
           },
           tabBarLabelStyle: {

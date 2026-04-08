@@ -219,7 +219,8 @@ const useAppStore = create(
           streak: {},
           badges: [],
           available_weekly_checkins: 0,
-          total_weekly_checkins_completed: 0
+          total_weekly_checkins_completed: 0,
+          latest_badge: {}
         },     
       },
 
