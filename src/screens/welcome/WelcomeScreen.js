@@ -8,10 +8,15 @@ import FooterBar from '../../components/FooterBar';
 
 import CustomCarousel from '../../components/CustomCarousel';
 import useLayoutDimention from '../../hooks/useLayoutDimention';
-const {height, width} = Dimensions.get("window")
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+
+const {height, width} = Dimensions.get("window");
+
 
 export default function WelcomeScreen({ navigation }) {
   
+  const insets = useSafeAreaInsets();
   
 
   return (
@@ -19,7 +24,7 @@ export default function WelcomeScreen({ navigation }) {
       {/* <ImageSlider /> */}
       <CustomCarousel/>
 
-      <View style={styles.btnContainer}>
+      <View style={{...styles.btnContainer, paddingBottom: insets.bottom}}>
         <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('AuthHome')}> 
           <Text style={styles.btnText}>Begin Your Journey</Text>
         </TouchableOpacity>

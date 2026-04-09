@@ -43,7 +43,7 @@ const SubscriptionConfirmedScreen = () => {
           style={{ fontFamily: 'DMSerifDisplay' }}
           className="text-[28px] text-[#0B172A] text-center"
         >
-          Subscription Confirmed!
+          You're Equipped to Grow
         </Text>
         </View>
 
@@ -60,11 +60,11 @@ const SubscriptionConfirmedScreen = () => {
         />
         <ParagraphIcon
           icon={require("../../../assets/img/bulb.png")}
-          text={"Save and revisit key insights"}
+          text={"Save and revisit meaningful insights"}
         />
         <ParagraphIcon
           icon={require("../../../assets/img/message.png")}
-          text={"Speak boldly with scriptural wisdom"}
+          text={"Speak confidently using scripture"}
         />
       </View>
 

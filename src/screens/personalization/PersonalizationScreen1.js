@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function PersonalizationScreen1() {
   const { store } = useAuth();
@@ -19,6 +20,7 @@ export default function PersonalizationScreen1() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
 
   const handleDenomination = () => {
     setLoading(true);
@@ -66,7 +68,7 @@ export default function PersonalizationScreen1() {
           />
         </ScrollView>
 
-        <View className="pb-8">
+        <View style={{paddingBottom:insets.bottom}}>
           <CommonButton
             btnText={"Continue"}
             bgColor={deepGreen}

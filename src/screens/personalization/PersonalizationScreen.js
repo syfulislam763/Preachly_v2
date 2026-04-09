@@ -13,10 +13,11 @@ import { logoutUser } from '../../context/api';
 import { useAuth } from '../../context/AuthContext';
 import useStaticData from '../../hooks/useStaticData';
 import useAppStore from '@/context/useAppStore';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function PersonalizationScreen() {
  
-
+  const insets = useSafeAreaInsets();
   const [cardOne, setCardOne] = useState(false)
   const [cardTwo, setCardTwo] = useState(false)
   const [loading, setLoading] = useState(false);
@@ -59,7 +60,7 @@ export default function PersonalizationScreen() {
       } else if(res.response && res.response.status === 401) {
         setLoading(false);
         handleToast("error", "Session expired. Please login again.", 2000, () => {
-          
+          logout()
         });
 
       }else {
@@ -79,9 +80,9 @@ export default function PersonalizationScreen() {
           <ProgressBar progress={14.28} />
         </View>
 
-        <Text style={styles.title}>Your Journey Matters. Let's discover how Preachly can empower your faith</Text>
+        <Text style={styles.title}>Every faith journey begins with a question. Let's start with yours.</Text>
 
-        <Text style={styles.text}>When it comes to your faith, what do you need most right now?</Text>
+        <Text style={styles.text}>When it comes to your faith, What would help you most right now?</Text>
 
 
         <View style={styles.imageContainer}>
@@ -114,17 +115,19 @@ export default function PersonalizationScreen() {
           </View>}
       </View>
 
-      <CommonButton
-          btnText={"Continue"}
-          bgColor={deepGreen}
-          navigation={navigation}
-          route={""}
-          txtColor={primaryText}
-          handler={handleJourneyReason}
-          bold='bold'
-          opacity={id==-1?0.7:1}
-          disabled={id==-1?true:false}
-      />
+      <View style={{paddingBottom: insets.bottom}}>
+          <CommonButton
+            btnText={"Continue"}
+            bgColor={deepGreen}
+            navigation={navigation}
+            route={""}
+            txtColor={primaryText}
+            handler={handleJourneyReason}
+            bold='bold'
+            opacity={id==-1?0.7:1}
+            disabled={id==-1?true:false}
+          />
+      </View>
       {loading && <Indicator>
         <ActivityIndicator size="large" />
       </Indicator>}

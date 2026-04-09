@@ -12,10 +12,12 @@ import CommonButton from '../../components/CommonButton';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ConfirmationEmail() {
   const route = useRoute();
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets()
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white">
@@ -65,7 +67,7 @@ export default function ConfirmationEmail() {
         </ScrollView>
 
         {/* Button pinned at bottom */}
-        <View className="px-5 pb-8">
+        <View style={{paddingBottom: insets.bottom+10}} className="px-5">
           <CommonButton
             btnText={"Enter Confirmation Code"}
             bgColor={deepGreen}

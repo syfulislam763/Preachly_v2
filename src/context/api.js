@@ -5,7 +5,7 @@ import { Alert } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { ROOT_URL , TOKEN_URL} from './Paths';
 import { handleToast } from '../screens/auth/AuthAPI';
-
+import useAppStore from './useAppStore';
 
 // Replace with your API base URL
 const api = axios.create({
@@ -67,7 +67,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Access to navigation should be passed manually
       // OR use a global navigationRef pattern if needed
+      delete api.defaults.headers.common['Authorization'];
+      await AsyncStorage.clear();
       handleToast("error", "Login again please", 2000, ()=>{})
+      
     }
     return Promise.reject(error);
   }

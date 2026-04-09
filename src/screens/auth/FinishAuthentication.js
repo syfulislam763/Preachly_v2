@@ -67,7 +67,7 @@ const FinishAuthentication = () => {
             style={{ fontFamily: 'NunitoSemiBold', lineHeight: 22 }}
             className={`text-[#2B4752] text-center ${isSmall ? 'text-base pt-2 pb-2 px-5' : 'text-lg p-5'}`}
           >
-            Let's tailor your experience to help you grow in faith and confidence.
+            Let’s shape your journey to help you grow in faith and confidence.
           </Text>
         </View>
 

@@ -72,12 +72,12 @@ const ScriptureSearch = ({onClose, bibleId, title}) => {
 
       
             <Text style={styles.primaryText}>
-                What’s on your heart today?
+                Search the Scriptures
             </Text>
 
 
             <Text style={styles.secondaryText}>
-                Search the Scriptures for the wisdom you need
+                Explore God’s Word and discover the wisdom you need today.
             </Text>
 
             <Text style={styles.quoteText}>
@@ -195,10 +195,10 @@ const styles = StyleSheet.create({
     marginTop: 50
   },
   primaryText: {
-    fontSize: 30,
+    fontSize: 28,
     fontFamily:'DMSerifDisplay',
     textAlign:'center',
-    paddingHorizontal: 50,
+    paddingHorizontal: 0,
     marginBottom: 12,
     marginTop:20
   },
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     color:'#2B4752',
     fontFamily:'NunitoSemiBold',
-    paddingHorizontal: 60,
+    paddingHorizontal: 0,
     textAlign:'center'
   },
   quoteText: {
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     fontFamily:'NunitoSemiBold',
     color: '#90B2B2',
     textAlign:'center',
-    paddingHorizontal:40
+    paddingHorizontal:0
   },
 });
 

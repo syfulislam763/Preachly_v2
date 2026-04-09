@@ -73,15 +73,15 @@ export default function SubscriptionScreen() {
         >
           <ParagraphIcon
             icon={require("../../../assets/img/24-sunset.png")}
-            text={"Build Confidence in Conversations About Faith"}
+            text={"Know what to say when faith conversations matter most"}
           />
           <ParagraphIcon
             icon={require("../../../assets/img/bird.png")}
-            text={"Clarity and Ease When You Need It Most"}
+            text={"Understand scripture with clarity and context"}
           />
           <ParagraphIcon
             icon={require("../../../assets/img/piramid.png")}
-            text={"Inspire and Strengthen Your Walk with God"}
+            text={"Share what you believe with confidence"}
           />
 
           <PlanSelector
@@ -90,7 +90,7 @@ export default function SubscriptionScreen() {
           />
 
           <CommonButton
-            btnText={"Try Free & Subscribe"}
+            btnText={"Start My Free Trial"}
             bgColor={"#005A55"}
             navigation={navigation}
             route={""}

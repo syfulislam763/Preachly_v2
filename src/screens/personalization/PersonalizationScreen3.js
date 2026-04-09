@@ -12,10 +12,12 @@ import Indicator from '../../components/Indicator';
 import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function PersonalizationScreen3() {
   const { store } = useAuth();
   const tone_preference_data = useAppStore((s) => s.onboarding.tone_preference_data);
+  const insets = useSafeAreaInsets();
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [id, setId] = useState(null);
@@ -64,7 +66,7 @@ export default function PersonalizationScreen3() {
             style={{ fontFamily: 'NunitoSemiBold' }}
             className="text-lg text-[#2B4752] text-center pb-5"
           >
-            Personalize how you receive inspired answers and insights to fit your journey
+            Personalize how your inspired answers and insights will sound
           </Text>
 
           {tone_preference_data.map((item, idx) => (
@@ -84,7 +86,7 @@ export default function PersonalizationScreen3() {
           ))}
         </ScrollView>
 
-        <View className="pb-8">
+        <View style={{paddingBottom:insets.bottom}}>
           <CommonButton
             btnText={"Select Tone"}
             bgColor={deepGreen}

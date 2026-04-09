@@ -12,6 +12,7 @@ import Indicator from '../../components/Indicator';
 import { get_onboarding_all_data, onboarding_status } from '../personalization/PersonalizationAPIs';
 import { get_payment_status, setAuthToken } from './AuthAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import useAppStore from '@/context/useAppStore';
 
@@ -20,7 +21,7 @@ const AuthHome = () => {
   const styles = getStyles(isSmall, isMedium, isLarge, isFold);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-
+  const insets = useSafeAreaInsets();
 
   const setAuth = useAppStore((s) => s.setAuth);
   const setOnboardingData = useAppStore((s) => s.setOnboardingData);
@@ -119,7 +120,7 @@ const AuthHome = () => {
         resizeMode="cover"
       />
 
-      <View style={styles.content}>
+      <View  style={{...styles.content, paddingBottom: insets.bottom}}>
         <Text style={styles.title}>Inspired Answers are just a step away</Text>
         <Text style={styles.subtitle}>Equip your faith. Empower your words</Text>
 
@@ -169,7 +170,7 @@ const AuthHome = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row items-center justify-center flex-wrap px-7  ">
+        <View className={`flex-row items-center justify-center flex-wrap px-7`}>
           <Text className="text-[#90B2B2]">By singing up, you agree to the app's {' '}</Text>
           <TouchableOpacity onPress={() => {
             navigation.navigate("TermsAndCondition")

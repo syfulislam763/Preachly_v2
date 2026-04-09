@@ -34,11 +34,12 @@ const ProfileFaith = () => {
             RightComponent={()=>{}}
         />
         <View style={{marginTop:hp("1%")}}>
-            <Text style={styles.title}>Well Done!</Text>
-            <Text style={styles.title}>Keep Growing in Faith</Text>
+            <Text style={styles.title}>Well Done.</Text>
+            <Text style={styles.title}>Keep Growing.</Text>
         </View>
         <View className="px-3 py-5">
-            <Text className='text-[16px] text-[#3F5862] font-[NunitoSemiBold] text-center'> Your commitment to deepening your faithis building a strong foundation.Keep going—there’s more ahead!</Text>
+            <Text className='text-[16px] text-[#3F5862] font-[NunitoSemiBold] text-center'> Your Every step you take deepens your faith and strengthens your voice.</Text>
+            <Text className='text-[16px] text-[#3F5862] font-[NunitoSemiBold] text-center mt-5'> Keep building a foundation rooted in truth.</Text>
         </View>
         <Image
             source={require('../../../../assets/img/bg_bible_frame.png')}
@@ -47,7 +48,7 @@ const ProfileFaith = () => {
 
         <View style={styles.btnContainer}>
             <CommonButton
-                btnText={"Find Answers"}
+                btnText={"Continue"}
                 bgColor={deepGreen}
                 navigation={navigation}
                 route={""}//MainTabs

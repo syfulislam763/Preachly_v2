@@ -64,7 +64,7 @@ const ProfileScreen = () => {
           console.log("da", JSON.stringify(data, null,2))
           if (isOk) {
             setBadge(data?.data?.latest_badge);
-            const temp = {...dashboard, "latest_badge":data?.data?.latest_badge };
+            const temp = {...dashboard, latest_badge:data?.data?.latest_badge };
             setDashboard(temp)
           }
         });

@@ -16,31 +16,31 @@ const SPACING = -9;
 const SNAP_INTERVAL = ITEM_WIDTH + SPACING;
 const SIDE_ITEM_VERTICAL_OFFSET = 50;
 const CAPTION_LEFT_OFFSET = -((SCREEN_WIDTH - ITEM_WIDTH) / 2);
-const IMAGE_HEIGHT = SCREEN_HEIGHT * 0.48;
+const IMAGE_HEIGHT = SCREEN_HEIGHT * 0.45;
 const SLIDE_MARGIN_TOP = SCREEN_HEIGHT * 0.20; 
 const CONTAINER_MARGIN_TOP = SCREEN_HEIGHT * 0.05;
 
 const imageData = [
   {
     img: require('../../assets/img/Frame1.png'),
-    title: 'Empowerment',
-    description: 'Speak confidently in every moment of doubt',
+    title: 'Speak with Confidence',
+    description: 'When questions or doubts arise, feel empowered with clear, scripture-rooted answers you can trust.',
   },
   {
     img: require('../../assets/img/Frame2.png'),
-    title: 'Biblical Guidance',
-    description: 'Answers rooted in scripture, delivered with clarity',
+    title: 'Clarity from Scripture',
+    description: 'Explore thoughtful explanations that connect God’s Word to real conversations.',
   },
   {
     img: require('../../assets/img/Frame3.png'),
-    title: 'Community',
-    description: 'Join a global movement of believers sharing the truth',
+    title: 'Encourage Others',
+    description: 'Grow in your faith and become a voice that inspires those around you.',
   },
   {
     img: require('../../assets/img/Frame4.png'),
-    title: 'Modern Faith Tools',
+    title: 'Modern Faith Guidance',
     description:
-      "Equipping you with easily accessible answers at your fingertips for today's conversations",
+      "Ask questions, explore scripture, and find inspired answers for today’s conversations.",
   },
 ];
 
@@ -143,7 +143,7 @@ function CustomCarousel() {
                 <Text
                   style={{
                     fontFamily: 'DMSerifDisplay',
-                    fontSize: SCREEN_WIDTH < 360 ? 28 : 36,
+                    fontSize: SCREEN_WIDTH < 360 ? 28 : 28,
                     color: '#0B172A',
                     textAlign: 'center',
                     paddingTop: 20,

@@ -12,10 +12,12 @@ import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function PersonalizationScreen() {
   const { store } = useAuth();
   const bible_familiarity_data = useAppStore((s) => s.onboarding.bible_familiarity_data);
+  const insets = useSafeAreaInsets();
 
   const [isLoading, setIsLoading] = useState(false);
   const [index, setIndex] = useState(-1);
@@ -57,7 +59,7 @@ export default function PersonalizationScreen() {
             style={{ fontFamily: 'DMSerifDisplay', lineHeight: 35 }}
             className="text-[32px] text-[#0B172A] text-center  py-10"
           >
-            How familiar are you with the Bible
+            How familiar are you with the Bible’s teachings?
           </Text>
 
           {/* Photo Cards Row */}
@@ -86,7 +88,7 @@ export default function PersonalizationScreen() {
 
         </ScrollView>
 
-        <View className="pb-8">
+        <View style={{paddingBottom: insets.bottom}}>
           <CommonButton
             btnText={"Continue"}
             bgColor={deepGreen}

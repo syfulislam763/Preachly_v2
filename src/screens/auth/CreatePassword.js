@@ -22,6 +22,7 @@ import { onboarding_status, get_onboarding_all_data } from '../personalization/P
 import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function CreatePassword() {
   const { updateStore } = useAuth();
@@ -29,6 +30,7 @@ export default function CreatePassword() {
   const [rePassword, setRePassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [keyboardOffset, setKeyboardOffset] = useState(30);
+  const insets = useSafeAreaInsets()
 
   const setAuth = useAppStore(s => s.setAuth);
   const route = useRoute();
@@ -82,11 +84,12 @@ export default function CreatePassword() {
   useEffect(() => {
     const show = Keyboard.addListener('keyboardDidShow', e => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setKeyboardOffset(Math.min(e.endCoordinates.height, 100));
+      //setKeyboardOffset(Math.min(e.endCoordinates.height, 100));
+      setKeyboardOffset(insets.bottom + 10);
     });
     const hide = Keyboard.addListener('keyboardDidHide', () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setKeyboardOffset(30);
+      setKeyboardOffset(insets.bottom + 10);
     });
     return () => { show.remove(); hide.remove(); };
   }, []);

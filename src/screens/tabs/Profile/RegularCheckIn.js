@@ -45,14 +45,15 @@ const RegularCheckIn = () => {
             style={{ fontFamily: 'DMSerifDisplay', lineHeight: 35 }}
             className="text-[32px] text-[#0B172A] text-center pt-6 pb-3"
           >
-            Time for a heart check!
+            Your Weekly Faith Check-In
           </Text>
 
           <Text
             style={{ fontFamily: 'NunitoSemiBold', lineHeight: 22 }}
             className="text-base text-[#2B4752] text-center px-2"
           >
-            Take a moment to reflect on your faith journey this week. Your growth, clarity, and connection matter—this isn't just a habit, it's a step toward a more powerful, confident faith
+            Growth happens when we pause and notice it. Take a moment to reflect on your faith, your
+conversations, and how God has been shaping you this week.
           </Text>
         </View>
 

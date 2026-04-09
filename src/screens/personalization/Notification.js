@@ -7,10 +7,12 @@ import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Notification() {
   const navigation = useNavigation();
   const setOnboardingCompleted = useAppStore((s) => s.setOnboardingCompleted);
+  const insets = useSafeAreaInsets()
 
   const finishOnboarding = () => {
     setOnboardingCompleted(true);
@@ -49,19 +51,19 @@ export default function Notification() {
               style={{ fontFamily: 'DMSerifDisplay' }}
               className="text-[26px] text-[#0B172A] text-center px-5 pt-5 pb-2"
             >
-              Turn On Notifications
+              Stay Encouraged in Your Faith
             </Text>
 
             <Text
               style={{ fontFamily: 'NunitoSemiBold', lineHeight: 23 }}
               className="text-base text-[#2B4752] text-center px-4"
             >
-              Never miss a moment to grow in faith. Get gentle reminders, uplifting messages, and timely insights to keep you inspired on your journey
+              Get short insights, scripture prompts, and conversation encouragement throughout the week.
             </Text>
           </View>
         </ScrollView>
 
-        <View className="pb-16">
+        <View style={{paddingBottom:insets.bottom}}>
           
           <CommonButton
             btnText={"Continue"}

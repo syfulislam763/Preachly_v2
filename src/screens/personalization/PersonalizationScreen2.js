@@ -11,11 +11,13 @@ import { faith_goal } from './PersonalizationAPIs';
 import Indicator from '../../components/Indicator';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function PersonalizationScreen2() {
   const [selectedOptions, setSelectedOptions] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets()
 
   const handleSubmit = () => {
     setLoading(true);
@@ -72,7 +74,7 @@ export default function PersonalizationScreen2() {
           />
         </ScrollView>
 
-        <View className="pb-8">
+        <View style={{paddingBottom:insets.bottom}}>
           <CommonButton
             btnText={"Continue"}
             bgColor={deepGreen}
