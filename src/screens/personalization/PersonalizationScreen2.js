@@ -29,7 +29,7 @@ export default function PersonalizationScreen2() {
       setLoading(false);
       if (success) {
         console.log("Faith Goals submitted successfully: ", data);
-        navigation.navigate("Personalization3");
+        navigation.navigate("Personalization21");
       } else {
         console.error("Error submitting Faith Goals: ", data);
       }
@@ -52,7 +52,7 @@ export default function PersonalizationScreen2() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <ProgressBar progress={14.28 * 3} />
+          <ProgressBar progress={10 * 3} />
 
           <Text
             style={{ fontFamily: 'DMSerifDisplay', lineHeight: 35 }}

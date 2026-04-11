@@ -57,7 +57,7 @@ export default function HistoryStack() {
 
       <Stack.Screen
         options={()=>({
-          headerShown:true
+          headerShown:false
         })}
         name='QuestionScreen'
         component={QuestionScreen}
@@ -65,7 +65,7 @@ export default function HistoryStack() {
 
 
       <Stack.Screen options={({navigation}) => ({
-        headerShown: true,
+        headerShown: false,
       })} name="CurrentGoals" component={CurrentGoals} />
 
 

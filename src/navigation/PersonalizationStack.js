@@ -19,6 +19,12 @@ import MessageScreen from '../screens/tabs/Message/MessageScreen';
 import { useAuth } from '../context/AuthContext';
 import BackButton from '../components/BackButton';
 import useAppStore from '@/context/useAppStore';
+import PersonalizationScreen21 from '@/screens/personalization/PersonalizationScreen21';
+import PersonalizationScreen22 from '@/screens/personalization/PersonalizationScreen22';
+import PersonalizationScreen23 from '@/screens/personalization/PersonalizationScreen23';
+
+
+
 
 const NotFound = () => <View>
   <Text>Not Found</Text>
@@ -98,6 +104,21 @@ export default function PersonalizationStack() {
             options={{headerShown: false}}
             name="Personalization2" 
             component={PersonalizationScreen2} 
+          />
+          <Stack.Screen 
+            options={{headerShown: false}}
+            name="Personalization21" 
+            component={PersonalizationScreen21} 
+          />
+          <Stack.Screen 
+            options={{headerShown: false}}
+            name="Personalization22" 
+            component={PersonalizationScreen22} 
+          />
+          <Stack.Screen 
+            options={{headerShown: false}}
+            name="Personalization23" 
+            component={PersonalizationScreen23} 
           />
           <Stack.Screen 
             options={{headerShown: false}}

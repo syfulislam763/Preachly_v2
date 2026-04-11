@@ -7,6 +7,7 @@ import Indicator from '../../../components/Indicator';
 import Entypo from '@expo/vector-icons/Entypo';
 import ReusableNavigation from '../../../components/ReusabeNavigation';
 import BackButton from '../../../components/BackButton';
+import SeedPlantedModal from '@/components/SeedPlantedModal';
 
 const img1   = require('../../../../assets/img/card_bg8.png');
 const img4   = require('../../../../assets/img/card_bg11.png');
@@ -23,6 +24,7 @@ const WeeklyCheckIn = () => {
   const navigation = useNavigation();
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false)
 
   const handleGetHistory = () => {
     setLoading(true);
@@ -49,11 +51,12 @@ const WeeklyCheckIn = () => {
     return (
       <Pressable
         onPress={() => {
-          if (item?.status === 'completed') {
-            navigation.navigate("WeeklyCheckIn_", { ...item, title: `${item.week_number} Weekly Check-In` });
-          } else {
-            navigation.navigate("RegularCheckIn", { title: `${item.week_number} Weekly Check-In` });
-          }
+          setShowModal(true);
+          // if (item?.status === 'completed') {
+          //   navigation.navigate("WeeklyCheckIn_", { ...item, title: `${item.week_number} Weekly Check-In` });
+          // } else {
+          //   navigation.navigate("RegularCheckIn", { title: `${item.week_number} Weekly Check-In` });
+          // }
         }}
       >
         <ImageBackground source={bgImage} style={styles.background} resizeMode="cover">
@@ -108,6 +111,12 @@ const WeeklyCheckIn = () => {
           <ActivityIndicator size="large" />
         </Indicator>
       )}
+
+      <SeedPlantedModal
+        visible={showModal}
+        onClose={() => setShowModal(false)}
+        badgeUrl="https://api.preachly.app/media/checkin/badges/MicrosoftTeams-image_2.png"
+      />
 
     </SafeAreaView>
   );

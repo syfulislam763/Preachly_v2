@@ -24,6 +24,7 @@ import HomeModal from './HomeModal';
 import { useAuth } from '@/context/AuthContext';
 import useAppStore from '@/context/useAppStore';
 import Indicator from '@/components/Indicator';
+import CommonGoalCard from './CommonGoalCard';
 
 
 export default function HomeScreen() {
@@ -174,6 +175,14 @@ export default function HomeScreen() {
             <Image source={require('../../../../assets/img/ReligeousBook.png')} style={styles.multiImage} />
             <Text style={styles.multiText}>Faith Library</Text>
           </TouchableOpacity>
+        </View>
+
+        {/*  */}
+        <View className='w-full  mt-5 '>
+          <CommonGoalCard
+
+            onPress={() => navigation.navigate("CurrentGoals")}
+          />
         </View>
 
         {/* Popular Questions */}

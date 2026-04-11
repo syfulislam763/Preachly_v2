@@ -21,13 +21,12 @@ const scripture = require("../../../../assets/img/scripture.png");
 const conversation = require("../../../../assets/img/conversation.png");
 const share_faith = require("../../../../assets/img/share_faith.png");
 
-// ── FIX: Static require map (Metro bundler requires static paths) ─────────────
 const logoImages = {
   rocket: require("../../../../assets/updated_img/rocket_black.png"),
   open_book: require("../../../../assets/updated_img/open_book_black.png"),
   bulb: require("../../../../assets/updated_img/bulb_black.png"),
 };
-// ─────────────────────────────────────────────────────────────────────────────
+
 
 const lavel = {
   "conversation": "Confidence Goal",
@@ -71,13 +70,13 @@ const modal_info = {
   },
   share_faith: {
     badge: "Inspiration",
-    logoKey: "bulb",   // <-- use key instead of path string
+    logoKey: "bulb",  
     heading: "How to Grow Your Inspiration",
     body: "Share your faith boldly! Every time you inspire someone, your own light grows brighter and reaches further than you know.",
     extra: "Share your faith boldly! Every time you inspire someone, your own light grows brighter and reaches further than you know.",
   },
 };
-// ─────────────────────────────────────────────────────────────────────────────
+
 
 const images = {
   "conversation": conversation,
@@ -85,7 +84,6 @@ const images = {
   "share_faith": share_faith,
 };
 
-// ── GoalInfoModal ─────────────────────────────────────────────────────────────
 const GoalInfoModal = ({ visible, onClose, goalType }) => {
   const info = modal_info[goalType] || modal_info.conversation;
 
@@ -145,7 +143,7 @@ const GoalInfoModal = ({ visible, onClose, goalType }) => {
     </Modal>
   );
 };
-// ─────────────────────────────────────────────────────────────────────────────
+
 
 const CurrentGoals = () => {
   const navigation = useNavigation();

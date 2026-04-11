@@ -12,6 +12,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 const img2 = require('../../../../assets/img/card_bg10.png');
 const img4 = require('../../../../assets/img/card_bg11.png');
 const bookOpen = require('../../../../assets/img/BookOpen.png');
+const rightArrow = require("../../../../assets/img/24-caret-right.png")
 
 const CommonCard = ({index =0, title="", text="", onPress=()=>{}}) => {
     const navigation = useNavigation()
@@ -61,6 +62,11 @@ const CommonCard = ({index =0, title="", text="", onPress=()=>{}}) => {
                         
                         <View style={{}}>
                             <Entypo name="chevron-thin-right" size={24} color="white" />
+                            {/* <Image style={{
+                                        height: 23,
+                                        width: 23,
+                                        objectFit:'contain',
+                                    }} source={rightArrow} /> */}
                         </View>
 
                     </View>
