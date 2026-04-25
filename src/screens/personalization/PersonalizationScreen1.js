@@ -52,7 +52,7 @@ export default function PersonalizationScreen1() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <ProgressBar progress={10 * 2} />
+          <ProgressBar progress={12.5 * 2.0} />
 
           <Text
             style={{ fontFamily: 'DMSerifDisplay', lineHeight: 35 }}

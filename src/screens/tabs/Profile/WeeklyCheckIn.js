@@ -51,12 +51,12 @@ const WeeklyCheckIn = () => {
     return (
       <Pressable
         onPress={() => {
-          setShowModal(true);
-          // if (item?.status === 'completed') {
-          //   navigation.navigate("WeeklyCheckIn_", { ...item, title: `${item.week_number} Weekly Check-In` });
-          // } else {
-          //   navigation.navigate("RegularCheckIn", { title: `${item.week_number} Weekly Check-In` });
-          // }
+          //setShowModal(true);
+          if (item?.status === 'completed') {
+            navigation.navigate("WeeklyCheckIn_", { ...item, title: `${item.week_number} Weekly Check-In` });
+          } else {
+            navigation.navigate("RegularCheckIn", { title: `${item.week_number} Weekly Check-In` });
+          }
         }}
       >
         <ImageBackground source={bgImage} style={styles.background} resizeMode="cover">

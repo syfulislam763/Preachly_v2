@@ -1,13 +1,18 @@
 import React from 'react';
 import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 
-const checkIcon = require('../../assets/updated_img/done.png');
+const checkIcon = require('../../assets/updated_img/done2.png');
 
+/* 
+ h
+ dfd
+ jfdsjepu
+*/
 const GoalInfoScreen = ({
   title = "",
   subtitle = "",
   quote = "",
-  checkItems = [],
+  checkItems = [],                                                                                                                                                                                                                                                                                                                                             
   badgeUrl = "",
 }) => {
   return (
@@ -36,7 +41,7 @@ const GoalInfoScreen = ({
       {badgeUrl ? (
         <View style={styles.badgeContainer}>
           <Image
-            source={{ uri: badgeUrl }}
+            source={badgeUrl}
             style={styles.badge}
             resizeMode="contain"
           />

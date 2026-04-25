@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native';
 import CommonButton from '../../../components/CommonButton';
 import { deepGreen , primaryText} from '../../../components/Constant';
@@ -14,16 +14,22 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { getStyles } from './ProfileFaithStyle';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
+import SeedPlantedModal from '@/components/SeedPlantedModal';
 
 const { width, height,} = Dimensions.get('window');
 
 const ProfileFaith = () => {
     const navigation = useNavigation();
     const route = useRoute();
+    const [showModal, setShowModal] = useState(false);
 
-  const {completePersonalization} = useAuth()
-  const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
-  const styles = getStyles(isSmall, isMedium, isLarge, isFold)
+    const {completePersonalization} = useAuth()
+    const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
+    const styles = getStyles(isSmall, isMedium, isLarge, isFold);
+
+    useEffect(() => {
+        setShowModal(true);
+    }, [])
 
   return (
     <SafeAreaView edges={["top"]} style={styles.container}>
@@ -58,6 +64,12 @@ const ProfileFaith = () => {
                 opacity={1}
             />
         </View>
+
+        <SeedPlantedModal
+            visible={showModal}
+            onClose={() => setShowModal(false)}
+            badgeUrl="https://api.preachly.app/media/checkin/badges/MicrosoftTeams-image_2.png"
+        />
       
     </SafeAreaView>
   );

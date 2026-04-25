@@ -77,7 +77,7 @@ export default function PersonalizationScreen() {
       
       <View>
         <View style={{marginTop:"10%"}}>
-          <ProgressBar progress={10} />
+          <ProgressBar progress={12.5} />
         </View>
 
         <Text style={styles.title}>Every faith journey begins with a question. Let's start with yours.</Text>
