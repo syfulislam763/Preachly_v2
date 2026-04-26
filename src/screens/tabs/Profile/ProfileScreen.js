@@ -20,6 +20,7 @@ import { get_static_badge, update_static_badge } from '../TabsAPI';
 import { BASE_URL } from '../../../context/Paths';
 import dayjs from 'dayjs';
 import useAppStore from '@/context/useAppStore';
+import { get_profile_dashboard_data } from '../TabsAPI';
 
 const ProfileScreen = () => {
  
@@ -28,7 +29,8 @@ const ProfileScreen = () => {
 
   const userInfo = useAppStore((s) => s.profile.userInfo);
   const dashboard = useAppStore((s) => s.profile.dashboard)
-  const setDashboard = useAppStore((s) => s.setDashboard)
+  const setDashboard = useAppStore((s) => s.setDashboard);
+  const resolveProfileSettings = useAppStore((s) => s.resolveProfileSettings);
 
 
 
@@ -66,6 +68,7 @@ const ProfileScreen = () => {
             setBadge(data?.data?.latest_badge);
             const temp = {...dashboard, latest_badge:data?.data?.latest_badge };
             setDashboard(temp)
+            //console.log("temp", JSON.stringify(temp, null, ))
           }
         });
       } else {
@@ -76,13 +79,16 @@ const ProfileScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      handle_get_static_badge();
+      //handle_get_static_badge();
+      get_profile_dashboard_data((res, isOk) => {
+        console.log("res dash", JSON.stringify(res, null, 2));
+        setDashboard(res?.data)
+      })
     }, [])
   );
 
   let badge_uri = badge?.badge_template?.image ?? "";
-  console.log("badge ", badge)
-  // if (badge_uri) badge_uri = BASE_URL + badge_uri;
+
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -210,13 +216,14 @@ const ProfileScreen = () => {
             <View style={{...styles.weeklyCheckIn, paddingVertical:10}}>
               <View>
                 <Text style={styles.menuText}>Weekly Check-In</Text>
-                {/* <View style={styles.tooltip}>
-                  <Text style={styles.tooltipText}>Completed</Text>
-                  <Image
+                <View style={styles.tooltip}>
+                  <Text style={[styles.tooltipText, {color:'#966F44'}]}>{dashboard?.current_week_available? "Not completed": "completed" }</Text>
+                  { !(dashboard?.current_week_available) && <Image
                     source={require("../../../../assets/img/Check.png")}
                     style={styles.caretRight}
-                  />
-                </View> */}
+                  />}
+                  
+                </View>
               </View>
               <Image
                 source={require("../../../../assets/img/CaretRight.png")}
@@ -226,8 +233,20 @@ const ProfileScreen = () => {
           </Pressable>
               <View style={{height:20}}></View>
           <Pressable onPress={() => navigation.navigate("CurrentGoals")}>
+
             <View style={{...styles.weeklyCheckIn, paddingVertical:10}}>
-              <Text style={styles.menuText}>Your Current Goals</Text>
+              <View>
+                <Text style={styles.menuText}>Your Current Goals</Text>
+                <View style={styles.tooltip}>
+                  <Text style={[styles.tooltipText, {color:'#966F44'}]}>{!(dashboard?.current_goal.completed)? "Not completed": "completed" }</Text>
+                  { (dashboard?.current_goal?.completed) && <Image
+                    source={require("../../../../assets/img/Check.png")}
+                    style={styles.caretRight}
+                  />}
+                  
+                </View>
+              </View>
+              
               <Image
                 source={require("../../../../assets/img/CaretRight.png")}
                 style={styles.caretRight}

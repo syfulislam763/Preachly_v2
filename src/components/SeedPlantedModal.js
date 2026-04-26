@@ -12,7 +12,7 @@ const SeedPlantedModal = ({
   onClose = () => {},
   title = "Seed Planted",
   message1 = "You showed up.\nThat's where growth begins.",
-  message2 = "Keep planting what matters.",
+  message2 = "",
   badgeUrl = "https://api.preachly.app/media/checkin/badges/MicrosoftTeams-image_2.png",
   buttonText = "Continue Growing",
 }) => {
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    height: 280,
+    height: 350,
     alignItems: 'center',
     justifyContent: 'center',
   },

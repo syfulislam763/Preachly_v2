@@ -8,7 +8,6 @@ const baseStyle =  StyleSheet.create({
   tootltipText:{
     fontFamily:'NunitoSemiBold',
     fontSize:14,
-    color:'#966F44'
   },
   tooltip: {
     display:'flex',

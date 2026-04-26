@@ -1,8 +1,16 @@
 import React from 'react'
 
-import {View, StyleSheet,Text, TouchableOpacity, Image} from 'react-native'
+import {View, StyleSheet,Text, TouchableOpacity, Image} from 'react-native';
+import useAppStore from '@/context/useAppStore';
 
 const Reward = ({count=0, handler}) => {
+
+  const dashboard = useAppStore((s) => s.profile.dashboard);
+
+  const isRedFlame = dashboard?.streak?.has_red_flame ?? false;
+
+  console.log("red flame", isRedFlame)
+
   return (
     <TouchableOpacity 
      onPress={() => {

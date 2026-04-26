@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, Pressable, ImageBackground } from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable, ImageBackground } from 'react-native';
+import useAppStore from '@/context/useAppStore';
 
 const bgImages = {
   golden: require('../../../../assets/updated_img/goal_bg_image.png'),
@@ -15,7 +16,25 @@ const CommonGoalCard = ({
   variant = "golden", // "golden" | "dark"
   onPress = () => {},
 }) => {
-  const progressPercent = Math.round((progress / total) * 100)
+  
+
+  const dashboard = useAppStore((s) => s.profile.dashboard);
+  const goal =  {
+    "week_start": "2026-04-25",
+    "week_end": "2026-05-01",
+    "days_remaining": 6,
+    "goal_type": "share_faith",
+    "goal_display": "",
+    "current_count": 0,
+    "target_count": 10,
+    "completed": false,
+    "progress_percentage": 0,
+    "is_new_goal": false,
+    "week_number": 17
+  }
+
+  const current_goal = dashboard?.current_goal ?? goal;
+  const progressPercent = Math.round((current_goal?.current_count / current_goal?.target_count) * 100);
 
   return (
     <Pressable onPress={onPress}>
@@ -30,7 +49,7 @@ const CommonGoalCard = ({
             source={require('../../../../assets/img/lightning.png')} // your bolt icon
             style={styles.icon}
           />
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{current_goal?.goal_display}</Text>
         </View>
 
         {/* Main tagline */}
@@ -38,7 +57,7 @@ const CommonGoalCard = ({
 
         {/* Progress */}
         <Text style={styles.progressLabel}>
-          {progress} of {total} {label}
+          {current_goal?.current_count} of {current_goal?.target_count} {label}
         </Text>
         <View style={styles.progressTrack}>
           <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />

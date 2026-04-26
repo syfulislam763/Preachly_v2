@@ -15,6 +15,7 @@ import { getStyles } from './ProfileFaithStyle';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import SeedPlantedModal from '@/components/SeedPlantedModal';
+import { BASE_URL } from '@/context/Paths';
 
 const { width, height,} = Dimensions.get('window');
 
@@ -68,7 +69,9 @@ const ProfileFaith = () => {
         <SeedPlantedModal
             visible={showModal}
             onClose={() => setShowModal(false)}
-            badgeUrl="https://api.preachly.app/media/checkin/badges/MicrosoftTeams-image_2.png"
+            title={route?.params?.modal_info?.title}
+            message1={route?.params?.modal_info?.description}
+            badgeUrl={BASE_URL+ (route?.params?.modal_info?.image)}
         />
       
     </SafeAreaView>

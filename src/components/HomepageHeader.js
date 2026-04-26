@@ -5,13 +5,18 @@ import { useAuth } from '../context/AuthContext';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
 import HomeModal from '../screens/tabs/Home/HomeModal';
+import useAppStore from '@/context/useAppStore';
 
 
 const HomepageHeader = ({userInfo, dashboard}) => {
   const {store} = useAuth();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false)
+  const dashboardd = useAppStore((s) => s.profile.dashboard);
 
+  const isRedFlame = dashboardd?.streak?.has_red_flame ?? false;
+
+  console.log("red flame", isRedFlame)
 
   return (
     <View style={styles.container}>

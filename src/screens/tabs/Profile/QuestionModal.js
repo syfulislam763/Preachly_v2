@@ -76,7 +76,7 @@ const QuestionModal = ({ modalVisible, setModalVisible, navigation }) => {
       setLoading(false)
       if (success) {
         setModalVisible(false)
-        navigation.navigate("PorfileFaith", { week_number: res?.data?.week_number })
+        navigation.navigate("PorfileFaith", { week_number: res?.data?.week_number, modal_info: res?.data?.newly_earned_badge })
       }
     })
   }
