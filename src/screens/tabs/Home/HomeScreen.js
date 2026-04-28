@@ -41,6 +41,7 @@ export default function HomeScreen() {
   const profile = useAppStore((s) => s.profile);
   const goal = useAppStore((s) => s.goal);
   const onboarding = useAppStore((s) => s.onboarding);
+  const dashboard = useAppStore((s) => s.profile.dashboard)
 
   const setProfileData = useAppStore((s) => s.setProfileData);
   const setDashboard = useAppStore((s) => s.setDashboard);
@@ -50,7 +51,7 @@ export default function HomeScreen() {
   const isDailyLoading = useAppStore((s) => s.ui.isDailyLoading)
   
 
-  console.log("profile -> ", JSON.stringify(profile, null, 2))
+  console.log("profile -> ", JSON.stringify(goal, null, 2))
   // console.log("goal -> ", JSON.stringify(goal, null, 2));
 
 
@@ -206,7 +207,7 @@ export default function HomeScreen() {
         {/* Weekly Goal Card */}
         <CommonCard
           title="Don't forget to reflect on this week's progress and earn your badge!"
-          text={`Days left ${goal?.days_remaining ?? 0} days`}
+          text={dashboard?.current_week_available?`Days left ${ goal?.days_remaining ?? 0} days`: 'completed'}
           onPress={() => navigation.navigate('WeeklyCheckIn')}
         />
         <View className='h-36'></View>

@@ -68,7 +68,7 @@ const WeeklyCheckIn = () => {
                   {(history.length - item.week_number) + 1}. Week Check-In
                 </Text>
                 <Text style={[styles.text, { color: dateColor }]}>
-                  {item?.completed_at ? timeAgo(item.completed_at) : "Available"}
+                  {item?.status}
                 </Text>
               </View>
             </View>
@@ -115,7 +115,7 @@ const WeeklyCheckIn = () => {
       <SeedPlantedModal
         visible={showModal}
         onClose={() => setShowModal(false)}
-        badgeUrl="https://api.preachly.app/media/checkin/badges/MicrosoftTeams-image_2.png"
+        badgeUrl=""
       />
 
     </SafeAreaView>

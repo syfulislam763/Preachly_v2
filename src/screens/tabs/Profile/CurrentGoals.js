@@ -18,8 +18,8 @@ import BackButton from '../../../components/BackButton';
 const img1 = require('../../../../assets/img/card_bg9.png');
 const img2 = require('../../../../assets/img/card_bg10.png');
 const scripture = require("../../../../assets/img/scripture.png");
-const conversation = require("../../../../assets/img/conversation.png");
-const share_faith = require("../../../../assets/img/share_faith.png");
+const conversation = require("../../../../assets/img/share_faith.png");
+const share_faith = require("../../../../assets/img/conversation.png");
 
 const logoImages = {
   rocket: require("../../../../assets/updated_img/rocket_black.png"),

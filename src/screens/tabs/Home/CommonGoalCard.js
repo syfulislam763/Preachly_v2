@@ -7,6 +7,28 @@ const bgImages = {
   dark: require('../../../../assets/img/card_bg11.png'),
 }
 
+const book = require("../../../../assets/updated_img/open_book_black.png");
+const lightening = require('../../../../assets/img/lightning.png');
+const mountain = require("../../../../assets/updated_img/mountain.png")
+
+const goal_label = {
+  "conversation": {
+    img: lightening,
+    tagline: 'Courage grows with every step.',
+    comment: "Conversations Started"
+  },
+  "scripture": {
+    img: book,
+    tagline: 'Every verse builds wisdom.',
+    comment: "Chapters Completed"
+  },
+  "share_faith": {
+    img: mountain,
+    tagline: "Seeds grow when they're shared.",
+    comment: "Shares Made"
+  },
+};
+
 const CommonGoalCard = ({
   title = "Faith Confidence",
   tagline = "Every step builds confidence.",
@@ -33,7 +55,7 @@ const CommonGoalCard = ({
     "week_number": 17
   }
 
-  const current_goal = dashboard?.current_goal ?? goal;
+  const current_goal = {...dashboard?.current_goal, ...goal_label[dashboard?.current_goal?.goal_type]} ?? goal;
   const progressPercent = Math.round((current_goal?.current_count / current_goal?.target_count) * 100);
 
   return (
@@ -46,18 +68,18 @@ const CommonGoalCard = ({
         {/* Header row — icon + title */}
         <View style={styles.headerRow}>
           <Image
-            source={require('../../../../assets/img/lightning.png')} // your bolt icon
+            source={current_goal?.img} // your bolt icon
             style={styles.icon}
           />
           <Text style={styles.title}>{current_goal?.goal_display}</Text>
         </View>
 
         {/* Main tagline */}
-        <Text style={styles.tagline}>{tagline}</Text>
+        <Text style={styles.tagline}>{current_goal?.tagline}</Text>
 
         {/* Progress */}
         <Text style={styles.progressLabel}>
-          {current_goal?.current_count} of {current_goal?.target_count} {label}
+          {current_goal?.current_count} of {current_goal?.target_count} {current_goal?.comment}
         </Text>
         <View style={styles.progressTrack}>
           <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />

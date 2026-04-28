@@ -79,10 +79,10 @@ const ProfileScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      //handle_get_static_badge();
+      handle_get_static_badge();
       get_profile_dashboard_data((res, isOk) => {
         console.log("res dash", JSON.stringify(res, null, 2));
-        setDashboard(res?.data)
+        setDashboard(res?.data);
       })
     }, [])
   );

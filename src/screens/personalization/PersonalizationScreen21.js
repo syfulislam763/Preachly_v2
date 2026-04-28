@@ -11,8 +11,8 @@ import { deepGreen, primaryText } from '../../components/Constant';
 import GoalInfoScreen from '../../components/GoalInfoScreen';
 import { faith_goal, get_onboarding_user_data } from './PersonalizationAPIs';
 const scripture = require("../../../assets/img/scripture.png");
-const conversation = require("../../../assets/img/conversation.png");
-const share_faith = require("../../../assets/img/share_faith.png");
+const conversation = require("../../../assets/img/share_faith.png")
+const share_faith = require("../../../assets/img/conversation.png");
 
 const goal_type = {
   "conversation": {
