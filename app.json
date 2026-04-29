@@ -22,12 +22,11 @@
           "en",
           "es",
           "fr",
-          "en",
-          "es",
-          "fr"
+          "en"
         ],
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "googleServicesFile": "./GoogleService-info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -53,6 +52,23 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      "@react-native-firebase/app",
+      [
+        "@react-native-firebase/messaging",
+        {
+          "ios": {
+            "permissions": ["alert", "badge", "sound"]
+          }
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#ffffff",
+          "sounds": []
         }
       ]
     ],

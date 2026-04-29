@@ -26,6 +26,10 @@ import useAppStore from '@/context/useAppStore';
 import Indicator from '@/components/Indicator';
 import CommonGoalCard from './CommonGoalCard';
 
+function removeLeadingNumbers(text){
+  if(!text) return "";
+  return text?.replace(/^\d+\s*/, '');
+}
 
 export default function HomeScreen() {
 
@@ -51,7 +55,7 @@ export default function HomeScreen() {
   const isDailyLoading = useAppStore((s) => s.ui.isDailyLoading)
   
 
-  console.log("profile -> ", JSON.stringify(goal, null, 2))
+  console.log("profile -> ", JSON.stringify(randomVerse, null, 2))
   // console.log("goal -> ", JSON.stringify(goal, null, 2));
 
 
@@ -140,7 +144,7 @@ export default function HomeScreen() {
         >
           <View style={styles.bgImageWrapper}>
             <Text style={styles.bgImageCaption}>({randomVerse?.verse_reference})</Text>
-            <Text style={styles.bgImageCaptionTitle}>"{randomVerse?.verse_text}"</Text>
+            <Text style={styles.bgImageCaptionTitle}>"{removeLeadingNumbers(randomVerse?.verse_text)}"</Text>
             <TouchableOpacity onPress={() => handleShare(randomVerse?.verse_text)} style={styles.bgImageFooter}>
               <Image source={require('../../../../assets/img/24-share.png')} style={styles.bgImageFooterIcon} />
               <Text style={styles.bgImageFooterText}>Share This</Text>
