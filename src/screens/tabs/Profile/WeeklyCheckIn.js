@@ -67,6 +67,9 @@ const WeeklyCheckIn = () => {
                 <Text style={[styles.title, { color: titleColor }]}>
                   {(history.length - item.week_number) + 1}. Week Check-In
                 </Text>
+                <Text style={[styles.text, { color: dateColor, fontSize: 12 }]}>
+                  {`${timeAgo(item?.week_start)} - ${timeAgo(item?.week_end)}`}
+                </Text>
                 <Text style={[styles.text, { color: dateColor }]}>
                   {item?.status}
                 </Text>

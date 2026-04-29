@@ -148,8 +148,8 @@ const ProfileScreen = () => {
 
         <View style={styles.caption}>
           <Image
-            source={require("../../../../assets/img/Fire.png")}
-            style={{ paddingHorizontal: 10 }}
+            source={require("../../../../assets/updated_img/Fire.png")}
+            style={{ height:20, width:20,   objectFit:'contain', marginRight:10 }}
           />
           <Text style={{ ...styles.semitext, fontSize: 14 }}>
             You're on <Text style={{ color: '#2B4752', fontFamily: 'NunitoBold' }}>
