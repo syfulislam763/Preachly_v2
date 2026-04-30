@@ -16,6 +16,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.darrin.preachly",
       "icon": "./assets/ios-icon.png",
+      "entitlements": {
+        "aps-environment": "development"
+      },
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "CFBundleLocalizations": [
@@ -26,7 +29,8 @@
         ],
         "ITSAppUsesNonExemptEncryption": false
       },
-      "googleServicesFile": "./GoogleService-info.plist"
+      "googleServicesFile": "./GoogleService-info.plist",
+      "appleTeamId": "Y26CW3U986"
     },
     "android": {
       "adaptiveIcon": {
@@ -59,7 +63,11 @@
         "@react-native-firebase/messaging",
         {
           "ios": {
-            "permissions": ["alert", "badge", "sound"]
+            "permissions": [
+              "alert",
+              "badge",
+              "sound"
+            ]
           }
         }
       ],

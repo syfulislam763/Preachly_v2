@@ -37,8 +37,19 @@ export const appleSignIn = async (cb) => {
         }
 
     } catch (error) {
+        console.log('Error code:', error.code);
+        console.log('Error message:', error.message);
+
         if (error.code === appleAuth.Error.CANCELED) {
             cb({ message: 'User cancelled Apple Sign-In' }, false);
+        } else if (error.code === appleAuth.Error.FAILED) {
+            cb({ message: 'Apple Sign-In failed' }, false);
+        } else if (error.code === appleAuth.Error.INVALID_RESPONSE) {
+            cb({ message: 'Invalid response from Apple' }, false);
+        } else if (error.code === appleAuth.Error.NOT_HANDLED) {
+            cb({ message: 'Apple Sign-In not handled' }, false);
+        } else if (error.code === appleAuth.Error.UNKNOWN) {
+            cb({ message: 'Unknown Apple Sign-In error' }, false);
         } else {
             console.log('APPLE_SIGN_IN_ERROR', error);
             cb(error, false);

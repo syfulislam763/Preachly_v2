@@ -10,7 +10,6 @@ import CustomCarousel from '../../components/CustomCarousel';
 import useLayoutDimention from '../../hooks/useLayoutDimention';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-
 const {height, width} = Dimensions.get("window");
 
 
@@ -18,6 +17,7 @@ export default function WelcomeScreen({ navigation }) {
   
   const insets = useSafeAreaInsets();
   
+
 
   return (
     <SafeAreaView style={{flex:1, backgroundColor:'#fff', justifyContent:'space-between'}}>

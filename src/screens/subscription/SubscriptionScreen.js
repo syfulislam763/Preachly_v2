@@ -9,7 +9,7 @@ import BackButton from '../../components/BackButton';
 import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { useNotificationPermission } from '@/context/fcm';
 
 const { height } = Dimensions.get("window");
 
@@ -22,6 +22,10 @@ export default function SubscriptionScreen() {
   const handleSubscription = () => {
     navigation.navigate("SubscriptionConfirmedScreen")
   };
+
+  const {enabled} = useNotificationPermission();
+
+  console.log("notification enabled ", enabled)
 
   return (
     <SafeAreaView edges={["top"]} className='flex-1 bg-[#FFEAC2]'>

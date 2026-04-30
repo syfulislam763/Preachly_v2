@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CommonButton from '../../components/CommonButton';
@@ -6,8 +6,9 @@ import { deepGreen, primaryText, lightgreen1 } from '../../components/Constant';
 import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { initFCM } from '@/context/fcm';
 
 export default function Notification() {
   const navigation = useNavigation();
@@ -17,6 +18,12 @@ export default function Notification() {
   const finishOnboarding = () => {
     setOnboardingCompleted(true);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      initFCM()
+    }, [])
+  )
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white">

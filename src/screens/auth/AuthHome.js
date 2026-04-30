@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, ImageBackground, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import CommonButton from '../../components/CommonButton';
 import Divider from '../../components/Divider';
@@ -7,13 +7,14 @@ import useLayoutDimention from '../../hooks/useLayoutDimention';
 import { googleSignIn, googleLogin } from './AuthAPI';
 import { appleSignIn } from './appleAuth';
 import { AppleButton } from '@invertase/react-native-apple-authentication';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Indicator from '../../components/Indicator';
 import { get_onboarding_all_data, onboarding_status } from '../personalization/PersonalizationAPIs';
 import { get_payment_status, setAuthToken } from './AuthAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import { initFCM } from '@/context/fcm';
+import { useNotificationPermission } from '@/context/fcm';
 import useAppStore from '@/context/useAppStore';
 
 const AuthHome = () => {
@@ -22,11 +23,21 @@ const AuthHome = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
+  const { toggle, enabled} = useNotificationPermission();
 
   const setAuth = useAppStore((s) => s.setAuth);
   const setOnboardingData = useAppStore((s) => s.setOnboardingData);
   const setPayment = useAppStore((s) => s.setPayment);
   const setOnboardingCompleted = useAppStore((s) => s.setOnboardingCompleted);
+
+
+  useFocusEffect(
+    useCallback(() => {
+      toggle(true)
+    }, [])
+  )
+
+  console.log("nofication enabled", enabled)
 
   const handleLogin = (payload) => {
     setLoading(true);
