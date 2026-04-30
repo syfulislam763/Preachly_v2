@@ -10,6 +10,7 @@ import useAppStore from '@/context/useAppStore';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+
 const { height } = Dimensions.get("window");
 
 export default function SubscriptionScreen() {
