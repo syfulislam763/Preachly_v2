@@ -1,75 +1,107 @@
-import { getMessaging, onMessage, onTokenRefresh, getToken, deleteToken, onNotificationOpenedApp, getInitialNotification, requestPermission, hasPermission, AuthorizationStatus, getAPNSToken } from '@react-native-firebase/messaging';
-import * as Notifications from 'expo-notifications';
-import { AppState, Linking, Alert } from 'react-native';
+import {
+  getMessaging,
+  onMessage,
+  onTokenRefresh,
+  getToken,
+  deleteToken,
+  onNotificationOpenedApp,
+  getInitialNotification,
+  requestPermission,
+  hasPermission,
+  AuthorizationStatus,
+  getAPNSToken,
+  setBackgroundMessageHandler
+} from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native'; 
+import { AppState, Linking, Alert, Platform } from 'react-native';
 import { useEffect, useState, useCallback } from 'react';
+import api from './api';
 
 const m = () => getMessaging();
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => {
-    console.log('[FCM] 🔔 handleNotification triggered'); // ← does this print?
-    return {
-      shouldShowBanner: true,
-      shouldShowList: true,
-      shouldPlaySound: true,
-      shouldSetBadge: true,
-    };
-  },
-});
+const API = '/notifications/fcm-tokens/';
+const authHeader = () => ({ Authorization: `Bearer YOUR_TOKEN` });
 
-let fcmInitialized = false;
-
-export function initFCM() {
-  if (fcmInitialized) return; // ← prevent duplicate listeners
-  fcmInitialized = true;
-
-  const messaging = m();
-  console.log('[FCM] initFCM called');
-
-  onMessage(messaging, async (remoteMessage) => {
-    console.log('[FCM] ✅ onMessage fired:', JSON.stringify(remoteMessage));
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: remoteMessage.notification?.title ?? 'Preachly',
-        body: remoteMessage.notification?.body ?? '',
-        data: remoteMessage.data ?? {},
-        sound: 'default',
-      },
-      trigger: null,
-    });
-  });
-
-  onNotificationOpenedApp(messaging, ({ data }) => handleNav(data));
-  getInitialNotification(messaging).then((msg) => {
-    if (msg) setTimeout(() => handleNav(msg.data), 1000);
-  });
+const saveToken = (token) => {
+  return api.post(API, {token: token, device_type: Platform.OS});
 }
+
+
+const removeToken = (tokenId) => api.delete(API+tokenId+"/")
 
 function handleNav(data) {
   if (!data?.screen) return;
   console.log('[FCM] Navigate to:', data.screen, data);
+  // navigationRef.navigate(data.screen, data)
 }
 
-const API = 'https://your-backend.com/api/user/fcm-token';
-const authHeader = () => ({ Authorization: `Bearer YOUR_TOKEN` });
+//Show foreground notification via Notifee
+async function showNotification(title, body, data = {}) {
+  if (Platform.OS === 'ios') {
+    await notifee.displayNotification({
+      title: title ?? 'Preachly',
+      body: body ?? '',
+      data,
+      ios: {
+        sound: 'default',
+        foregroundPresentationOptions: {
+          alert: true,
+          badge: true,
+          sound: true,
+          banner: true,
+          list: true,
+        },
+      },
+    });
+  } else {
+    // Android needs a channel
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default',
+    });
+    await notifee.displayNotification({
+      title: title ?? 'Preachly',
+      body: body ?? '',
+      data,
+      android: {
+        channelId,
+        sound: 'default',
+        pressAction: { id: 'default' },
+      },
+    });
+  }
+}
 
-const saveToken = (token) =>
-  fetch(API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...authHeader() },
-    body: JSON.stringify({ fcmToken: token }),
-  }).catch(console.error);
+let fcmInitialized = false;
 
-const removeToken = () =>
-  fetch(API, { method: 'DELETE', headers: authHeader() }).catch(console.error);
+export function initFCM() {
+  if (fcmInitialized) return;
+  fcmInitialized = true;
 
+  const messaging = m();
+
+  onMessage(messaging, async (remoteMessage) => {
+    console.log('[FCM] Foreground message:', remoteMessage);
+    const { title, body } = remoteMessage.notification ?? {};
+    await showNotification(title, body, remoteMessage.data);
+  });
+
+  onNotificationOpenedApp(messaging, ({ data }) => handleNav(data));
+
+  getInitialNotification(messaging).then((msg) => {
+    if (msg) setTimeout(() => handleNav(msg.data), 1000);
+  });
+
+  setBackgroundMessageHandler(messaging, async () => {});
+}
+
+// Hook
 export function useNotificationPermission() {
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const check = useCallback(async () => {
     const status = await hasPermission(m());
-    console.log('[FCM] Permission status on check:', status);
     setEnabled(
       status === AuthorizationStatus.AUTHORIZED ||
       status === AuthorizationStatus.PROVISIONAL
@@ -88,21 +120,18 @@ export function useNotificationPermission() {
   const toggle = async (value) => {
     setLoading(true);
     const messaging = m();
-    console.log('[FCM] Toggle called, value:', value);
 
     if (!value) {
       await deleteToken(messaging);
+      // await removeToken();
       setEnabled(false);
       setLoading(false);
       return;
     }
 
     const status = await hasPermission(messaging);
-    console.log('[FCM] Permission status:', status);
-    // 0=NOT_DETERMINED 1=AUTHORIZED 2=DENIED 3=PROVISIONAL
 
     if (status === AuthorizationStatus.DENIED) {
-      console.log('[FCM] ❌ Permission DENIED');
       Alert.alert(
         'Notifications Blocked',
         'Go to Settings → Preachly → Notifications and turn them on.',
@@ -116,40 +145,32 @@ export function useNotificationPermission() {
     }
 
     if (status === AuthorizationStatus.NOT_DETERMINED) {
-      console.log('[FCM] Requesting permission...');
       const result = await requestPermission(messaging);
-      console.log('[FCM] Permission result:', result);
       const granted =
         result === AuthorizationStatus.AUTHORIZED ||
         result === AuthorizationStatus.PROVISIONAL;
       if (!granted) {
-        console.log('[FCM] ❌ Permission not granted');
         setEnabled(false);
         setLoading(false);
         return;
       }
     }
 
-    console.log('[FCM] Getting APNs token...');
     const apns = await getAPNSToken(messaging);
-    console.log('[FCM] APNs token:', apns); // null = problem!
-
     if (!apns) {
-      console.log('[FCM] ❌ No APNs token — retrying in 2s...');
       setTimeout(() => toggle(true), 2000);
       return;
     }
 
-    console.log('[FCM] Getting FCM token...');
     const token = await getToken(messaging);
-    console.log('[FCM] ✅ FCM Token:', token); // if null = Firebase config issue
-
     if (!token) {
-      console.log('[FCM] ❌ FCM token is null — check GoogleService-Info.plist');
       setLoading(false);
       return;
     }
 
+    console.log('[FCM] FCM Token:', token);
+    const res = await saveToken(token);
+    console.log(res)
     onTokenRefresh(messaging, saveToken);
     setEnabled(true);
     setLoading(false);

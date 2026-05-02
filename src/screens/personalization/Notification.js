@@ -8,23 +8,24 @@ import ReusableNavigation from '../../components/ReusabeNavigation';
 import BackButton from '../../components/BackButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { initFCM } from '@/context/fcm';
-
+import { useNotificationPermission } from '@/context/fcm';
 export default function Notification() {
   const navigation = useNavigation();
   const setOnboardingCompleted = useAppStore((s) => s.setOnboardingCompleted);
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
+  const {toggle, enabled} = useNotificationPermission()
 
   const finishOnboarding = () => {
+    toggle(false)
     setOnboardingCompleted(true);
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      initFCM()
-    }, [])
-  )
+  useEffect(() => {
+    toggle(true)
+  },[])
 
+
+  console.log("notification enabled ", enabled)
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white">
 

@@ -32,7 +32,7 @@ const ProfileScreen = () => {
   const setDashboard = useAppStore((s) => s.setDashboard);
   const resolveProfileSettings = useAppStore((s) => s.resolveProfileSettings);
 
-
+  const completed = dashboard?.current_goal?.completed ?? false
 
   const [badge, setBadge] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -238,8 +238,8 @@ const ProfileScreen = () => {
               <View>
                 <Text style={styles.menuText}>Your Current Goals</Text>
                 <View style={styles.tooltip}>
-                  <Text style={[styles.tooltipText, {color:'#966F44'}]}>{!(dashboard?.current_goal.completed)? "Not completed": "completed" }</Text>
-                  { (dashboard?.current_goal?.completed) && <Image
+                  <Text style={[styles.tooltipText, {color:'#966F44'}]}>{!(completed ?? false)? "Not completed": "completed" }</Text>
+                  { (completed ?? false) && <Image
                     source={require("../../../../assets/img/Check.png")}
                     style={styles.caretRight}
                   />}

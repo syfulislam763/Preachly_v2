@@ -1,7 +1,7 @@
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 
 export const appleSignIn = async (cb) => {
-    console.log("hello")
+   
     try {
 
         if (!appleAuth.isSupported) {
@@ -9,11 +9,12 @@ export const appleSignIn = async (cb) => {
             return;
         }
 
-       
+       console.log("hello1")
         const appleAuthRequestResponse = await appleAuth.performRequest({
             requestedOperation: appleAuth.Operation.LOGIN,
             requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
         });
+        console.log("hello")
 
         const { identityToken, nonce, email, fullName, user } = appleAuthRequestResponse;
 

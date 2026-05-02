@@ -1,87 +1,148 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import useLayoutDimention from '../hooks/useLayoutDimention';
 import { getStyles } from './SubscriptionPlanStyle';
 
-const PlanSelector = ({OtherPlan=null, setSelectedPlanType, plan}) => {
-  const [selectedPlan, setSelectedPlan] = useState('monthly');
-  const {isSmall, isMedium, isLarge, isFold} = useLayoutDimention()
+/**
+ * PlanSelector
+ *
+ * Props:
+ *  - plan               'monthly' | 'yearly'   controlled from parent
+ *  - setSelectedPlanType  (value) => void
+ *  - monthlyPrice       string | null   e.g. "$11.99"  (from RevenueCat)
+ *  - annualPrice        string | null   e.g. "$79.99"  (from RevenueCat)
+ *  - monthlyTrialText   string | null   e.g. "7-day free trial"
+ *  - annualTrialText    string | null   e.g. "7-day free trial"
+ *  - OtherPlan          render-prop for an extra plan card (optional)
+ */
+const PlanSelector = ({
+  OtherPlan = null,
+  setSelectedPlanType,
+  plan,
+  monthlyPrice = null,
+  annualPrice = null,
+  monthlyTrialText = null,
+  annualTrialText = null,
+}) => {
+  const [selectedPlan, setSelectedPlan] = useState('annual');
+  const { isSmall, isMedium, isLarge, isFold } = useLayoutDimention();
   const styles = getStyles(isSmall, isMedium, isLarge, isFold);
 
-  
+  // Sync internal state when parent changes `plan`
+  useEffect(() => {
+    if (plan === 'yearly') {
+      setSelectedPlan('annual');
+    } else {
+      setSelectedPlan(plan ?? 'annual');
+    }
+  }, [plan]);
+
   const handlePlan = (label) => {
-    console.log("hello")
-    if(label=="monthly"){
-      setSelectedPlanType(label)
-    }else{
-      setSelectedPlanType("yearly");
-    }
     setSelectedPlan(label);
-  }
+    // Normalise to 'monthly' | 'yearly' for the parent
+    setSelectedPlanType(label === 'annual' ? 'yearly' : 'monthly');
+  };
 
-
-  useEffect(()=>{
-    if(plan=="yearly"){
-      setSelectedPlan("annual")
-    }else{
-      setSelectedPlan(plan)
-    }
-  })
+  // ─── Derive save-% badge ──────────────────────────────────────────────────
+  const savingsLabel = getSavingsLabel(monthlyPrice, annualPrice);
 
   return (
     <View>
-      {/* Monthly Plan */}
+
+      {/* ── Monthly Plan ── */}
       <TouchableOpacity
         style={[
           styles.planContainer,
           selectedPlan === 'monthly' && styles.selectedPlan,
         ]}
         onPress={() => handlePlan('monthly')}
+        activeOpacity={0.85}
       >
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.planTitle}>Monthly Plan</Text>
-          <Text style={styles.subText}>7-Day Free Trial</Text>
+          <Text style={styles.subText}>
+            {monthlyTrialText ?? '7-Day Free Trial'}
+          </Text>
         </View>
 
         <View style={styles.rightSection}>
-          <Text style={styles.priceText}>$11.99 / Month</Text>
-          <View style={[styles.radioOuter, selectedPlan === 'monthly' && styles.radioOuterSelected]}>
+          <Text style={styles.priceText}>
+            {monthlyPrice ? `${monthlyPrice} / Month` : '$11.99 / Month'}
+          </Text>
+          <View style={[
+            styles.radioOuter,
+            selectedPlan === 'monthly' && styles.radioOuterSelected,
+          ]}>
             {selectedPlan === 'monthly' && <View style={styles.radioInner} />}
           </View>
         </View>
       </TouchableOpacity>
 
-      {OtherPlan&& OtherPlan()}
+      {/* Optional extra plan slot */}
+      {OtherPlan && OtherPlan()}
 
-      {/* Annual Plan */}
+      {/* ── Annual Plan ── */}
       <TouchableOpacity
         style={[
           styles.planContainer,
           selectedPlan === 'annual' && styles.selectedPlan,
         ]}
         onPress={() => handlePlan('annual')}
+        activeOpacity={0.85}
       >
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.planTitle}>Annual Plan</Text>
-          <Text style={styles.subText}>7-Day Free Trial</Text>
+          <Text style={styles.subText}>
+            {annualTrialText ?? '7-Day Free Trial'}
+          </Text>
         </View>
 
         <View style={styles.rightSection}>
-          <Text style={styles.priceText}>$79.99 / Year</Text>
-          <View style={[styles.radioOuter, selectedPlan === 'annual' && styles.radioOuterSelected]}>
+          <Text style={styles.priceText}>
+            {annualPrice ? `${annualPrice} / Year` : '$79.99 / Year'}
+          </Text>
+          <View style={[
+            styles.radioOuter,
+            selectedPlan === 'annual' && styles.radioOuterSelected,
+          ]}>
             {selectedPlan === 'annual' && <View style={styles.radioInner} />}
           </View>
         </View>
 
-        {/* Save Badge */}
+        {/* Save badge — only shown when annual is NOT selected */}
         {selectedPlan !== 'annual' && (
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>Save 44%</Text>
+            <Text style={styles.badgeText}>{savingsLabel}</Text>
           </View>
         )}
       </TouchableOpacity>
+
     </View>
   );
 };
+
+// ─── Helper: calculate savings % from real prices ─────────────────────────────
+function getSavingsLabel(monthlyPriceStr, annualPriceStr) {
+  // Try to parse numeric values from price strings like "$11.99"
+  const parsePrice = (str) => {
+    if (!str) return null;
+    const num = parseFloat(str.replace(/[^0-9.]/g, ''));
+    return isNaN(num) ? null : num;
+  };
+
+  const monthly = parsePrice(monthlyPriceStr);
+  const annual  = parsePrice(annualPriceStr);
+
+  if (monthly && annual) {
+    const annualEquivalentMonthly = annual / 12;
+    const saving = ((monthly - annualEquivalentMonthly) / monthly) * 100;
+    if (saving > 0) {
+      return `Save ${Math.round(saving)}%`;
+    }
+  }
+
+  // Fallback to hardcoded label
+  return 'Save 44%';
+}
 
 export default PlanSelector;
