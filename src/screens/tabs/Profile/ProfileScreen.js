@@ -21,9 +21,10 @@ import { BASE_URL } from '../../../context/Paths';
 import dayjs from 'dayjs';
 import useAppStore from '@/context/useAppStore';
 import { get_profile_dashboard_data } from '../TabsAPI';
+import { useNotificationPermission } from '@/context/fcm';
 
 const ProfileScreen = () => {
- 
+  const {toggle} = useNotificationPermission()
   const route = useRoute();
   const navigation = useNavigation();
 
@@ -44,10 +45,12 @@ const ProfileScreen = () => {
     if (route.params?.flag) {
       navigation.navigate("Calendar");
     }
+    
   }, []);
 
   useFocusEffect(
     useCallback(() => {
+      toggle(true)
       StatusBar.setTranslucent(true);
       StatusBar.setBackgroundColor("transparent");
       return () => {
@@ -63,7 +66,7 @@ const ProfileScreen = () => {
       if (success) {
         get_static_badge((data, isOk) => {
           setLoading(false);
-          console.log("da", JSON.stringify(data, null,2))
+          //console.log("da", JSON.stringify(data, null,2))
           if (isOk) {
             setBadge(data?.data?.latest_badge);
             const temp = {...dashboard, latest_badge:data?.data?.latest_badge };
@@ -81,7 +84,7 @@ const ProfileScreen = () => {
     useCallback(() => {
       handle_get_static_badge();
       get_profile_dashboard_data((res, isOk) => {
-        console.log("res dash", JSON.stringify(res, null, 2));
+        //console.log("res dash", JSON.stringify(res, null, 2));
         setDashboard(res?.data);
       })
     }, [])

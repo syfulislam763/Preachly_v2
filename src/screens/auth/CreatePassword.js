@@ -64,11 +64,11 @@ export default function CreatePassword() {
     create_password(payload, (res, isSuccess) => {
       if (isSuccess) {
         onboarding_status(res?.data?.access, (statusRes, isOk) => {
-          const { access, refresh } = res.data;
+          const { access, refresh, user } = res.data;
           const onboarding_completed = statusRes?.data?.onboarding_completed ?? false;
           setLoading(false);
           if (isOk) {
-            setAuth({ access, refresh, onboarding_completed });
+            setAuth({ access, refresh, onboarding_completed, user });
             handleToast("success", "User is created!", 2000, () => {
               navigation.navigate("FinishAuthentication");
             });

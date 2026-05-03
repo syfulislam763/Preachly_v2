@@ -26,6 +26,12 @@ const saveToken = (token) => {
   return api.post(API, {token: token, device_type: Platform.OS});
 }
 
+const getSavedToken = async () => {
+  const res = await api.get(API);
+  console.log("saved token -> ", JSON.stringify(res.data, null, 2))
+}
+
+
 
 const removeToken = (tokenId) => api.delete(API+tokenId+"/")
 
@@ -169,8 +175,14 @@ export function useNotificationPermission() {
     }
 
     console.log('[FCM] FCM Token:', token);
-    const res = await saveToken(token);
-    console.log(res)
+    try{
+      const res = await saveToken(token);
+      console.log("[FCM] token saved", JSON.stringify(res.data, null, 2))
+    }catch(e){
+      // console.log("[FCM] token not saved", JSON.stringify(e, null, 2))
+      console.log("[FCM] token not saved", e.message)
+    }
+    getSavedToken();
     onTokenRefresh(messaging, saveToken);
     setEnabled(true);
     setLoading(false);

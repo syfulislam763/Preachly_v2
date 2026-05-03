@@ -25,6 +25,7 @@ import { useAuth } from '@/context/AuthContext';
 import useAppStore from '@/context/useAppStore';
 import Indicator from '@/components/Indicator';
 import CommonGoalCard from './CommonGoalCard';
+import { useNotificationPermission } from '@/context/fcm';
 
 function removeLeadingNumbers(text){
   if(!text) return "";
@@ -35,6 +36,7 @@ export default function HomeScreen() {
 
  
   const {socket} = useAuth();
+  const {toggle} = useNotificationPermission()
   
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -62,6 +64,7 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
+      toggle(true)
       get_random_verses((res, success) => {
         if (success) setRandomVerse(res?.data?.data ?? {});
       });

@@ -1,20 +1,17 @@
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 
 export const appleSignIn = async (cb) => {
-   
     try {
-
         if (!appleAuth.isSupported) {
             cb({ message: 'Apple Sign-In is not supported on this device' }, false);
             return;
         }
 
-       console.log("hello1")
+        // FULL_NAME must be first — see official docs issue #293
         const appleAuthRequestResponse = await appleAuth.performRequest({
             requestedOperation: appleAuth.Operation.LOGIN,
             requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
         });
-        console.log("hello")
 
         const { identityToken, nonce, email, fullName, user } = appleAuthRequestResponse;
 
@@ -23,23 +20,31 @@ export const appleSignIn = async (cb) => {
             return;
         }
 
-        const credentialState = await appleAuth.getCredentialStateForUser(user);
-
-        if (credentialState === appleAuth.State.AUTHORIZED) {
-            cb({
-                identityToken,
-                nonce,
-                email,     
-                fullName,        
-                user,    
-            }, true);
-        } else {
-            cb({ message: 'Apple credential state not authorized' }, false);
+        // getCredentialStateForUser only works on real device
+        // If it throws, we still have identityToken so treat as success
+        try {
+            const credentialState = await appleAuth.getCredentialStateForUser(user);
+            if (credentialState !== appleAuth.State.AUTHORIZED) {
+                cb({ message: 'Apple credential state not authorized' }, false);
+                return;
+            }
+        } catch (credentialError) {
+            // On some devices/iOS versions this call fails but auth is still valid
+            // identityToken presence is the real proof of auth
+            console.warn('getCredentialStateForUser failed, proceeding anyway:', credentialError.message);
         }
 
+        cb({ identityToken, nonce, email, fullName, user }, true);
+
     } catch (error) {
-        console.log('Error code:', error.code);
-        console.log('Error message:', error.message);
+        // Log everything to help diagnose
+        console.log('Apple Sign-In raw error:', JSON.stringify({
+            code: error.code,
+            message: error.message,
+            domain: error.domain,
+            nativeCode: error.nativeCode,
+            userInfo: error.userInfo,
+        }, null, 2));
 
         if (error.code === appleAuth.Error.CANCELED) {
             cb({ message: 'User cancelled Apple Sign-In' }, false);
@@ -49,19 +54,15 @@ export const appleSignIn = async (cb) => {
             cb({ message: 'Invalid response from Apple' }, false);
         } else if (error.code === appleAuth.Error.NOT_HANDLED) {
             cb({ message: 'Apple Sign-In not handled' }, false);
-        } else if (error.code === appleAuth.Error.UNKNOWN) {
-            cb({ message: 'Unknown Apple Sign-In error' }, false);
         } else {
-            console.log('APPLE_SIGN_IN_ERROR', error);
-            cb(error, false);
+            // error.code 1000 = config issue (entitlements/provisioning/capability missing)
+            cb({ message: `Apple Sign-In error (code: ${error.code})` }, false);
         }
     }
 };
 
 export const appleSignOut = async (cb) => {
     try {
-        // Apple doesn't have a true sign-out SDK method
-        // Just clear your local session/token
         cb(true);
     } catch (error) {
         cb(false);

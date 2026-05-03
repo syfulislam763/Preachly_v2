@@ -1,5 +1,10 @@
 
+import config from "config";
 // export const BASE_URL = "https://bibel-project.onrender.com"
+
+export const REVENUECAT_IOS_API_KEY = config.REVENUECAT_IOS_API_KEY;
+export const PREMIUM_ENTITLEMENT_ID = config.PREMIUM_ENTITLEMENT_ID;
+
 export const BASE_URL = "https://api.preachly.app";//changed
 export const WEBSOCKET_URL = "wss://api.preachly.app";
 export const KEY = `pk_test_51RVMTHQU9tGM4LXBf8ZHLjC18DYzzWu4HnxSCojMGP58ZO8x1K2sFbNZ5xGLmIRt6KjZpo77V0RKs4m6dwoxoFLi00u06pnafX`

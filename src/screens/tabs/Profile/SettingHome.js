@@ -114,7 +114,7 @@ const SettingHome = () => {
       <DeleteModal
         isVisible={isOpenDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
-        logout={logout}
+        deleteAccount={deleteAccount}
         navigation={navigation}
       />
 
@@ -165,7 +165,7 @@ const LogoutModal = ({ isVisible, onClose, logout, navigation }) => (
   </Modal>
 );
 
-const DeleteModal = ({ isVisible, onClose, logout, navigation }) => (
+const DeleteModal = ({ isVisible, onClose, deleteAccount, navigation }) => (
   <Modal
     visible={isVisible}
     transparent

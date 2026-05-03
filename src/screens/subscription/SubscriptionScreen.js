@@ -21,11 +21,10 @@ import ParagraphIcon from '../../components/ParagraphIcon';
 import ReusableNavigation from '../../components/ReusabeNavigation';
 import useAppStore from '@/context/useAppStore';
 import { useNotificationPermission } from '@/context/fcm';
+import { REVENUECAT_IOS_API_KEY, PREMIUM_ENTITLEMENT_ID } from '@/context/Paths';
 
 
-const REVENUECAT_IOS_API_KEY = "appl_cNLtaHCWAzoGqBYKlRnyRmxGurK"
-const PREMIUM_ENTITLEMENT_ID = ""
-const REVENUECAT_ANDROID_API_KEY = "preachly_plan"
+const REVENUECAT_ANDROID_API_KEY = ""
 // ────────────────────────────────────────────────────────────────────────────
 
 const { height } = Dimensions.get('window');
@@ -38,6 +37,7 @@ export default function SubscriptionScreen() {
   const navigation = useNavigation();
   const setPayment = useAppStore((s) => s.setPayment);
   const auth = useAppStore((s) => s.auth);
+  const logout = useAppStore((s) => s.logout)
   const { enabled } = useNotificationPermission();
   const userProfile = auth?.user;
   console.log("Auth ", JSON.stringify(auth, null, 2))
@@ -132,6 +132,10 @@ export default function SubscriptionScreen() {
       const active = customerInfo.entitlements.active[PREMIUM_ENTITLEMENT_ID]?.isActive === true;
       setIsSubscribed(active);
       setSubscriptionInfo(customerInfo);
+      if(active) {
+        setPayment({ has_subscription: true });
+      }
+
       return active;
     } catch (error) {
       console.error('checkSubscriptionStatus error:', error);
@@ -212,7 +216,7 @@ export default function SubscriptionScreen() {
       return;
     }
 
-    const user = userProfile?.user;
+    const user = userProfile;
     if (!user?.email) {
       Alert.alert(
         'Login Required',
@@ -233,23 +237,23 @@ export default function SubscriptionScreen() {
       if (hasAccess) {
         setIsSubscribed(true);
         setSubscriptionInfo(customerInfo);
-        userProfile?.setIsSubscribed?.(true);
-        userProfile?.setSubscriptionInfo?.(customerInfo);
-        setPayment?.(true);
+        // userProfile?.setIsSubscribed?.(true);
+        // userProfile?.setSubscriptionInfo?.(customerInfo);
+        // setPayment({ has_subscription: true });
 
-        Alert.alert(
-          '🎉 Welcome!',
-          isFreeIntro
-            ? `Your free trial has started! Enjoy ${getTrialPeriodText()} free.`
-            : 'Your subscription is now active. Enjoy premium access!',
-          [{ text: 'Continue', onPress: () => navigation.navigate('SubscriptionConfirmedScreen') }]
-        );
+        // Alert.alert(
+        //   'Welcome!',
+        //   isFreeIntro
+        //     ? `Your free trial has started! Enjoy ${getTrialPeriodText()} free.`
+        //     : 'Your subscription is now active. Enjoy premium access!',
+        //   [{ text: 'Continue', onPress: () => navigation.navigate('SubscriptionConfirmedScreen') }]
+        // );
       } else {
         // Access not immediately confirmed — poll
         Alert.alert('Processing', 'Purchase received. Verifying your access...');
         setTimeout(async () => {
           const active = await checkSubscriptionStatus();
-          if (active) navigation.navigate('SubscriptionConfirmedScreen');
+          //if (active) navigation.navigate('SubscriptionConfirmedScreen');
         }, 2500);
       }
     } catch (error) {
@@ -283,8 +287,8 @@ export default function SubscriptionScreen() {
       if (active) {
         setIsSubscribed(true);
         setSubscriptionInfo(customerInfo);
-        userProfile?.setIsSubscribed?.(true);
-        userProfile?.setSubscriptionInfo?.(customerInfo);
+        // userProfile?.setIsSubscribed?.(true);
+        // userProfile?.setSubscriptionInfo?.(customerInfo);
         Alert.alert('Restored!', 'Your subscription has been restored.');
         navigation.navigate('SubscriptionConfirmedScreen');
       } else {
@@ -302,10 +306,10 @@ export default function SubscriptionScreen() {
     if (!activeIntroOffer) return null;
     const { periodNumberOfUnits: count, periodUnit } = activeIntroOffer;
     switch (periodUnit) {
-      case 'DAY':   return count === 1 ? '1 day'   : `${count} days`;
-      case 'WEEK':  return count === 1 ? '1 week'  : `${count} weeks`;
-      case 'MONTH': return count === 1 ? '1 month' : `${count} months`;
-      case 'YEAR':  return count === 1 ? '1 year'  : `${count} years`;
+      case 'DAY':   return count === 1 ? '1-Day'   : `${count} Days`;
+      case 'WEEK':  return count === 1 ? '7-Day'  : `${count} Weeks`;
+      case 'MONTH': return count === 1 ? '30-Day' : `${count} Months`;
+      case 'YEAR':  return count === 1 ? '1 Year'  : `${count} Years`;
       default:      return activeIntroOffer.period;
     }
   }, [activeIntroOffer]);
@@ -350,9 +354,9 @@ export default function SubscriptionScreen() {
   // ─── Subscribed state ─────────────────────────────────────────────────────
   if (isSubscribed) {
     return (
-      <SafeAreaView edges={['top']} className="flex-1 bg-[#FFEAC2]">
+      <SafeAreaView edges={['top', 'bottom']} className="flex-1 bg-[white]">
         <ReusableNavigation
-          backgroundStyle={{ backgroundColor: '#FFE9BD' }}
+          backgroundStyle={{ backgroundColor: 'white' }}
           leftComponent={() => <Text />}
           middleComponent={() => (
             <Text style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}>
@@ -363,7 +367,7 @@ export default function SubscriptionScreen() {
         />
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
           <Text style={{ fontFamily: 'DMSerifDisplay', fontSize: 28, color: '#0B172A', textAlign: 'center', marginBottom: 12 }}>
-            You're all set! 🎉
+            You're all set! 
           </Text>
           <Text style={{ fontFamily: 'NunitoSemiBold', fontSize: 16, color: '#005A55', textAlign: 'center' }}>
             Premium access is active.
@@ -376,6 +380,18 @@ export default function SubscriptionScreen() {
               {new Date(subscriptionInfo.latestExpirationDate).toLocaleDateString()}
             </Text>
           )}
+          
+        </View>
+        <View className='px-5'>
+          <CommonButton
+            btnText="Continue"
+            bgColor="#005A55"
+            navigation={navigation}
+            route=""
+            handler={() => navigation.navigate('SubscriptionConfirmedScreen')}
+            //handler={() => logout()}
+            txtColor="#fff"
+          />
         </View>
       </SafeAreaView>
     );
@@ -457,12 +473,12 @@ export default function SubscriptionScreen() {
             annualPrice={getPriceForPlan('yearly')}     // e.g. "$79.99"
             monthlyTrialText={
               monthlyIntroOffer?.price === 0
-                ? `${monthlyIntroOffer.periodNumberOfUnits}-${monthlyIntroOffer.periodUnit?.toLowerCase()} free trial`
+                ? `${getTrialPeriodText()} Free Trial`
                 : null
             }
             annualTrialText={
               annualIntroOffer?.price === 0
-                ? `${annualIntroOffer.periodNumberOfUnits}-${annualIntroOffer.periodUnit?.toLowerCase()} free trial`
+                ? `${getTrialPeriodText()} Free Trial`
                 : null
             }
           />
@@ -478,13 +494,14 @@ export default function SubscriptionScreen() {
             navigation={navigation}
             route=""
             handler={handleSubscription}
+            //handler={() => logout()}
             txtColor="#fff"
             opacity={isPurchasing || !activePackage ? 0.6 : 1}
             disabled={isPurchasing || !activePackage}
           />
 
           {/* ── Restore Purchases ── */}
-          <Text
+          {/* <Text
             onPress={handleRestorePurchases}
             style={{
               fontFamily: 'NunitoSemiBold',
@@ -496,7 +513,7 @@ export default function SubscriptionScreen() {
             }}
           >
             Restore Purchases
-          </Text>
+          </Text> */}
 
           {/* ── Legal footer ── */}
           <Text

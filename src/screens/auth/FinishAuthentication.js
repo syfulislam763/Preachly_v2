@@ -19,12 +19,11 @@ const FinishAuthentication = () => {
   const [loading, setLoading] = useState(false);
 
   const access = useAppStore((s) => s.auth.access);
-  const refresh = useAppStore((s) => s.auth.refresh);
+  const auth = useAppStore((s) => s.auth);
   const onboarding_completed = useAppStore((s) => s.auth.onboarding_completed);
   const setOnboardingData = useAppStore((s) => s.setOnboardingData);
   const setAuth = useAppStore((s) => s.setAuth);
 
-  console.log(refresh, "finish");
 
   const handleForward = () => {
     setLoading(true);
@@ -35,7 +34,7 @@ const FinishAuthentication = () => {
         return;
       }
       setOnboardingData(res.data);
-      setAuth({ access, refresh, isLoggedIn: true });
+      setAuth({ ...auth, isLoggedIn: true });
     });
   };
 

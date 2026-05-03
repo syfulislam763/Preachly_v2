@@ -374,7 +374,8 @@ const useAppStore = create(
         auth: {
           access: state.auth.access,
           refresh: state.auth.refresh,
-          onboarding_completed: state.auth.onboarding_completed
+          onboarding_completed: state.auth.onboarding_completed,
+          user: state.auth.user
         },
         onboarding: state.onboarding,
         profile: state.profile,
