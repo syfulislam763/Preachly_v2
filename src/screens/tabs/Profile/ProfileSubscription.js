@@ -50,6 +50,7 @@ export default function SubscriptionScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isNewlySubscribed, setIsNewlySubscribed] = useState(false);
 
   // Separate packages for each plan
   const [monthlyPackage, setMonthlyPackage] = useState(null);
@@ -132,6 +133,7 @@ export default function SubscriptionScreen() {
       const active = customerInfo.entitlements.active[PREMIUM_ENTITLEMENT_ID]?.isActive === true;
       setIsSubscribed(active);
       setSubscriptionInfo(customerInfo);
+      console.log("customerInfo -> ", JSON.stringify(customerInfo, null, 2))
       if(active) {
         setPayment({ has_subscription: true });
       }
@@ -181,6 +183,7 @@ export default function SubscriptionScreen() {
         setMonthlyPackage(monthly);
         if (monthly.product.introPrice) {
           const eligible = await checkIntroEligibility(monthly);
+          console.log("eli monthly", eligible)
           if (eligible) setMonthlyIntroOffer(monthly.product.introPrice);
         }
       }
@@ -191,6 +194,7 @@ export default function SubscriptionScreen() {
         setAnnualPackage(annual);
         if (annual.product.introPrice) {
           const eligible = await checkIntroEligibility(annual);
+          console.log("eli annual", eligible)
           if (eligible) setAnnualIntroOffer(annual.product.introPrice);
         }
       }
@@ -237,6 +241,7 @@ export default function SubscriptionScreen() {
       if (hasAccess) {
         setIsSubscribed(true);
         setSubscriptionInfo(customerInfo);
+        setIsNewlySubscribed(true);
         // userProfile?.setIsSubscribed?.(true);
         // userProfile?.setSubscriptionInfo?.(customerInfo);
         // setPayment({ has_subscription: true });
@@ -302,23 +307,38 @@ export default function SubscriptionScreen() {
   };
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
-  const getTrialPeriodText = useCallback(() => {
-    if (!activeIntroOffer) return null;
+  const getTrialPeriodText = (identifier) => {
+
+    if(isSubscribed) {
+      const plan = subscriptionInfo.entitlements.active[PREMIUM_ENTITLEMENT_ID].productIdentifier;
+      if(plan === identifier){
+        return "Active"
+      }else{
+        return null
+      }
+    }
+
+    if (!activeIntroOffer) return 'Free Trial Expired';
+    
+
     const { periodNumberOfUnits: count, periodUnit } = activeIntroOffer;
     switch (periodUnit) {
-      case 'DAY':   return count === 1 ? '1-Day'   : `${count} Days`;
-      case 'WEEK':  return count === 1 ? '7-Day'  : `${count} Weeks`;
-      case 'MONTH': return count === 1 ? '30-Day' : `${count} Months`;
-      case 'YEAR':  return count === 1 ? '1 Year'  : `${count} Years`;
+      case 'DAY':   return count === 1 ? '1-Day Free Trial'   : `${count} Days Free Trial`;
+      case 'WEEK':  return count === 1 ? '7-Day Free Tri'  : `${count} Weeks Free Trial`;
+      case 'MONTH': return count === 1 ? '30-Day Free Trial' : `${count} Months Free Trial`;
+      case 'YEAR':  return count === 1 ? '1 Year Free Trial'  : `${count} Years Free Trial`;
       default:      return activeIntroOffer.period;
     }
-  }, [activeIntroOffer]);
+  };
 
   const getCtaText = () => {
     if (isPurchasing) return null; // shows spinner
-    if (isFreeIntro) return `Start Free Trial`;
+    if(isSubscribed) return `${subscriptionInfo.entitlements.active[PREMIUM_ENTITLEMENT_ID]?.willRenew
+                ? 'Next billing: '
+                : 'Access until: '}${new Date(subscriptionInfo.latestExpirationDate).toLocaleDateString()}`
+    if (isFreeIntro) return `Start My Free Trial`;
     if (activeIntroOffer) return `Try for ${activeIntroOffer.priceString}`;
-    return 'Start My Free Trial';
+    return 'Subscribe';
   };
 
   const getPriceForPlan = (planType) => {
@@ -352,18 +372,18 @@ export default function SubscriptionScreen() {
   }
 
   // ─── Subscribed state ─────────────────────────────────────────────────────
-  if (isSubscribed) {
+  if (isNewlySubscribed) {
     return (
       <SafeAreaView edges={['top', 'bottom']} className="flex-1 bg-[white]">
         <ReusableNavigation
           backgroundStyle={{ backgroundColor: 'white' }}
-          leftComponent={() => <BackButton cb={() => navigation.goBack()}/>}
+          leftComponent={() => <Text/>}
           middleComponent={() => (
             <Text style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}>
               Subscription
             </Text>
           )}
-          RightComponent={() => <Text />}
+          RightComponent={() => <Text className='ml-12'></Text>}
         />
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
           <Text style={{ fontFamily: 'DMSerifDisplay', fontSize: 28, color: '#0B172A', textAlign: 'center', marginBottom: 12 }}>
@@ -382,17 +402,17 @@ export default function SubscriptionScreen() {
           )}
           
         </View>
-        {/* <View className='px-5'>
+        <View className='px-5'>
           <CommonButton
             btnText="Continue"
             bgColor="#005A55"
             navigation={navigation}
             route=""
-            handler={() => navigation.navigate('SubscriptionConfirmedScreen')}
+            handler={() => setIsNewlySubscribed(false)}
             //handler={() => logout()}
             txtColor="#fff"
           />
-        </View> */}
+        </View>
       </SafeAreaView>
     );
   }
@@ -404,7 +424,7 @@ export default function SubscriptionScreen() {
       {/* Navigation header */}
       <ReusableNavigation
         backgroundStyle={{ backgroundColor: '#FFE9BD' }}
-        leftComponent={() => <Text />}
+        leftComponent={() => <BackButton customStyle={{backgroundColor:'#FFE9BD'}} cb={() => navigation.goBack()}/>}
         middleComponent={() => (
           <Text
             style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}
@@ -412,7 +432,7 @@ export default function SubscriptionScreen() {
             Subscription
           </Text>
         )}
-        RightComponent={() => <Text />}
+        RightComponent={() => <Text className='ml-12' />}
       />
 
       <View className="flex-1 relative">
@@ -469,17 +489,14 @@ export default function SubscriptionScreen() {
           <PlanSelector
             plan={selectedPlanType}
             setSelectedPlanType={setSelectedPlanType}
+            isSubscribed={isSubscribed}
             monthlyPrice={getPriceForPlan('monthly')}   // e.g. "$11.99"
             annualPrice={getPriceForPlan('yearly')}     // e.g. "$79.99"
             monthlyTrialText={
-              monthlyIntroOffer?.price === 0
-                ? `${getTrialPeriodText()} Free Trial`
-                : null
+              getTrialPeriodText("preachly_monthly_plan")
             }
             annualTrialText={
-              annualIntroOffer?.price === 0
-                ? `${getTrialPeriodText()} Free Trial`
-                : null
+                getTrialPeriodText("preachly_yearly_plan")
             }
           />
 
@@ -496,8 +513,8 @@ export default function SubscriptionScreen() {
             handler={handleSubscription}
             //handler={() => logout()}
             txtColor="#fff"
-            opacity={isPurchasing || !activePackage ? 0.6 : 1}
-            disabled={isPurchasing || !activePackage}
+            opacity={isPurchasing || !activePackage || isSubscribed ? 0.6 : 1}
+            disabled={isPurchasing || !activePackage || isSubscribed}
           />
 
           {/* ── Restore Purchases ── */}

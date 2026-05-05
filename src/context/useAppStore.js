@@ -298,12 +298,10 @@ const useAppStore = create(
 
       payment: {
         has_subscription: false,
-        status: 'free',
-        can_make_request: false,
-        revenuecat_user_id: null,
-        monthly_prompts_used: 0,
-        monthly_prompts_limit: 0,
-        is_active: false,
+        expiry_date: null,
+        will_renew: false,
+        product_identifier: null,
+        last_checked: null,
       },
 
       setPayment: (paymentData) =>

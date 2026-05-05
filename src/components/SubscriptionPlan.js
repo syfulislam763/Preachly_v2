@@ -18,6 +18,7 @@ import { getStyles } from './SubscriptionPlanStyle';
 const PlanSelector = ({
   OtherPlan = null,
   setSelectedPlanType,
+  isSubscribed = false,
   plan,
   monthlyPrice = null,
   annualPrice = null,
@@ -38,6 +39,7 @@ const PlanSelector = ({
   }, [plan]);
 
   const handlePlan = (label) => {
+    if(isSubscribed) return;
     setSelectedPlan(label);
     // Normalise to 'monthly' | 'yearly' for the parent
     setSelectedPlanType(label === 'annual' ? 'yearly' : 'monthly');
@@ -45,6 +47,7 @@ const PlanSelector = ({
 
   // ─── Derive save-% badge ──────────────────────────────────────────────────
   const savingsLabel = getSavingsLabel(monthlyPrice, annualPrice);
+  console.log("mon", monthlyTrialText, annualTrialText)
 
   return (
     <View>
@@ -61,7 +64,7 @@ const PlanSelector = ({
         <View style={{ flex: 1 }}>
           <Text style={styles.planTitle}>Monthly Plan</Text>
           <Text style={styles.subText}>
-            {monthlyTrialText ?? '7-Day Free Trial'}
+            {monthlyTrialText}
           </Text>
         </View>
 
@@ -93,7 +96,7 @@ const PlanSelector = ({
         <View style={{ flex: 1 }}>
           <Text style={styles.planTitle}>Annual Plan</Text>
           <Text style={styles.subText}>
-            {annualTrialText ?? '7-Day Free Trial'}
+            {annualTrialText}
           </Text>
         </View>
 

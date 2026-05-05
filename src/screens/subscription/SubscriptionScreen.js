@@ -303,22 +303,22 @@ export default function SubscriptionScreen() {
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
   const getTrialPeriodText = useCallback(() => {
-    if (!activeIntroOffer) return null;
+    if (!activeIntroOffer) return 'Free Trial Expired';
     const { periodNumberOfUnits: count, periodUnit } = activeIntroOffer;
     switch (periodUnit) {
-      case 'DAY':   return count === 1 ? '1-Day'   : `${count} Days`;
-      case 'WEEK':  return count === 1 ? '7-Day'  : `${count} Weeks`;
-      case 'MONTH': return count === 1 ? '30-Day' : `${count} Months`;
-      case 'YEAR':  return count === 1 ? '1 Year'  : `${count} Years`;
+      case 'DAY':   return count === 1 ? '1-Day Free Trial'   : `${count} Days Free Trial`;
+      case 'WEEK':  return count === 1 ? '7-Day Free Trial'  : `${count} Weeks Free Trial`;
+      case 'MONTH': return count === 1 ? '30-Day Free Trial' : `${count} Months Free Trial`;
+      case 'YEAR':  return count === 1 ? '1 Year Free Trial'  : `${count} Years Free Trial`;
       default:      return activeIntroOffer.period;
     }
   }, [activeIntroOffer]);
 
   const getCtaText = () => {
     if (isPurchasing) return null; // shows spinner
-    if (isFreeIntro) return `Start Free Trial`;
+    if (isFreeIntro) return `Start My Free Trial`;
     if (activeIntroOffer) return `Try for ${activeIntroOffer.priceString}`;
-    return 'Start My Free Trial';
+    return 'Subscribe';
   };
 
   const getPriceForPlan = (planType) => {
@@ -412,7 +412,7 @@ export default function SubscriptionScreen() {
             Subscription
           </Text>
         )}
-        RightComponent={() => <Text />}
+        RightComponent={() => <Text className='ml-12' />}
       />
 
       <View className="flex-1 relative">
@@ -469,6 +469,7 @@ export default function SubscriptionScreen() {
           <PlanSelector
             plan={selectedPlanType}
             setSelectedPlanType={setSelectedPlanType}
+            isSubscribed={false}
             monthlyPrice={getPriceForPlan('monthly')}   // e.g. "$11.99"
             annualPrice={getPriceForPlan('yearly')}     // e.g. "$79.99"
             monthlyTrialText={
