@@ -40,46 +40,37 @@ export default function SubscriptionScreen() {
   const logout = useAppStore((s) => s.logout)
   const { enabled } = useNotificationPermission();
   const userProfile = auth?.user;
-  console.log("Auth ", JSON.stringify(auth, null, 2))
 
-  // ─── Plan selection state ─────────────────────────────────────────────────
-  // 'monthly' | 'yearly'  (maps to RevenueCat monthly / annual packages)
   const [selectedPlanType, setSelectedPlanType] = useState('yearly');
 
-  // ─── RevenueCat state ─────────────────────────────────────────────────────
   const [isLoading, setIsLoading] = useState(true);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  // Separate packages for each plan
   const [monthlyPackage, setMonthlyPackage] = useState(null);
   const [annualPackage, setAnnualPackage] = useState(null);
 
-  // Intro / trial offers per plan
   const [monthlyIntroOffer, setMonthlyIntroOffer] = useState(null);
   const [annualIntroOffer, setAnnualIntroOffer] = useState(null);
 
   const [subscriptionInfo, setSubscriptionInfo] = useState(null);
 
-  // ─── Derived helpers ──────────────────────────────────────────────────────
   const activePackage = selectedPlanType === 'monthly' ? monthlyPackage : annualPackage;
   const activeIntroOffer = selectedPlanType === 'monthly' ? monthlyIntroOffer : annualIntroOffer;
   const isFreeIntro = activeIntroOffer?.price === 0;
 
-  // ─── Initialise RevenueCat on mount ──────────────────────────────────────
   useEffect(() => {
     initializeRevenueCat();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initializeRevenueCat = async () => {
     try {
       // Logging
-      if (__DEV__) {
-        Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
-      } else {
-        Purchases.setLogLevel(LOG_LEVEL.ERROR);
-      }
+      // if (__DEV__) {
+      //   Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
+      // } else {
+      //   Purchases.setLogLevel(LOG_LEVEL.ERROR);
+      // }
 
       // Configure SDK
       if (Platform.OS === 'ios') {
@@ -412,7 +403,7 @@ export default function SubscriptionScreen() {
             Subscription
           </Text>
         )}
-        RightComponent={() => <Text className='ml-12' />}
+        RightComponent={() => <Text />}
       />
 
       <View className="flex-1 relative">
@@ -474,12 +465,12 @@ export default function SubscriptionScreen() {
             annualPrice={getPriceForPlan('yearly')}     // e.g. "$79.99"
             monthlyTrialText={
               monthlyIntroOffer?.price === 0
-                ? `${getTrialPeriodText()} Free Trial`
+                ? `${getTrialPeriodText()}`
                 : null
             }
             annualTrialText={
               annualIntroOffer?.price === 0
-                ? `${getTrialPeriodText()} Free Trial`
+                ? `${getTrialPeriodText()}`
                 : null
             }
           />

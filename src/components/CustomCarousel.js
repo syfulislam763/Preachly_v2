@@ -143,7 +143,7 @@ function CustomCarousel() {
                 <Text
                   style={{
                     fontFamily: 'DMSerifDisplay',
-                    fontSize: SCREEN_WIDTH < 360 ? 28 : 28,
+                    fontSize: 34,
                     color: '#0B172A',
                     textAlign: 'center',
                     paddingTop: 20,
@@ -156,7 +156,7 @@ function CustomCarousel() {
                 <Text
                   style={{
                     fontFamily: 'NunitoSemiBold',
-                    fontSize: SCREEN_WIDTH < 360 ? 17 : 17,
+                    fontSize: 19,
                     lineHeight: SCREEN_WIDTH < 360 ? 18 : 24,
                     color: '#2B4752',
                     textAlign: 'center',

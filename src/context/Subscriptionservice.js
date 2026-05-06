@@ -11,11 +11,11 @@ let isConfigured = false;
 
 export async function configureRevenueCat(userEmail) {
   try {
-    if (__DEV__) {
-      Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
-    } else {
-      Purchases.setLogLevel(LOG_LEVEL.ERROR);
-    }
+    // if (__DEV__) {
+    //   Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
+    // } else {
+    //   Purchases.setLogLevel(LOG_LEVEL.ERROR);
+    // }
 
     if (!isConfigured) {
       if (Platform.OS === 'ios') {

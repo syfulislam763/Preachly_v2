@@ -76,11 +76,11 @@ export default function SubscriptionScreen() {
   const initializeRevenueCat = async () => {
     try {
       // Logging
-      if (__DEV__) {
-        Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
-      } else {
-        Purchases.setLogLevel(LOG_LEVEL.ERROR);
-      }
+      // if (__DEV__) {
+      //   Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
+      // } else {
+      //   Purchases.setLogLevel(LOG_LEVEL.ERROR);
+      // }
 
       // Configure SDK
       if (Platform.OS === 'ios') {
@@ -135,6 +135,14 @@ export default function SubscriptionScreen() {
       setSubscriptionInfo(customerInfo);
       console.log("customerInfo -> ", JSON.stringify(customerInfo, null, 2))
       if(active) {
+        const plan = customerInfo?.entitlements?.active[PREMIUM_ENTITLEMENT_ID]?.productIdentifier;
+
+        if(plan === "preachly_monthly_plan"){
+          setSelectedPlanType("monthly")
+        }else if(plan == "preachly_yearly_plan"){
+          setSelectedPlanType("yearly")
+        }
+        
         setPayment({ has_subscription: true });
       }
 
@@ -311,7 +319,7 @@ export default function SubscriptionScreen() {
 
     if(isSubscribed) {
       const plan = subscriptionInfo.entitlements.active[PREMIUM_ENTITLEMENT_ID].productIdentifier;
-      if(plan === identifier){
+      if(plan === identifier.id){
         return "Active"
       }else{
         return null
@@ -493,10 +501,10 @@ export default function SubscriptionScreen() {
             monthlyPrice={getPriceForPlan('monthly')}   // e.g. "$11.99"
             annualPrice={getPriceForPlan('yearly')}     // e.g. "$79.99"
             monthlyTrialText={
-              getTrialPeriodText("preachly_monthly_plan")
+              getTrialPeriodText({id:"preachly_monthly_plan", type:"monthly"})
             }
             annualTrialText={
-                getTrialPeriodText("preachly_yearly_plan")
+              getTrialPeriodText({id:"preachly_yearly_plan", type:"yearly"})
             }
           />
 

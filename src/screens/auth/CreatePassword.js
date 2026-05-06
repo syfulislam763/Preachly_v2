@@ -62,16 +62,21 @@ export default function CreatePassword() {
     const payload = { ...route.params, password, password2: password };
     setLoading(true);
     create_password(payload, (res, isSuccess) => {
+      console.log(JSON.stringify(res, null, 2), "pss")
       if (isSuccess) {
         onboarding_status(res?.data?.access, (statusRes, isOk) => {
+          console.log(JSON.stringify(res.data, null, 2), "user data")
           const { access, refresh, user } = res.data;
           const onboarding_completed = statusRes?.data?.onboarding_completed ?? false;
           setLoading(false);
           if (isOk) {
-            setAuth({ access, refresh, onboarding_completed, user });
+            setAuth({ access, refresh, onboarding_completed, user});
+            
             handleToast("success", "User is created!", 2000, () => {
               navigation.navigate("FinishAuthentication");
             });
+          }else{
+
           }
         });
       } else {
@@ -192,3 +197,5 @@ export default function CreatePassword() {
     </SafeAreaView>
   );
 }
+
+

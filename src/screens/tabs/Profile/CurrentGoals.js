@@ -209,7 +209,10 @@ const CurrentGoals = () => {
   useFocusEffect(
     useCallback(() => {
       handle_get_current_goal();
-      setModalVisible(true);
+      const timeout = setTimeout(() => {
+        setModalVisible(true);
+        clearTimeout(timeout);
+      }, 1000)
     }, [])
   );
 

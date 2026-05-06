@@ -237,7 +237,7 @@ const TermsAndCondition = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F8FAFA' }}>
       <NavHeader />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
 
         {/* Hero banner */}
         <Animated.View
@@ -253,7 +253,7 @@ const TermsAndCondition = ({ navigation }) => {
             alignItems: 'center',
           }}
         >
-          <View
+          {/* <View
             style={{
               width: 52,
               height: 52,
@@ -265,7 +265,7 @@ const TermsAndCondition = ({ navigation }) => {
             }}
           >
             <Text style={{ fontSize: 26 }}>📋</Text>
-          </View>
+          </View> */}
 
           <Text style={{ fontFamily: 'NunitoBold', fontSize: 22, color: '#FFFFFF', textAlign: 'center', marginBottom: 6 }}>
             {meta.title}

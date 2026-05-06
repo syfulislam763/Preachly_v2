@@ -80,7 +80,7 @@ export default function PersonalizationScreen() {
           <ProgressBar progress={12.5} />
         </View>
 
-        <Text style={styles.title}>Every faith journey begins with a question. Let's start with yours.</Text>
+        <Text style={styles.title}>{`Every faith journey begins with a question.\nLet's start with yours.`}</Text>
 
         <Text style={styles.text}>When it comes to your faith, What would help you most right now?</Text>
 
@@ -159,7 +159,7 @@ const PhotoCard = ({isActive, setIsActive, img, text}) => {
 
 const styles = StyleSheet.create({
   container: {flex:1, backgroundColor:'#fff', justifyContent:'space-between'},
-  title: {fontFamily:'DMSerifDisplay', fontSize:26, textAlign:'center', flexWrap:'wrap', paddingTop: 40, paddingBottom: 30,color:'#0B172A', lineHeight: 35},
+  title: {fontFamily:'DMSerifDisplay', fontSize:30, textAlign:'center', flexWrap:'wrap', paddingTop: 40, paddingBottom: 30,color:'#0B172A', lineHeight: 35},
   text: {fontFamily:'NunitoSemiBold', fontSize:17, color: '#2B4752', textAlign:'center', flexWrap:'wrap', paddingBottom: 50},
   img: { 
     height:hp("12%"),

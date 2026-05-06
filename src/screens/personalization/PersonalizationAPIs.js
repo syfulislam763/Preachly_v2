@@ -1,7 +1,8 @@
 
 import { ONBOARDING_COMPLETE, BIBLE_FAMILIARITY, BIBLE_VERSION, DENOMINATION, FAITH_GOAL, JOURNEY_REASON, TONE_PREFERENCE, ONBOARDING_STATUS, ONBOARDING_OPTIONS,ONBOARDING_USER_DATA, ONBOARDING_ALL_DATA } from "../../context/Paths";
-
+import axios from "axios";
 import api from "../../context/api";
+import { ROOT_URL } from "../../context/Paths";
 
 
 export const journey_reason = async (payload, cb) => {
@@ -127,7 +128,7 @@ export const onboarding_complete = async (cb) => {
 
 export const onboarding_status = async (access,cb) => {
   try {
-    const response = await api.get(ONBOARDING_STATUS, {
+    const response = await axios.get(ROOT_URL+ONBOARDING_STATUS, {
       headers: {
         Authorization: `Bearer ${access}`
       },
@@ -135,6 +136,7 @@ export const onboarding_status = async (access,cb) => {
     cb(response.data, true);
 
   } catch (error) {
+    console.log("onboard error -< ", JSON.stringify(error, null, 2))
     cb(error, false);
   }
 }
@@ -168,7 +170,7 @@ export const post_onboarding_user_data = async(payload, cb) => {
 
 export const get_onboarding_all_data = async(token, cb) => {
   try{
-    const res = await api.get(ONBOARDING_ALL_DATA, {
+    const res = await axios.get(ROOT_URL+ONBOARDING_ALL_DATA, {
       headers:{
         Authorization: `Bearer ${token}`
       }

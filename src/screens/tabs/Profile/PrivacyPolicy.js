@@ -322,12 +322,12 @@ const PrivacyPolicy = ({ navigation }) => {
 
   // ── CONTENT ──────────────────────────────────────────────────────────────
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F8FAFA' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#F8FAFA'}}>
       <NavHeader />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 40 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* Hero banner */}
         <Animated.View
@@ -343,7 +343,7 @@ const PrivacyPolicy = ({ navigation }) => {
             alignItems: 'center',
           }}
         >
-          <View
+          {/* <View
             style={{
               width: 52,
               height: 52,
@@ -355,7 +355,7 @@ const PrivacyPolicy = ({ navigation }) => {
             }}
           >
             <Text style={{ fontSize: 26 }}>🔒</Text>
-          </View>
+          </View> */}
 
           <Text
             style={{
@@ -411,7 +411,7 @@ const PrivacyPolicy = ({ navigation }) => {
         ))}
 
         {/* Footer */}
-        <View style={{ alignItems: 'center', marginTop: 8, marginBottom: 8 }}>
+        <View style={{ alignItems: 'center', marginTop: 0, marginBottom: 8 }}>
           <Text
             style={{
               fontFamily: 'NunitoRegular',

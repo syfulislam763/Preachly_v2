@@ -23,11 +23,29 @@ const api = axios.create({
 
 // Add any public endpoints here so they don't get blocked
 const SUBSCRIPTION_FREE_ROUTES = [
-  '/auth/login',
-  '/auth/register',
-  '/auth/refresh',
-  '/auth/logout',
-  '/user/profile',       
+  '/auth/register/initiate/',
+  '/auth/verify-email/',
+  '/auth/resend-otp/',
+  "/auth/login/",
+  "/auth/register/complete/",
+  "/auth/social-auth/",
+  "/auth/password/reset-request/",
+  "/auth/password/reset-verify-otp/",
+  "/auth/password/reset-confirm/",
+
+  "/onboarding/journey-reason/", 
+  "/onboarding/denomination/", 
+  "/onboarding/faith-goals/", 
+  "/onboarding/faith-preference/", 
+  "/onboarding/bible-familiarity/", 
+  "/onboarding/bible-version/",
+  "/onboarding/tone-preference/", 
+  "/onboarding/complete/", 
+  "/onboarding/status/", 
+  "/onboarding/options/", 
+  "/onboarding/user-data/", 
+  "/onboarding/options/", 
+
 ];
 
 function isSubscriptionFreeRoute(url = '') {
@@ -36,8 +54,9 @@ function isSubscriptionFreeRoute(url = '') {
 
 api.interceptors.request.use(
   async (config) => {
-
+    console.log("config url ", config.url )
     if (isSubscriptionFreeRoute(config.url)) {
+      
       return config;
     }
 

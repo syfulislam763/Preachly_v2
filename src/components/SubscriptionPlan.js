@@ -113,7 +113,7 @@ const PlanSelector = ({
         </View>
 
         {/* Save badge — only shown when annual is NOT selected */}
-        {selectedPlan !== 'annual' && (
+        {(selectedPlan !== 'annual' && !isSubscribed) && (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{savingsLabel}</Text>
           </View>

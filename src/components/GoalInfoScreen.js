@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'DMSerifDisplay',
-    fontSize: 26,
+    fontSize: 30,
     color: '#0B172A',
     textAlign: 'center',
     lineHeight: 35,

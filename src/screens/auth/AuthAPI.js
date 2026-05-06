@@ -116,6 +116,7 @@ export const create_password = async (payload, cb) => {
         const data = res.data
         cb(data, true)
     }catch(error){
+        
         cb(error, false)
     }
 }
@@ -249,3 +250,6 @@ export const confirm_forget_password = async (payload, cb) => {
         cb(e, false);
     }
 }
+
+
+
