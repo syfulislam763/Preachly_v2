@@ -99,6 +99,19 @@ export default function SubscriptionScreen() {
   const identifyUser = async () => {
     try {
       const user = userProfile?.user;
+
+      if (!user?.email) {
+        Alert.alert(
+          'Login Required',
+          'Please log in to subscribe.',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Log In', onPress: () => logout() },
+          ]
+        );
+        return;
+      }
+      
       if (user?.email) {
         await Purchases.logIn(user.email);
 
@@ -214,7 +227,7 @@ export default function SubscriptionScreen() {
         'Please log in to subscribe.',
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Log In', onPress: () => navigation.navigate('Login') },
+          { text: 'Log In', onPress: () => logout() },
         ]
       );
       return;
