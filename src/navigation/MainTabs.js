@@ -40,7 +40,7 @@ export default function MainTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => { 
         const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-        const hiddenRoutes = ['WeeklyCheckIn', 'CurrentGoals', 'RegularCheckIn', 'WeeklyCheckIn_','PorfileFaith', 'ProfileNotification', 'SettingHome', 'PersonalInfo', 'ProfileSubscription', 'EditPersonalInfo', 'ConfirmEmail', 'MessageScreen', 'AboutApp', 'HistoryDetails', 'Calendar']
+        const hiddenRoutes = ['WeeklyCheckIn', 'CurrentGoals', 'RegularCheckIn', 'WeeklyCheckIn_','PorfileFaith', 'ProfileNotification', 'SettingHome', 'PersonalInfo', 'ProfileSubscription', 'EditPersonalInfo', 'ConfirmEmail', 'MessageScreen', 'AboutApp', 'HistoryDetails', 'Calendar', 'PrivacyPolicy', 'TermsAndCondition']
         const shouldHideTabBar = hiddenRoutes.includes(routeName);
 
         const preachly_obj = (route?.name === "Preachly" )? {}: {shadowColor: '#000000',

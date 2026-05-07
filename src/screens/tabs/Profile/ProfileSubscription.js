@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Linking,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -293,6 +294,7 @@ export default function SubscriptionScreen() {
 
   // ─── Restore purchases ────────────────────────────────────────────────────
   const handleRestorePurchases = async () => {
+    if(isSubscribed) return;
     setIsPurchasing(true);
     try {
       const customerInfo = await Purchases.restorePurchases();
@@ -303,7 +305,6 @@ export default function SubscriptionScreen() {
         // userProfile?.setIsSubscribed?.(true);
         // userProfile?.setSubscriptionInfo?.(customerInfo);
         Alert.alert('Restored!', 'Your subscription has been restored.');
-        navigation.navigate('SubscriptionConfirmedScreen');
       } else {
         Alert.alert('Nothing Found', 'No active subscriptions were found for this account.');
       }
@@ -526,19 +527,20 @@ export default function SubscriptionScreen() {
           />
 
           {/* ── Restore Purchases ── */}
-          {/* <Text
-            onPress={handleRestorePurchases}
-            style={{
-              fontFamily: 'NunitoSemiBold',
-              color: '#005A55',
-              textAlign: 'center',
-              textDecorationLine: 'underline',
-              fontSize: 13,
-              marginTop: 12,
-            }}
-          >
-            Restore Purchases
-          </Text> */}
+          <TouchableOpacity onPress={handleRestorePurchases}>
+            <Text
+              style={{
+                fontFamily: 'NunitoSemiBold',
+                color: '#005A55',
+                textAlign: 'center',
+                textDecorationLine: 'underline',
+                fontSize: 13,
+                marginTop: 12,
+              }}
+            >
+              Restore Purchases
+            </Text>
+          </TouchableOpacity>
 
           {/* ── Legal footer ── */}
           <Text
@@ -555,7 +557,7 @@ export default function SubscriptionScreen() {
             {' '}and{' '}
             <Text
               style={{ fontFamily: 'NunitoExtraBold', textDecorationLine: 'underline', color: '#555' }}
-              onPress={() => Linking.openURL(PRIVACY_URL)}
+              onPress={() => navigation.navigate("PrivacyPolicy")}
             >
               Privacy Policy
             </Text>

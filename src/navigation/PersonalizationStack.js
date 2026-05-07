@@ -22,7 +22,7 @@ import useAppStore from '@/context/useAppStore';
 import PersonalizationScreen21 from '@/screens/personalization/PersonalizationScreen21';
 import PersonalizationScreen22 from '@/screens/personalization/PersonalizationScreen22';
 import PersonalizationScreen23 from '@/screens/personalization/PersonalizationScreen23';
-
+import PrivacyPolicy from '@/screens/tabs/Profile/PrivacyPolicy';
 
 
 
@@ -84,6 +84,14 @@ export default function PersonalizationStack() {
             })}
             name="SubscriptionConfirmedScreen" 
             component={SubscriptionConfirmedScreen} 
+          />
+
+          <Stack.Screen 
+            options={({navigation}) => ({
+              headerShown:false,
+            })}
+            name="PrivacyPolicy" 
+            component={PrivacyPolicy} 
           />
   
       </> :

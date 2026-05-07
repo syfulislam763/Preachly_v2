@@ -493,19 +493,20 @@ export default function SubscriptionScreen() {
           />
 
           {/* ── Restore Purchases ── */}
-          {/* <Text
-            onPress={handleRestorePurchases}
-            style={{
-              fontFamily: 'NunitoSemiBold',
-              color: '#005A55',
-              textAlign: 'center',
-              textDecorationLine: 'underline',
-              fontSize: 13,
-              marginTop: 12,
-            }}
-          >
-            Restore Purchases
-          </Text> */}
+          <TouchableOpacity onPress={handleRestorePurchases}>
+            <Text
+              style={{
+                fontFamily: 'NunitoSemiBold',
+                color: '#005A55',
+                textAlign: 'center',
+                textDecorationLine: 'underline',
+                fontSize: 13,
+                marginTop: 12,
+              }}
+            >
+              Restore Purchases
+            </Text>
+          </TouchableOpacity>
 
           {/* ── Legal footer ── */}
           <Text
@@ -522,7 +523,7 @@ export default function SubscriptionScreen() {
             {' '}and{' '}
             <Text
               style={{ fontFamily: 'NunitoExtraBold', textDecorationLine: 'underline', color: '#555' }}
-              onPress={() => Linking.openURL(PRIVACY_URL)}
+              onPress={() => navigation.navigate("PrivacyPolicy")}
             >
               Privacy Policy
             </Text>
