@@ -3,18 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import useLayoutDimention from '../hooks/useLayoutDimention';
 import { getStyles } from './SubscriptionPlanStyle';
 
-/**
- * PlanSelector
- *
- * Props:
- *  - plan               'monthly' | 'yearly'   controlled from parent
- *  - setSelectedPlanType  (value) => void
- *  - monthlyPrice       string | null   e.g. "$11.99"  (from RevenueCat)
- *  - annualPrice        string | null   e.g. "$79.99"  (from RevenueCat)
- *  - monthlyTrialText   string | null   e.g. "7-day free trial"
- *  - annualTrialText    string | null   e.g. "7-day free trial"
- *  - OtherPlan          render-prop for an extra plan card (optional)
- */
+
 const PlanSelector = ({
   OtherPlan = null,
   setSelectedPlanType,
@@ -29,7 +18,6 @@ const PlanSelector = ({
   const { isSmall, isMedium, isLarge, isFold } = useLayoutDimention();
   const styles = getStyles(isSmall, isMedium, isLarge, isFold);
 
-  // Sync internal state when parent changes `plan`
   useEffect(() => {
     if (plan === 'yearly') {
       setSelectedPlan('annual');
@@ -41,18 +29,17 @@ const PlanSelector = ({
   const handlePlan = (label) => {
     if(isSubscribed) return;
     setSelectedPlan(label);
-    // Normalise to 'monthly' | 'yearly' for the parent
+
     setSelectedPlanType(label === 'annual' ? 'yearly' : 'monthly');
   };
 
-  // ─── Derive save-% badge ──────────────────────────────────────────────────
+
   const savingsLabel = getSavingsLabel(monthlyPrice, annualPrice);
   console.log("mon", monthlyTrialText, annualTrialText)
 
   return (
     <View>
 
-      {/* ── Monthly Plan ── */}
       <TouchableOpacity
         style={[
           styles.planContainer,
@@ -81,10 +68,9 @@ const PlanSelector = ({
         </View>
       </TouchableOpacity>
 
-      {/* Optional extra plan slot */}
       {OtherPlan && OtherPlan()}
 
-      {/* ── Annual Plan ── */}
+
       <TouchableOpacity
         style={[
           styles.planContainer,
@@ -112,7 +98,6 @@ const PlanSelector = ({
           </View>
         </View>
 
-        {/* Save badge — only shown when annual is NOT selected */}
         {(selectedPlan !== 'annual' && !isSubscribed) && (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{savingsLabel}</Text>
@@ -124,9 +109,8 @@ const PlanSelector = ({
   );
 };
 
-// ─── Helper: calculate savings % from real prices ─────────────────────────────
+
 function getSavingsLabel(monthlyPriceStr, annualPriceStr) {
-  // Try to parse numeric values from price strings like "$11.99"
   const parsePrice = (str) => {
     if (!str) return null;
     const num = parseFloat(str.replace(/[^0-9.]/g, ''));
@@ -144,7 +128,6 @@ function getSavingsLabel(monthlyPriceStr, annualPriceStr) {
     }
   }
 
-  // Fallback to hardcoded label
   return 'Save 44%';
 }
 

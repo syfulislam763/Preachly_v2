@@ -34,11 +34,12 @@ const WeeklyCheckIn_ = () => {
     }, [])
 
 
-    const renderItem = ({item}) => {
+    const renderItem = ({item, index}) => {
         return <View style={styles.cardWrapper}>
             <View style={styles.cardContainer}>
                 <View style={styles.cardSubContainer1}>
-                    <Text style={styles.number}>{item.question_order}.</Text>
+                    {/* <Text style={styles.number}>{item.question_order}.</Text> */}
+                    <Text style={styles.number}>{index+1}.</Text>
                 </View>
                 <View style={styles.cardSubContainer2}>
                     <Text style={styles.title}>{item.question_text}</Text>

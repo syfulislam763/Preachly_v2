@@ -214,7 +214,7 @@ export default function HomeScreen() {
         {/* Weekly Goal Card */}
         <CommonCard
           title="Don't forget to reflect on this week's progress and earn your badge!"
-          text={dashboard?.current_week_available?`Days left ${ goal?.days_remaining ?? 0} days`: 'completed'}
+          text={dashboard?.current_week_available?`Days left ${ goal?.days_remaining ?? 0} days`: 'Completed'}
           onPress={() => navigation.navigate('WeeklyCheckIn')}
         />
         <View className='h-36'></View>

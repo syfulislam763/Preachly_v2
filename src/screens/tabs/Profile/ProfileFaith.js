@@ -45,7 +45,7 @@ const ProfileFaith = () => {
             <Text style={styles.title}>Keep Growing.</Text>
         </View>
         <View className="px-3 py-5">
-            <Text className='text-[16px] text-[#3F5862] font-[NunitoSemiBold] text-center'> Your Every step you take deepens your faith and strengthens your voice.</Text>
+            <Text className='text-[16px] text-[#3F5862] font-[NunitoSemiBold] text-center'> Every step you take deepens your faith and strengthens your voice.</Text>
             <Text className='text-[16px] text-[#3F5862] font-[NunitoSemiBold] text-center mt-5'> Keep building a foundation rooted in truth.</Text>
         </View>
         <Image
@@ -59,7 +59,7 @@ const ProfileFaith = () => {
                 bgColor={deepGreen}
                 navigation={navigation}
                 route={""}//MainTabs
-                handler={() => navigation.navigate("WeeklyCheckIn_", {week_number: route.params.week_number, flag:true, title: route.params?.week_number+" Weekly Check-In"})}
+                handler={() => navigation.navigate("WeeklyCheckIn_", {week_number: route.params.week_number, flag:true, title: `Week ${route.params?.week_number} Check-In`})}
                 txtColor={primaryText}
                 bold='bold'
                 opacity={1}

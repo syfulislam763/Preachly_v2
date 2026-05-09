@@ -73,7 +73,7 @@ export default function PersonalizationScreen() {
 
           {/* Weekly Calendar */}
           <View className="pt-2">
-            <WeeklyCalendar />
+            <WeeklyCalendar markedDates={[]} />
           </View>
 
           {/* Fire streak caption */}

@@ -48,7 +48,7 @@ const SeedPlantedModal = ({
                   />
                 </View>
 
-                <View className='absolute -bottom-36 left-0 w-full min-h-44 text-wrap px-16'>  
+                <View className='absolute -bottom-36 left-0 w-full min-h-24 text-wrap px-16'>  
                   <Text style={styles.message}>{message1}</Text>
                   <Text style={styles.message}>{message2}</Text>
                 </View>

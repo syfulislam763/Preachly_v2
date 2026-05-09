@@ -26,9 +26,9 @@ import ReusableNavigation from '../../../components/ReusabeNavigation';
 import BackButton from '../../../components/BackButton';
 
 const faith_goal = [
-  { id: 1, goal_type: 'conversation', name: 'Confidence Goal' },
+  { id: 1, goal_type: 'conversation', name: 'Faith Confidence' },
   { id: 2, goal_type: 'scripture', name: 'Scripture Knowledge' },
-  { id: 3, goal_type: 'share_faith', name: 'Inspiration Goal' },
+  { id: 3, goal_type: 'share_faith', name: 'Faith Depth & Influence' },
 ];
 
 const PersonalInfo = () => {

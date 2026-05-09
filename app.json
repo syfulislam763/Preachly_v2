@@ -78,7 +78,8 @@
           "color": "#ffffff",
           "sounds": []
         }
-      ]
+      ],
+      "expo-build-properties"
     ],
     "owner": "bdcalling",
     "extra": {

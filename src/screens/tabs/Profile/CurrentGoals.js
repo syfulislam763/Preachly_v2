@@ -111,15 +111,15 @@ const GoalInfoModal = ({ visible, onClose, goalType }) => {
 
               {/* Badge */}
               <View className="self-center bg-green-50 rounded-full px-4 py-1 border border-green-100 mb-3">
-                <Text className="text-xs text-green-800" style={{ fontFamily: 'NunitoSemiBold' }}>
+                <Text className="text-[15px] text-green-800" style={{ fontFamily: 'NunitoSemiBold' }}>
                   {info.badge}
                 </Text>
               </View>
 
               {/* Optional extra tip block */}
               {info.extra && (
-                <View className="flex-row bg-gray-50 rounded-2xl p-4 mb-4 items-start" style={{ gap: 10 }}>
-                  <Text className="flex-1 text-sm leading-6 text-gray-500" style={{ fontFamily: 'NunitoSemiBold' }}>
+                <View className="flex-row rounded-2xl p-4 mb-4 items-start" style={{ gap: 10 }}>
+                  <Text style={{...styles.text1, color: "#2B4752"}}>
                     {info.extra}
                   </Text>
                 </View>
@@ -127,7 +127,7 @@ const GoalInfoModal = ({ visible, onClose, goalType }) => {
 
               {/* Got it button */}
               <TouchableOpacity
-                className="bg-gray-900 rounded-full py-4 items-center mt-1"
+                className="bg-[#005a55] rounded-full py-4 items-center mt-1"
                 onPress={onClose}
                 activeOpacity={0.85}
               >

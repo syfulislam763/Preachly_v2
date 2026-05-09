@@ -19,6 +19,10 @@ const timeAgo = (string) => {
   const d = new Date(string);
   return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 };
+function capitalizeFirstLetter(str) {
+    if (!str) return str; 
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 const WeeklyCheckIn = () => {
   const navigation = useNavigation();
@@ -47,19 +51,19 @@ const WeeklyCheckIn = () => {
     const leafIcon   = isEven ? leaf_b : leaf_w;
     const titleColor = isEven ? '#0B172A' : '#ffffff';
     const dateColor  = isEven ? '#966F44' : '#90B2B2';
-
+    
     return (
       <Pressable
         onPress={() => {
           //setShowModal(true);
           if (item?.status === 'completed') {
-            navigation.navigate("WeeklyCheckIn_", { ...item, title: `${item.week_number} Weekly Check-In` });
+            navigation.navigate("WeeklyCheckIn_", { ...item, title: `Week ${item.week_number} Check-In` });
           } else {
-            navigation.navigate("RegularCheckIn", { title: `${item.week_number} Weekly Check-In` });
+            navigation.navigate("RegularCheckIn", { title: `Week ${item.week_number} Check-In` });
           }
         }}
       >
-        <ImageBackground source={bgImage} style={styles.background} resizeMode="cover">
+        <ImageBackground source={bgImage} style={styles.background} resizeMode="contain">
           <View style={styles.card}>
             <View style={styles.cardWrap}>
               <Image source={leafIcon} style={styles.leafIcon} />
@@ -67,15 +71,15 @@ const WeeklyCheckIn = () => {
                 <Text style={[styles.title, { color: titleColor }]}>
                   {(history.length - item.week_number) + 1}. Week Check-In
                 </Text>
-                <Text style={[styles.text, { color: dateColor, fontSize: 12 }]}>
-                  {`${timeAgo(item?.week_start)} - ${timeAgo(item?.week_end)}`}
+                <Text style={[styles.text, { color: dateColor, fontSize: 13 }]}>
+                  {`${timeAgo(item?.week_start)} - ${timeAgo(item?.week_end)} (${capitalizeFirstLetter(item?.status)})`}
                 </Text>
                 <Text style={[styles.text, { color: dateColor }]}>
-                  {item?.status}
+                  
                 </Text>
               </View>
             </View>
-            <Entypo name="chevron-thin-right" size={24} color="white" />
+            <Entypo style={{marginBottom:15}} name="chevron-thin-right" size={24} color="white" />
           </View>
         </ImageBackground>
       </Pressable>
@@ -134,7 +138,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   background: {
-    height: 82,
+    height: 120,
     width: '100%',
     marginBottom: 20,
     overflow: 'hidden',
@@ -145,13 +149,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 20,
+    
   },
   cardWrap: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     width: '92%',
+    marginTop: 20
   },
   leafIcon: {
     height: 24,
@@ -161,11 +166,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'NunitoSemiBold',
-    fontSize: 16,
+    fontSize: 18,
+    marginLeft: 2,
   },
   text: {
     fontFamily: 'NunitoSemiBold',
-    fontSize: 12,
-    marginTop: 3,
+    fontSize: 13,
+    marginTop: 1,
+    marginLeft: 2
   },
 });

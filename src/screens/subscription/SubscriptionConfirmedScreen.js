@@ -51,7 +51,7 @@ const SubscriptionConfirmedScreen = () => {
           style={{ fontFamily: 'NunitoSemiBold', fontSize: 17 }}
           className="text-[#2B4752] text-center p-5"
         >
-          Words have power - now you have even more at your fingertips
+          Words have power, now you have even more at your fingertips
         </Text>
 
         <ParagraphIcon

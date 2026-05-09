@@ -15,17 +15,20 @@ const goal_label = {
   "conversation": {
     img: lightening,
     tagline: 'Courage grows with every step.',
-    comment: "Conversations Started"
+    comment: "Conversations Started",
+    goal_display: "Faith Confidence"
   },
   "scripture": {
     img: book,
     tagline: 'Every verse builds wisdom.',
-    comment: "Chapters Completed"
+    comment: "Chapters Completed",
+    goal_display: "Scripture Knowledge"
   },
   "share_faith": {
     img: mountain,
     tagline: "Seeds grow when they're shared.",
-    comment: "Shares Made"
+    comment: "Shares Made",
+    goal_display: "Faith Depth & Influence"
   },
 };
 

@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import useAppStore from '@/context/useAppStore';
 import { get_profile_dashboard_data } from '../TabsAPI';
 import { useNotificationPermission } from '@/context/fcm';
+import { get_calendar_information } from '../TabsAPI';
 
 const ProfileScreen = () => {
   const {toggle} = useNotificationPermission()
@@ -32,6 +33,7 @@ const ProfileScreen = () => {
   const dashboard = useAppStore((s) => s.profile.dashboard)
   const setDashboard = useAppStore((s) => s.setDashboard);
   const resolveProfileSettings = useAppStore((s) => s.resolveProfileSettings);
+  const [events, setEvents] = useState([])
 
   const completed = dashboard?.current_goal?.completed ?? false
 
@@ -41,7 +43,34 @@ const ProfileScreen = () => {
   const { isSmall, isMedium, isLarge, isFold } = useLayoutDimention();
   const styles = getStyles(isSmall, isMedium, isLarge, isFold);
 
+
+  const handle_get_calendar_information = () => {
+      const payload = {
+        month: (new Date()).getUTCMonth()+1,
+        year: (new Date()).getUTCFullYear()
+      }
+      get_calendar_information(payload, (res, success) => {
+
+        if(success){
+          const marked = []
+  
+          const temp = res?.data?.calendar_events;
+          console.log(JSON.stringify(temp, null, 2), "....2")
+          temp.forEach(item => {
+            const date = new Date(item.date);
+            marked.push({...item, date: date});
+          })
+          //marked.push(new Date("2025-08-24"))
+          setEvents(marked)
+          // console.log(JSON.stringify(marked, null, 2) , "***")
+        }else{
+      
+        }
+      })
+    }
+
   useEffect(() => {
+    
     if (route.params?.flag) {
       navigation.navigate("Calendar");
     }
@@ -51,6 +80,7 @@ const ProfileScreen = () => {
   useFocusEffect(
     useCallback(() => {
       toggle(true)
+      handle_get_calendar_information()
       StatusBar.setTranslucent(true);
       StatusBar.setBackgroundColor("transparent");
       return () => {
@@ -147,7 +177,7 @@ const ProfileScreen = () => {
 
       {/* Scrollable content */}
       <View style={{ ...styles.semiContainer, marginTop: hp("12%"), flex: 1 }}>
-        <WeeklyCalendar />
+        <WeeklyCalendar markedDates={events} />
 
         <View style={styles.caption}>
           <Image
@@ -206,7 +236,7 @@ const ProfileScreen = () => {
           </LinearGradient>
           {/* Menu Items */}
           <Pressable onPress={() => navigation.navigate("Calendar")}>
-            <View style={{...styles.weeklyCheckIn, paddingVertical:10}}>
+            <View style={{...styles.weeklyCheckIn, paddingVertical:12}}>
               <Text style={styles.menuText}>Calendar</Text>
               <Image
                 source={require("../../../../assets/img/CaretRight.png")}
@@ -216,7 +246,7 @@ const ProfileScreen = () => {
           </Pressable>
             <View style={{height:20}}></View>
           <Pressable onPress={() => navigation.navigate("WeeklyCheckIn")}>
-            <View style={{...styles.weeklyCheckIn, paddingVertical:10}}>
+            <View style={{...styles.weeklyCheckIn, paddingVertical:12}}>
               <View>
                 <Text style={styles.menuText}>Weekly Check-In</Text>
                 <View style={styles.tooltip}>
@@ -237,9 +267,9 @@ const ProfileScreen = () => {
               <View style={{height:20}}></View>
           <Pressable onPress={() => navigation.navigate("CurrentGoals")}>
 
-            <View style={{...styles.weeklyCheckIn, paddingVertical:10}}>
+            <View style={{...styles.weeklyCheckIn, paddingVertical:12}}>
               <View>
-                <Text style={styles.menuText}>Your Current Goals</Text>
+                <Text style={styles.menuText}>My Faith Goal</Text>
                 <View style={styles.tooltip}>
                   <Text style={[styles.tooltipText, {color:'#966F44'}]}>{!(completed ?? false)? "Not completed": "completed" }</Text>
                   { (completed ?? false) && <Image

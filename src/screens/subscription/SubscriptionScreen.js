@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Linking,
   Platform,
+  TouchableOpacity
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -25,12 +26,12 @@ import { REVENUECAT_IOS_API_KEY, PREMIUM_ENTITLEMENT_ID } from '@/context/Paths'
 
 
 const REVENUECAT_ANDROID_API_KEY = ""
-// ────────────────────────────────────────────────────────────────────────────
+
 
 const { height } = Dimensions.get('window');
 
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
-const PRIVACY_URL = 'https://yourapp.com/privacy-policy'; // ← update this
+
 
 export default function SubscriptionScreen() {
   
@@ -79,13 +80,11 @@ export default function SubscriptionScreen() {
         Purchases.configure({ apiKey: REVENUECAT_ANDROID_API_KEY });
       }
 
-      // Identify user
+
       await identifyUser();
 
-      // Check existing subscription
       await checkSubscriptionStatus();
 
-      // Fetch offerings (packages + intro eligibility)
       await fetchOfferings();
     } catch (error) {
       console.error('RevenueCat init error:', error);
@@ -95,27 +94,25 @@ export default function SubscriptionScreen() {
     }
   };
 
-  // ─── Identify user with RevenueCat ───────────────────────────────────────
   const identifyUser = async () => {
     try {
       const user = userProfile?.user;
 
-      if (!user?.email) {
-        Alert.alert(
-          'Login Required',
-          'Please log in to subscribe.',
-          [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Log In', onPress: () => logout() },
-          ]
-        );
-        return;
-      }
+      // if (!user?.email) {
+      //   Alert.alert(
+      //     'Login Required',
+      //     'Please log in to subscribe.',
+      //     [
+      //       { text: 'Cancel', style: 'cancel' },
+      //       { text: 'Log In', onPress: () => logout() },
+      //     ]
+      //   );
+      //   return;
+      // }
       
       if (user?.email) {
         await Purchases.logIn(user.email);
 
-        // Optional: sync attributes
         if (user.email) await Purchases.setEmail(user.email);
         if (user.name) await Purchases.setDisplayName(user.name);
         await Purchases.setAttributes({
@@ -129,7 +126,6 @@ export default function SubscriptionScreen() {
     }
   };
 
-  // ─── Check if already subscribed ─────────────────────────────────────────
   const checkSubscriptionStatus = async () => {
     try {
       const customerInfo = await Purchases.getCustomerInfo();
@@ -147,7 +143,6 @@ export default function SubscriptionScreen() {
     }
   };
 
-  // ─── Strict intro-offer eligibility check ────────────────────────────────
   const checkIntroEligibility = async (pkg) => {
     try {
       const productId = pkg.product.identifier;
@@ -166,21 +161,22 @@ export default function SubscriptionScreen() {
     }
   };
 
-  // ─── Fetch offerings from RevenueCat ─────────────────────────────────────
   const fetchOfferings = async () => {
     try {
       const offerings = await Purchases.getOfferings();
 
-      console.log("offerings ", JSON.stringify(offerings, null, 2))
+      // console.log("offerings ", JSON.stringify(offerings, null, 2))
+
       if (!offerings.current || offerings.current.availablePackages.length === 0) {
         console.warn('No offerings available');
         return;
       }
 
+
       const { current } = offerings;
 
-      // Monthly package
-      const monthly = current.monthly || null;
+
+      const monthly = current?.monthly || null;
       if (monthly) {
         setMonthlyPackage(monthly);
         if (monthly.product.introPrice) {
@@ -189,21 +185,19 @@ export default function SubscriptionScreen() {
         }
       }
 
-      // Annual package
-      const annual = current.annual || null;
+      const annual = current?.annual || null;
       if (annual) {
         setAnnualPackage(annual);
         if (annual.product.introPrice) {
           const eligible = await checkIntroEligibility(annual);
+          
           if (eligible) setAnnualIntroOffer(annual.product.introPrice);
         }
       }
 
-      // Fallback: if specific keys don't exist, spread all available packages
       if (!monthly && !annual && current.availablePackages.length > 0) {
-        // Try to guess monthly vs annual by period
         current.availablePackages.forEach((pkg) => {
-          const period = pkg.packageType; // 'MONTHLY' | 'ANNUAL' | 'SIX_MONTH' etc.
+          const period = pkg.packageType; 
           if (period === 'MONTHLY') setMonthlyPackage(pkg);
           else if (period === 'ANNUAL') setAnnualPackage(pkg);
         });
@@ -213,7 +207,6 @@ export default function SubscriptionScreen() {
     }
   };
 
-  // ─── Handle purchase ──────────────────────────────────────────────────────
   const handleSubscription = async () => {
     if (!activePackage) {
       Alert.alert('Unavailable', 'Subscription package is not available right now. Please try again.');
@@ -241,6 +234,7 @@ export default function SubscriptionScreen() {
       if (hasAccess) {
         setIsSubscribed(true);
         setSubscriptionInfo(customerInfo);
+        navigation.navigate('SubscriptionConfirmedScreen')
         // userProfile?.setIsSubscribed?.(true);
         // userProfile?.setSubscriptionInfo?.(customerInfo);
         // setPayment({ has_subscription: true });
@@ -267,7 +261,6 @@ export default function SubscriptionScreen() {
     }
   };
 
-  // ─── Purchase error handler ───────────────────────────────────────────────
   const handlePurchaseError = (error) => {
     if (error.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
       // User cancelled — no alert needed
@@ -282,7 +275,7 @@ export default function SubscriptionScreen() {
     }
   };
 
-  // ─── Restore purchases ────────────────────────────────────────────────────
+
   const handleRestorePurchases = async () => {
     setIsPurchasing(true);
     try {
@@ -319,7 +312,7 @@ export default function SubscriptionScreen() {
   }, [activeIntroOffer]);
 
   const getCtaText = () => {
-    if (isPurchasing) return null; // shows spinner
+    if (isPurchasing) return null; 
     if (isFreeIntro) return `Start My Free Trial`;
     if (activeIntroOffer) return `Try for ${activeIntroOffer.priceString}`;
     return 'Subscribe';
@@ -331,7 +324,7 @@ export default function SubscriptionScreen() {
     return pkg.product.priceString;
   };
 
-  // ─── Loading state ────────────────────────────────────────────────────────
+
   if (isLoading) {
     return (
       <SafeAreaView edges={['top']} className="flex-1 bg-[#FFEAC2]">
@@ -355,7 +348,7 @@ export default function SubscriptionScreen() {
     );
   }
 
-  // ─── Subscribed state ─────────────────────────────────────────────────────
+
   if (isSubscribed) {
     return (
       <SafeAreaView edges={['top', 'bottom']} className="flex-1 bg-[white]">
@@ -401,7 +394,6 @@ export default function SubscriptionScreen() {
     );
   }
 
-  // ─── Main UI ──────────────────────────────────────────────────────────────
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-[#FFEAC2]">
 
@@ -464,18 +456,13 @@ export default function SubscriptionScreen() {
             text="Share what you believe with confidence"
           />
 
-          {/* ── Plan Selector ── */}
-          {/*
-            PlanSelector now receives live price strings from RevenueCat.
-            Pass them as props so the component can display real prices
-            instead of hardcoded ones.
-          */}
+          <View className='h-5'/>
           <PlanSelector
             plan={selectedPlanType}
             setSelectedPlanType={setSelectedPlanType}
             isSubscribed={false}
-            monthlyPrice={getPriceForPlan('monthly')}   // e.g. "$11.99"
-            annualPrice={getPriceForPlan('yearly')}     // e.g. "$79.99"
+            monthlyPrice={getPriceForPlan('monthly')} 
+            annualPrice={getPriceForPlan('yearly')}   
             monthlyTrialText={
               monthlyIntroOffer?.price === 0
                 ? `${getTrialPeriodText()}`
@@ -487,7 +474,7 @@ export default function SubscriptionScreen() {
                 : null
             }
           />
-
+          <View className='h-10'/>
           {/* ── CTA Button ── */}
           <CommonButton
             btnText={
