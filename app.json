@@ -49,6 +49,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+
       "expo-font",
       "@react-native-google-signin/google-signin",
       "expo-audio",
@@ -79,7 +80,21 @@
           "sounds": []
         }
       ],
-      "expo-build-properties"
+      
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "extraPods": [
+              {
+                "name": "GoogleUtilities",
+                "modular_headers": true
+              }
+            ]
+          }
+        }
+      ]
+      
     ],
     "owner": "bdcalling",
     "extra": {

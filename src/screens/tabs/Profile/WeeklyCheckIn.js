@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   background: {
-    height: 120,
+    height: 100,
     width: '100%',
     marginBottom: 20,
     overflow: 'hidden',
