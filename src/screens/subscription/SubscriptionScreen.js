@@ -165,7 +165,7 @@ export default function SubscriptionScreen() {
     try {
       const offerings = await Purchases.getOfferings();
 
-      // console.log("offerings ", JSON.stringify(offerings, null, 2))
+      console.log("offerings ", JSON.stringify(offerings, null, 2))
 
       if (!offerings.current || offerings.current.availablePackages.length === 0) {
         console.warn('No offerings available');
@@ -226,6 +226,13 @@ export default function SubscriptionScreen() {
       return;
     }
 
+    // console.log("intro offer ", JSON.stringify(activeIntroOffer, null, 2))
+
+    // return;
+    if(!activeIntroOffer){
+      activePackage.product.introPrice = null
+    }
+    console.log("Active package", JSON.stringify(activePackage, null, 2))
     setIsPurchasing(true);
     try {
       const { customerInfo } = await Purchases.purchasePackage(activePackage);
@@ -464,14 +471,10 @@ export default function SubscriptionScreen() {
             monthlyPrice={getPriceForPlan('monthly')} 
             annualPrice={getPriceForPlan('yearly')}   
             monthlyTrialText={
-              monthlyIntroOffer?.price === 0
-                ? `${getTrialPeriodText()}`
-                : null
+              getTrialPeriodText()
             }
             annualTrialText={
-              annualIntroOffer?.price === 0
-                ? `${getTrialPeriodText()}`
-                : null
+             getTrialPeriodText()
             }
           />
           <View className='h-10'/>

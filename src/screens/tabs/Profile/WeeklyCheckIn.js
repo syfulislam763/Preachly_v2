@@ -55,6 +55,9 @@ const WeeklyCheckIn = () => {
     return (
       <Pressable
         onPress={() => {
+          if(item?.status === 'missed'){
+            return;
+          }
           //setShowModal(true);
           if (item?.status === 'completed') {
             navigation.navigate("WeeklyCheckIn_", { ...item, title: `Week ${item.week_number} Check-In` });

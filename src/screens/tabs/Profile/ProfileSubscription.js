@@ -194,7 +194,7 @@ export default function ProfileSubscription() {
         setMonthlyPackage(monthly);
         if (monthly.product.introPrice) {
           const eligible = await checkIntroEligibility(monthly);
-          if (true) setMonthlyIntroOffer(monthly.product.introPrice);
+          if (eligible) setMonthlyIntroOffer(monthly.product.introPrice);
         }
       }
       const annual = current.annual || null;
@@ -203,7 +203,7 @@ export default function ProfileSubscription() {
         setAnnualPackage(annual);
         if (annual.product.introPrice) {
           const eligible = await checkIntroEligibility(annual);
-          if (true) setAnnualIntroOffer(annual.product.introPrice);
+          if (eligible) setAnnualIntroOffer(annual.product.introPrice);
         }
       }
       if (!monthly && !annual) {
@@ -297,14 +297,17 @@ export default function ProfileSubscription() {
 
 
   const activePlan = isMonthlyActive
-    ? { title: 'Monthly Plan', price: monthlyPrice, period: '/ Month', trial: getTrialText('preachly_monthly_plan'), type: 'monthly', badge: null }
-    : { title: 'Annual Plan',  price: annualPrice,  period: '/ Year',  trial: getTrialText('preachly_yearly_plan'),  type: 'yearly', badge: saveBadge  };
+    ? { title: 'Monthly Plan', price: monthlyPrice, period: '/ Month', trial: getTrialText(), type: 'monthly', badge: null }
+    : { title: 'Annual Plan',  price: annualPrice,  period: '/ Year',  trial: getTrialText(),  type: 'yearly', badge: saveBadge  };
 
     
 
   const otherPlan = isMonthlyActive
-    ? { title: 'Annual Plan',  price: annualPrice,  period: '/ Year',  trial: getTrialText('preachly_yearly_plan'),  type: 'yearly',  badge: saveBadge }
-    : { title: 'Monthly Plan', price: monthlyPrice, period: '/ Month', trial: getTrialText('preachly_monthly_plan'), type: 'monthly', badge: null };
+    ? { title: 'Annual Plan',  price: annualPrice,  period: '/ Year',  trial: getTrialText(),  type: 'yearly',  badge: saveBadge }
+    : { title: 'Monthly Plan', price: monthlyPrice, period: '/ Month', trial: getTrialText(), type: 'monthly', badge: null };
+
+
+
 
   if (isLoading) {
     return (
@@ -378,7 +381,7 @@ export default function ProfileSubscription() {
           title={activePlan.title}
           price={activePlan.price}
           period={activePlan.period}
-          trialText={activePlan.trial}
+          trialText={getTrialText()}
           selected={true}
           opacity={1}
           onPress={() => {}}
@@ -393,7 +396,7 @@ export default function ProfileSubscription() {
           title={otherPlan.title}
           price={otherPlan.price}
           period={otherPlan.period}
-          trialText={otherPlan.trial}
+          trialText={getTrialText()}
           selected={false}
           active={activePlan.type}
           saveBadge={otherPlan.badge}
