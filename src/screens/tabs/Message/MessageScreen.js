@@ -175,7 +175,7 @@ export default function MessageScreen() {
                 message_id: item?.id,
                 type: 'user',
                 verseLink: "",
-                message: item?.content
+                message: item?.content,
               }: item.has_voice? 
                 {
                   id: item?.id,
@@ -190,8 +190,9 @@ export default function MessageScreen() {
               message_id: item?.id,
               type: 'bot',
               verseLink: "",
-              message:  item?.content.substring(item?.content.indexOf("Scriptural Rebuttal"), item?.content.length),
+              message: item?.ai_metadata?.type === "clarification_no"? item?.content + `\n\n Or \n\n Start a new chat`: item?.content.substring(item?.content.indexOf("Scriptural Rebuttal"), item?.content.length),
               bookmark:item.bookmark,
+              message_type: (item?.ai_metadata?.type === "clarification_no" || item?.ai_metadata?.type === "clarification_yes")? 'yes_no': null
             }
           });
 
@@ -317,6 +318,9 @@ export default function MessageScreen() {
           summary: data?.summary || [],
           message_type: "",
         }
+
+        const isOr = data?.show_new_chat_option ?? false
+
         if(data?.type === "typing" && data?.is_typing){
           setIsTyping(true);
           res.message = "typing..."
@@ -324,7 +328,7 @@ export default function MessageScreen() {
           setMessages(prev => [...prev, res])
         }
         if((data?.type === "exploration_options")){
-          res.message = data.message;
+          res.message = data.message ;
           res.message_id = Date.now();
           res.message_type= data?.show_clarification ? "" :"yes_no" 
           setIsTyping(false);
@@ -334,6 +338,8 @@ export default function MessageScreen() {
         if( (data?.type === "conversation_continuation")){
           //console.log("t", JSON.stringify(data, null, 2))
           res.message_type= data?.show_clarification ? "" :"yes_no" 
+          if(isOr)
+            res.message = res.message + `\n\n Or \n\n Start a new chat`
           setIsTyping(false);
           setMessages(prev => [...prev.filter(item=> item.message != "typing..."), res])
         }

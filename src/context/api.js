@@ -46,6 +46,8 @@ const SUBSCRIPTION_FREE_ROUTES = [
   "/onboarding/user-data/", 
   "/onboarding/options/", 
 
+  "/subscription/revenuecat/status/",
+
 ];
 
 function isSubscriptionFreeRoute(url = '') {

@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     marginTop: 2,
-    tintColor: '#C9A84C',
+    tintColor: '#966F44'
   },
   checkText: {
     fontFamily: 'NunitoSemiBold',

@@ -4,7 +4,7 @@
     "slug": "Preachly",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/updated_img/PreachlyIcon.png.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.darrin.preachly",
-      "icon": "./assets/ios-icon.png",
+      "icon": "./assets/updated_img/PreachlyIcon.png",
       "entitlements": {
         "aps-environment": "development"
       },
