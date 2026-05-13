@@ -66,7 +66,7 @@ const CommonGoalCard = ({
       <ImageBackground
         source={bgImages[variant]}
         style={styles.background}
-        resizeMode='stretch'
+        resizeMode='cover'
       >
         {/* Header row — icon + title */}
         <View style={styles.headerRow}>

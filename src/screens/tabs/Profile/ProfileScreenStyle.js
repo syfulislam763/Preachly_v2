@@ -44,7 +44,7 @@ const baseStyle =  StyleSheet.create({
   profileContainer:{
     position: 'absolute',
     top: hp("14%"),
-    left: (width*38)/100,
+    left: "40%",
     display:'flex',
     flexDirection:'column',
     justifyContent: 'flex-start',

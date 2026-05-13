@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, Image, StyleSheet, Pressable, ActivityIndicator, ImageBackground, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, ActivityIndicator, ImageBackground, FlatList, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { get_weekly_check_in_history } from '../TabsAPI';
@@ -13,7 +13,7 @@ const img1   = require('../../../../assets/img/card_bg8.png');
 const img4   = require('../../../../assets/img/card_bg11.png');
 const leaf_b = require('../../../../assets/img/leaf_b.png');
 const leaf_w = require('../../../../assets/img/leaf_w.png');
-
+const isIPad = Platform.OS === 'ios' && Platform.isPad;
 const timeAgo = (string) => {
   const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   const d = new Date(string);
@@ -66,7 +66,7 @@ const WeeklyCheckIn = () => {
           }
         }}
       >
-        <ImageBackground source={bgImage} style={styles.background} resizeMode="contain">
+        <ImageBackground source={bgImage} style={styles.background} resizeMode={isIPad?"cover":'contain'}>
           <View style={styles.card}>
             <View style={styles.cardWrap}>
               <Image source={leafIcon} style={styles.leafIcon} />

@@ -283,10 +283,7 @@ export default function PreachlyScreen() {
   return (
     <View style={{flex:1, backgroundColor:'#edf3f3'}}>
 
-      <View style={{
-        ...styles.commonHeaderStyle,
-        ...styles.header
-      }}>
+      <View style={[styles.commonHeaderStyle,styles.header, {height: 70+(insets.top)}]}>
         <View
           style={{
             ...styles.commonHeaderStyle,

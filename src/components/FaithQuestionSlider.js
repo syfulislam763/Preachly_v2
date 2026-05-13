@@ -1,22 +1,22 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions,Image, Pressable, Text } from 'react-native';
+import { View, StyleSheet, Dimensions,Image, Pressable, Text, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useLayoutDimention from '../hooks/useLayoutDimention'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
-
+const isIPad = Platform.OS === 'ios' && Platform.isPad;
 const window = Dimensions.get("window")
 const InactiveColor = "#90B2B2"
 const ActiveColor = "#004F4A"
 
 const progressPercentage = {
-    0: 10,
-    1: 30,
-    2: 50,
-    3: 70,
-    4: 100
+    0: isIPad? 15: 10,
+    1: isIPad? 30: 30,
+    2: isIPad? 50: 50,
+    3: isIPad? 70: 70,
+    4: isIPad? 100:100
 }
 
 const Dot = ({dotNumber=0, left, top,activeDot,group, pressEvent}) => {
@@ -123,32 +123,32 @@ function FaithQuestionSlider({Answers, selectedOption=0, ans, setAns}) {
             
             <Dot
                 dotNumber={2}
-                left={(window.width*46)/100}
-                top={ activeDot[2]?-15:-12}
+                left={isIPad?(window.width*48)/100:(window.width*46)/100}
+                top={isIPad? (activeDot[2]?-18:-10):(activeDot[2]?-15:-12)}
                 pressEvent={progressHandler}
                 activeDot={activeDot}
                 group={group}
             />
             <Dot
                 dotNumber={0}
-                left={(window.width*4)/100}
-                top={ activeDot[0]?65:70}
+                left={isIPad?(window.width*10)/100:(window.width*4)/100}
+                top={ isIPad? (activeDot[0]?100:112) : (activeDot[0]?65:70)}
                 pressEvent={progressHandler}
                 activeDot={activeDot}
                 group={group}
             />
             <Dot
                 dotNumber={1}
-                left={(window.width*23.5)/100}
-                top={ activeDot[1]?1:6}
+                left={isIPad?(window.width*27)/100 : (window.width*23.5)/100}
+                top={ isIPad? (activeDot[1]?15:25) : (activeDot[1]?1:6)}
                 pressEvent={progressHandler}
                 activeDot={activeDot}
                 group={group}
             />
             <Dot
                 dotNumber={3}
-                left={ (window.width*69)/100}
-                top={ activeDot[3]?8:10}
+                left={ isIPad?(window.width*71)/100 : (window.width*69)/100}
+                top={ isIPad? (activeDot[3]?15:18) : (activeDot[3]?8:10)}
                 pressEvent={progressHandler}
                 activeDot={activeDot}
                 group={group}
@@ -156,7 +156,7 @@ function FaithQuestionSlider({Answers, selectedOption=0, ans, setAns}) {
             <Dot
                 dotNumber={4}
                 left={(window.width*87)/100}
-                top={ activeDot[4]?67:70}
+                top={ isIPad ? (activeDot[4]?90:90) : (activeDot[4]?67:70)}
                 pressEvent={progressHandler}
                 activeDot={activeDot}
                 group={group}
@@ -178,12 +178,12 @@ const styles = StyleSheet.create({
         marginTop: 0 ,
         position:'relative',
         backgroundColor:'#fff',
-        height:350,
+        height:isIPad? 600: 350,
         width:"100%"
     },
     cardContainer:{
         backgroundColor:'#EDF3F3',
-        height: 350,
+        height: isIPad? 600: 350,
         width: '110%',
         borderRadius: '50%',
         overflow:'hidden',
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     },
     cardOne:{
         backgroundColor:'#67B7B7',
-        height: 350,
+        height: isIPad? 600: 350,
         width: `${50}%`,
         overflow:'hidden',
         position:'absolute',
@@ -202,8 +202,8 @@ const styles = StyleSheet.create({
     },
     cardTwo:{
         backgroundColor:'#fff',
-        height: 330,
-        width: `${95}%`,
+        height: isIPad? 600: 330,
+        width: `${isIPad?97.3:95}%`,
         overflow:'hidden',
         position:'absolute',
         borderRadius:'50%',
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     },
     cardThree:{
         backgroundColor:'#fff',
-        height: 350/2,
+        height: isIPad? 600/2: 350/2,
         width: `${100}%`,
         overflow:'hidden',
         position:'absolute',
