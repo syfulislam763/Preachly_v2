@@ -72,7 +72,7 @@ const WeeklyCheckIn = () => {
               <Image source={leafIcon} style={styles.leafIcon} />
               <View>
                 <Text style={[styles.title, { color: titleColor }]}>
-                  {(history.length - item.week_number) + 1}. Week Check-In
+                  Week {item.week_number}  Check-In
                 </Text>
                 <Text style={[styles.text, { color: dateColor, fontSize: 13 }]}>
                   {`${timeAgo(item?.week_start)} - ${timeAgo(item?.week_end)} (${capitalizeFirstLetter(item?.status)})`}

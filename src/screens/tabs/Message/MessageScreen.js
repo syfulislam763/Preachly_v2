@@ -370,10 +370,10 @@ export default function MessageScreen() {
       }
     }
     ws.current.onerror = (e) =>{
-      console.log("socket error ->", e.message);
+      console.log("socket error ->", JSON.stringify(e, null, 2));
     }
-    ws.current.onclose = () =>{
-      console.log("socket disconnected...");
+    ws.current.onclose = (e) =>{
+      console.log("socket disconnected...", JSON.stringify(e, null, 2));
     }
   }, [ access, currentSession]);
 
