@@ -23,6 +23,7 @@ import ReusableNavigation from '../../components/ReusabeNavigation';
 import useAppStore from '@/context/useAppStore';
 import { useNotificationPermission } from '@/context/fcm';
 import { REVENUECAT_IOS_API_KEY, PREMIUM_ENTITLEMENT_ID } from '@/context/Paths';
+import BackButton from '@/components/BackButton';
 
 
 const REVENUECAT_ANDROID_API_KEY = ""
@@ -41,6 +42,7 @@ export default function SubscriptionScreen() {
   const logout = useAppStore((s) => s.logout)
   const { enabled } = useNotificationPermission();
   const userProfile = auth?.user;
+  const setAuth = useAppStore((s) => s.setAuth)
 
   const [selectedPlanType, setSelectedPlanType] = useState('yearly');
 
@@ -361,7 +363,7 @@ export default function SubscriptionScreen() {
       <SafeAreaView edges={['top', 'bottom']} className="flex-1 bg-[white]">
         <ReusableNavigation
           backgroundStyle={{ backgroundColor: 'white' }}
-          leftComponent={() => <Text />}
+          leftComponent={() => <Text/>}
           middleComponent={() => (
             <Text style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}>
               Subscription
@@ -407,10 +409,20 @@ export default function SubscriptionScreen() {
       {/* Navigation header */}
       <ReusableNavigation
         backgroundStyle={{ backgroundColor: '#FFE9BD' }}
-        leftComponent={() => <Text />}
+        leftComponent={() => <BackButton customStyle={{backgroundColor:'#FFE9BD'}} cb={() => { setAuth({
+        access: null,
+        refresh: null,
+        isLoggedIn: false,
+        onboarding_completed: false,
+        user: {
+          email: null,
+          name: null,
+          social_auth_provider: null,
+        },
+      })}}/>}
         middleComponent={() => (
           <Text
-            style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18 }}
+            style={{ fontFamily: 'NunitoSemiBold', color: '#0B172A', fontSize: 18, marginRight:30 }}
           >
             Subscription
           </Text>

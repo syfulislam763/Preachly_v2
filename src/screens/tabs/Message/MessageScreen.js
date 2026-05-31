@@ -23,6 +23,7 @@ import MessageWrapper from './MessageWrapper';
 import { startRecording, stopRecording,requestPermission} from './voiceRecord_';
 import { useFocusEffect } from '@react-navigation/native';
 import useAppStore from '@/context/useAppStore';
+import { handleToast } from '@/screens/auth/AuthAPI';
 
 export default function MessageScreen() {
 
@@ -648,6 +649,7 @@ export default function MessageScreen() {
                 start_new_session(res)
               }else{
                 setIsFeedback(false);
+                handleToast('error', "Failed, Try again!", 2000, () => {});
               }
             })
           }else{
