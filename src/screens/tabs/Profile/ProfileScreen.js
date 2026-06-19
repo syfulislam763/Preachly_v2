@@ -36,7 +36,7 @@ const ProfileScreen = () => {
   const [events, setEvents] = useState([])
 
   const completed = dashboard?.current_goal?.completed ?? false
-
+  const isRedFlame = dashboard?.streak?.has_red_flame ?? false;
   const [badge, setBadge] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -181,7 +181,7 @@ const ProfileScreen = () => {
 
         <View style={styles.caption}>
           <Image
-            source={require("../../../../assets/updated_img/Fire.png")}
+            source={isRedFlame? require('../../../../assets/updated_img/red_flame.png'):require('../../../../assets/updated_img/Fire.png')}
             style={{ height:20, width:20,   objectFit:'contain', marginRight:10 }}
           />
           <Text style={{ ...styles.semitext, fontSize: 14 }}>

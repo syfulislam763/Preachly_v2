@@ -53,7 +53,7 @@ const MessageWrapper = ({
     const [flag, setFlag] = useState(false);
     const [isFollowUpQuestion, setIsFollowUpQuestion] = useState(true);
     const [isTooltip, setTooltip] = useState(false);
-
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     const startTimer = () => {
         if(intervalRef.current) clearInterval(intervalRef.current);
@@ -320,9 +320,17 @@ const MessageWrapper = ({
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             onScroll={handleScroll}
-            onContentSizeChange={() =>
-              flatListRef.current?.scrollToEnd({ animated: true })
-            }
+            onLayout={() => {
+              if (isInitialLoad && messages.length > 0) {
+                flatListRef.current?.scrollToEnd({ animated: false });
+              }
+            }}
+            onContentSizeChange={() => {
+              flatListRef.current?.scrollToEnd({ animated: !isInitialLoad });
+              if (isInitialLoad) {
+                setIsInitialLoad(false);
+              }
+            } }
           />
 
           

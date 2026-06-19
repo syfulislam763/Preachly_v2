@@ -545,6 +545,15 @@ export default function MessageScreen() {
   }, [doneOne, doneTwo])
 
 
+  useEffect(() => {
+    if (messages.length) {
+      const timer = setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: false });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [messages]);
+
 
   return (
     <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1, backgroundColor: 'white' }}>

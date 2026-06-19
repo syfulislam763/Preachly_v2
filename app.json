@@ -90,7 +90,8 @@
                 "name": "GoogleUtilities",
                 "modular_headers": true
               }
-            ]
+            ],
+            "useModularHeaders": true
           }
         }
       ]

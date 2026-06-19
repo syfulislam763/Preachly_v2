@@ -16,6 +16,7 @@ const HomepageHeader = ({userInfo, dashboard}) => {
 
   const isRedFlame = dashboardd?.streak?.has_red_flame ?? false;
 
+
   console.log("red flame", isRedFlame)
 
   return (
@@ -58,7 +59,7 @@ const HomepageHeader = ({userInfo, dashboard}) => {
 
         <TouchableOpacity onPress={()=>{setModalVisible(true)}} style={styles.countButton}>
             <Image
-                source={require('../../assets/updated_img/Fire.png')} 
+                source={isRedFlame? require('../../assets/updated_img/red_flame.png'):require('../../assets/updated_img/Fire.png')} 
                 style={{
                     height:18,
                     width:18,

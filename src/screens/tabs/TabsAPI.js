@@ -187,8 +187,10 @@ export const get_bookmarked_message = async (cb) =>{
 export const get_random_verses = async (cb) => {
     try{
         const res = await api.get(RANDOM_VERSE);
+        console.log("rewssdfds ", JSON.stringify(res.data, null, 2))
         cb(res.data, true);
     }catch(e){
+        console.log("verce error", JSON.stringify(e, null, 2))
         cb(e, false);
     }
 }

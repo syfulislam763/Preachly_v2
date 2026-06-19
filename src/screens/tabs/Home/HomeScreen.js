@@ -57,10 +57,10 @@ export default function HomeScreen() {
   const isDailyLoading = useAppStore((s) => s.ui.isDailyLoading)
   
 
-  console.log("profile -> ", JSON.stringify(randomVerse, null, 2))
+  console.log("verce data -> ", JSON.stringify(randomVerse, null, 2))
   // console.log("goal -> ", JSON.stringify(goal, null, 2));
 
-
+  console.log("profile -> ", profile.userInfo) 
 
   useFocusEffect(
     useCallback(() => {
@@ -114,6 +114,7 @@ export default function HomeScreen() {
       }
 
       get_profile_info((res1, success1) => {
+        //console.log("profile api -> ", JSON.parse(res1))
         if (!success1) {
           setModalVisible(false);
           return;
@@ -123,6 +124,7 @@ export default function HomeScreen() {
           setModalVisible(false);
           if (dashSuccess) {
             resolveProfileSettings(res?.data, res1?.data, dashboardRes?.data);
+
             show_daily_modal((modal, isResOk) => {
               if (isResOk && modal.show_modal ) {
                 setLoading("isDailyLoading", true)
@@ -146,7 +148,7 @@ export default function HomeScreen() {
           style={styles.bgImageContainer}
         >
           <View style={styles.bgImageWrapper}>
-            <Text style={styles.bgImageCaption}>({randomVerse?.verse_reference})</Text>
+            <Text style={styles.bgImageCaption}>{randomVerse?.verse_reference}</Text>
             <Text style={styles.bgImageCaptionTitle}>"{removeLeadingNumbers(randomVerse?.verse_text)}"</Text>
             <TouchableOpacity onPress={() => handleShare(randomVerse?.verse_text)} style={styles.bgImageFooter}>
               <Image source={require('../../../../assets/img/24-share.png')} style={styles.bgImageFooterIcon} />
